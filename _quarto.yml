@@ -1,0 +1,7 @@
+project:
+  title: "C407-2026"
+  execute-dir: project
+  resources: 
+    - "!docs-2025/*"
+
+
