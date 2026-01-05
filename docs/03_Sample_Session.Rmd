@@ -1,0 +1,169 @@
+---
+title: "Sample Session"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Install tidyverse package
+
+Open RStudio
+
+```{r eval=FALSE}
+install.packages("tidyverse")
+```
+
+Console or R Script?
+
+---
+
+## Open C407 project file
+
+Click File - Open Project 
+
+Go to the 'C407' folder.
+
+Open 'C407.Rproj' file.
+
+- Project file. (See [here](https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects) for detail.)
+
+- Sets the working folder to the folder where the file is located.
+
+If you have the C407 folder in a Dropbox or other file sharing program, pause Syncing.
+
+---
+
+## Create a new RScript.
+
+- Click 'File - New File - R Script'.
+
+- Save it in the 'Code' subfolder, as 'sample_session.R'.
+
+- Click 'Session - Restart R' to clear any existing objects in the R environment(memory).
+
+    - If it does not clear the memory, your RStudio has not been set up properly. Follow the instruction on RStudio Set up in the 01_R_and_RStudio_installation slides.
+
+---
+
+## Read and browse bca252 data
+
+.small[
+In R Script
+```{r }
+library(tidyverse)
+bca <- read_rds("data/bca252.rds")
+```
+- The shortcut key for <- is *Alt + -* or *Option + -*.
+	
+In Console
+```{r eval=FALSE}
+bca %>%
+  head() %>%
+  View()
+```
+- The shortcut key for %>% is *Ctrl + Shft + m* or *Cmd + Shift + m*.
+
+Try guess the meaning of each column.
+]
+
+---
+
+.scroll-output[
+.tiny[
+```{r echo=FALSE}
+op <- options("width" = 1000)
+bca %>%
+  head() %>%
+  kableExtra::kable()
+options(op)
+```
+]]
+
+---
+
+What is the keyboard shortcut for <- ?
+
+---
+
+What is the keyboard shortcut for %>% ?
+
+---
+
+## Calculate annual average price
+
+.small[
+Add the following to your R Script
+```{r eval=FALSE}
+library(lubridate)
+
+avg_price <- bca %>%
+  group_by(sale_year = year(sale_date)) %>%
+  summarise(avg_price = mean(price, na.rm = TRUE))
+
+avg_price
+```
+
+In the multiline code, press 'enter' at the end of the first two lines, and 'ctrl + enter' at the last line.
+
+Which year does the bca data start?
+
+How much average price has increased from 2010 to 2024?
+]
+
+---
+
+From which year does the bca data start?
+
+---
+
+.scroll-output[
+.small[
+```{r echo=FALSE}
+library(lubridate)
+
+avg_price <- bca %>%
+  group_by(sale_year = year(sale_date)) %>%
+  summarise(avg_price = mean(price, na.rm = TRUE))
+
+avg_price %>% kableExtra::kable()
+```
+]]
+
+---
+
+## Plot average price over time and save it as a png file.
+
+In the RScript editor, 
+```{r eval=FALSE}
+ggplot(avg_price, aes(sale_year, avg_price)) +
+  geom_line() +
+  geom_point() +
+  scale_y_continuous(labels = scales::comma)
+
+ggsave("Temp/avg_price.png")
+```
+
+- Check 'avg_price.png' is generated in 'C407/Temp' folder. You can use the png file in other applications (e.g., MS-Word)
+
+- Save your R Script.
+
+---
+
+```{r echo=FALSE}
+ggplot(avg_price, aes(sale_year, avg_price)) +
+  geom_line() +
+  geom_point() +
+  scale_y_continuous(labels = scales::comma)
+```
