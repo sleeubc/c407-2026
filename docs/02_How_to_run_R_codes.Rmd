@@ -43,7 +43,7 @@ Note that R shows the results in the same Console or in the Plots pane.
 
 ## R Script
 
-Console: hard to reproduce or revise your analysis later. 
+Console: difficult to reproduce or revise your analysis later. 
 
 R Script allows you to save the whole codes as a file.
 

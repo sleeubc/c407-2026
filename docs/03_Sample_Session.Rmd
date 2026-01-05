@@ -152,7 +152,7 @@ ggplot(avg_price, aes(sale_year, avg_price)) +
   geom_point() +
   scale_y_continuous(labels = scales::comma)
 
-ggsave("Temp/avg_price.png")
+ggsave("Temp/avg_price.png", width = 8, height = 4.5)
 ```
 
 - Check 'avg_price.png' is generated in 'C407/Temp' folder. You can use the png file in other applications (e.g., MS-Word)

@@ -4,7 +4,7 @@
     <title>Sample Session</title>
     <meta charset="utf-8" />
     <meta name="author" content="Sanghoon Lee" />
-    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.30/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="c407_slides.css" type="text/css" />
   </head>
@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### Sanghoon Lee
 ]
 .date[
-### 04 January, 2026
+### 05 January, 2026
 ]
 
 ---
@@ -189,7 +189,7 @@ ggplot(avg_price, aes(sale_year, avg_price)) +
   geom_point() +
   scale_y_continuous(labels = scales::comma)
 
-ggsave("Temp/avg_price.png")
+ggsave("Temp/avg_price.png", width = 8, height = 4.5)
 ```
 
 - Check 'avg_price.png' is generated in 'C407/Temp' folder. You can use the png file in other applications (e.g., MS-Word)

@@ -1,5 +1,5 @@
-@import url(//fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
-@import url(//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700);
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700);
 
 .title-slide .remark-slide-number {
   display: none;
@@ -11,7 +11,9 @@
   text-shadow: 0 0 0px #333;
 }
 
-.inverse h1, .inverse h2, .inverse h3 {
+.inverse h1,
+.inverse h2,
+.inverse h3 {
   color: #ffffff;
 }
 
@@ -40,34 +42,54 @@
   color: #FBBC13;
 }
 
+.my-emphasis-strong {
+  color: #db273e;
+  font-weight: bold;
+}
+
+.my-emphasis {
+  color: #db273e;
+}
+
 .remark-slide-content {
-    font-size: 30px;
-    padding: 1em 4em 1em 4em;
-    font-family: 'Open Sans';
+  font-size: 30px;
+  padding: 1em 4em 1em 4em;
+  font-family: 'Open Sans';
 }
 
-.remark-code, .remark-inline-code {
-    font-size: 28px;
-    font-family: 'Open Sans';
+.remark-code,
+.remark-inline-code {
+  font-size: 28px;
+  font-family: 'Open Sans';
 }
 
-.small .remark-code { /*Change made here*/
-    font-size: 25px;
-    font-family: 'Open Sans';
+.small .remark-code {
+  /*Change made here*/
+  font-size: 25px;
+  font-family: 'Open Sans';
 }
 
-.tiny .remark-code { /*Change made here*/
-    font-size: 22px;
-    font-family: 'Open Sans';
+.tiny .remark-code {
+  /*Change made here*/
+  font-size: 22px;
+  font-family: 'Open Sans';
 }
 
-.compact { font-size: 85% }
+.compact {
+  font-size: 85%
+}
 
-.small { font-size: 70% }
+.small {
+  font-size: 70%
+}
 
-.tiny { font-size: 50% }
+.tiny {
+  font-size: 50%
+}
 
-.verytiny { font-size: 30%}
+.verytiny {
+  font-size: 30%
+}
 
 /* https://github.com/yihui/xaringan/issues/147 */
 
@@ -98,6 +120,7 @@
   float: left;
   width: 60%;
 }
+
 .pull-right-1 {
   float: right;
   width: 36%;
@@ -107,6 +130,7 @@
   float: left;
   width: 36%;
 }
+
 .pull-right-2 {
   float: right;
   width: 60%;
@@ -114,7 +138,7 @@
 
 .pre {
   overflow-y: scroll;
-  overflow-x: scroll;	
+  overflow-x: scroll;
 }
 
 .vertical-center {
