@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### Sanghoon Lee
 ]
 .date[
-### 05 January, 2026
+### 07 January, 2026
 ]
 
 ---
@@ -107,7 +107,7 @@ ggplot(mtcars) +
 The following saves the plot in 'c407', the current working folder.
 
 ``` r
-ggsave("mpg_hp.png")
+ggsave("mpg_hp.png", width = 8, height = 4.5)
 ```
 
 --
@@ -116,7 +116,7 @@ If you want to save the plot in 'Temp' subfolder, use
 --
 
 ``` r
-ggsave("Temp/mpg_hp.png")
+ggsave("Temp/mpg_hp.png", width = 8, height = 4.5)
 ```
 
 Confirm in 'Files' pane, that the files are created in the two folders.
