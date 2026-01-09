@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C407 Course Slides</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), #4f46e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .slide-list {
+            display: grid;
+            gap: 1.5rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .slide-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+        }
+
+        .slide-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            border-color: var(--primary);
+        }
+
+        .slide-link {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 1.1rem;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .slide-number {
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .arrow {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .slide-item:hover .arrow {
+            opacity: 1;
+        }
+
+        footer {
+            margin-top: auto;
+            padding-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>C407 Course Slides</h1>
+            <p class="subtitle">Interactive slides and course materials for 2026</p>
+        </header>
+
+        <ul class="slide-list">
+            <li class="slide-item">
+                <a href="01_R_and_RStudio_Installation.html" class="slide-link">
+                    <span class="slide-number">01</span>
+                    R and RStudio Installation
+                </a>
+                <span class="arrow">→</span>
+            </li>
+            <li class="slide-item">
+                <a href="02_How_to_run_R_codes.html" class="slide-link">
+                    <span class="slide-number">02</span>
+                    How to run R codes
+                </a>
+                <span class="arrow">→</span>
+            </li>
+            <li class="slide-item">
+                <a href="03_Sample_Session.html" class="slide-link">
+                    <span class="slide-number">03</span>
+                    Sample Session
+                </a>
+                <span class="arrow">→</span>
+            </li>
+            <li class="slide-item">
+                <a href="04_Working_Directory_Relative_Path.html" class="slide-link">
+                    <span class="slide-number">04</span>
+                    Working Directory and Relative Path
+                </a>
+                <span class="arrow">→</span>
+            </li>
+            <li class="slide-item">
+                <a href="05_Data_Structure.html" class="slide-link">
+                    <span class="slide-number">05</span>
+                    Data Structure and Basic Operations
+                </a>
+                <span class="arrow">→</span>
+            </li>
+            <li class="slide-item">
+                <a href="06_dplyr_1.html" class="slide-link">
+                    <span class="slide-number">06</span>
+                    dplyr I
+                </a>
+                <span class="arrow">→</span>
+            </li>
+        </ul>
+
+        <footer>
+            &copy; 2026 Sanghoon Lee
+        </footer>
+    </div>
+</body>
+</html>
