@@ -1,0 +1,330 @@
+---
+title: "Data Structure and Basic Operations"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = NA)
+```
+
+Open `C407` project.
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+bca <- read_rds("data/bca252.rds")
+```
+
+---
+
+## Data Frame (or tibble)
+
+Data come as a 'data frame' or a 'tibble' in Tidyverse
+
+--
+
+A tibble consists of equal length vectors (i.e., columns).
+
+```{r eval=FALSE}
+bca %>%
+    head() %>%
+    View()
+```
+
+---
+
+.scroll-output[
+.small[
+```{r echo = FALSE}
+bca %>%
+    head(20) %>%
+    kableExtra::kable()
+```
+]]
+
+---
+
+## Vector
+
+A vector is a sequence of values of the *same type* (e.g., numeric, character, date, factor...).
+
+--
+
+You use 'c()' function to create a vector.
+
+Numeric
+```{r}
+a <- c(0, 1, 2)
+```
+
+Character
+```{r}
+b <- c("A", "B", "C")
+```
+
+---
+
+What is the type of the following vector?
+
+```{r}
+c <- c("0", "1", "2")
+```
+
+A. numeric
+
+B. character
+
+---
+
+.pull-left[
+```{r}
+a
+```
+ 
+```{r}
+b
+```
+
+```{r}
+c
+```
+]
+
+.pull-right[
+```{r}
+class(a)
+```
+
+```{r}
+class(b)
+```
+
+```{r}
+class(c)
+```
+]
+
+---
+
+### Why the values of the same type?
+
+Some operations work on only specific types.
+
+```{r}
+a * a
+```
+
+```{r eval=FALSE}
+b * b
+```
+
+---
+
+## Tibble
+
+A tibble is an enhanced version of data frame used in Tidyverse.
+
+You can create a tibble using 'tibble()' function.
+
+```{r}
+tb <- tibble(a = c(0, 1, 2), b = c("A", "B", "C"))
+tb
+```
+
+
+---
+
+## Practice task
+
+Create the following tibble, and name it 'tb2'. Print it on screen.
+```{r echo=FALSE}
+tb2 <- tibble(name = c("a", "b", "c"), x = c(1, 2, 3), y = c(3, 2, 1))
+tb2
+```
+
+--
+
+```{r eval=FALSE, include=params$answers}
+tb2 <- tibble(name = c("a", "b", "c"), x = c(1, 2, 3), y = c(3, 2, 1))
+tb2
+```
+
+---
+
+## Common operations with a tibble or a data frame
+
+You can pull out a column as a vector, using '$'.
+```{r}
+tb$a
+```
+
+--
+
+```{r}
+mean(tb$a)
+```
+
+---
+
+Show the data type of a column
+
+```{r}
+class(tb$a)
+```
+
+---
+
+Show column names
+```{r}
+names(tb)
+```
+
+---
+
+Show a summary of each column
+```{r}
+summary(tb)
+```
+
+---
+
+Show the number of rows
+
+```{r}
+nrow(tb)
+```
+
+---
+
+Show the first two rows
+```{r}
+head(tb, 2)
+```
+
+---
+
+Without the second argument, it shows 6 rows.
+```{r}
+head(bca)
+```
+
+---
+
+.scroll-output[
+```{r}
+glimpse(bca)
+```
+]
+
+---
+
+## Task
+
+How many rows does 'bca' data set have?
+
+Show the column names of the 'bca' dataset.
+
+What is the median of price variable(i.e., column) in the bca dataset?
+
+What are the types of the following columns: 'postalcode', 'price', 'sale_date'?
+
+
+---
+
+How many rows does 'bca' data set have?
+
+--
+
+```{r include=params$answers}
+nrow(bca)
+```
+
+---
+
+Show the column names of the 'bca' dataset.
+
+--
+
+```{r include=params$answers}
+names(bca)
+```
+
+---
+
+What is the median of price variable(i.e., column) in the bca dataset?
+
+--
+
+```{r include=params$answers}
+median(bca$price, na.rm = TRUE)
+```
+
+```{r eval=FALSE, include=params$answers}
+summary(bca)
+```
+
+---
+
+What is the type of 'postalcode' column?
+
+--
+
+```{r include=params$answers}
+class(bca$postalcode)
+```
+
+```{r eval=FALSE, include=params$answers}
+bca$postalcode
+```
+
+```{r echo=FALSE, include=params$answers}
+bca$postalcode %>% head(100)
+```
+
+---
+
+What is the type of 'price' column?
+
+--
+
+```{r include=params$answers}
+class(bca$price)
+```
+
+```{r eval=FALSE,  include=params$answers}
+bca$price
+```
+
+```{r echo=FALSE,  include=params$answers}
+bca$price %>% head(100)
+```
+
+---
+
+What is the type of 'sale_date' column?
+
+```{r  include=params$answers}
+class(bca$sale_date)
+```
+
+```{r eval=FALSE,  include=params$answers}
+bca$sale_date
+```
+
+```{r echo=FALSE,  include=params$answers}
+bca$sale_date %>% head(300)
+```

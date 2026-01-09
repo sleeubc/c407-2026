@@ -1,0 +1,446 @@
+---
+title: "dplyr I"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = NA)
+library(kableExtra)
+```
+
+select()
+
+filter()
+
+arrange()
+
+mutate()
+
+%>% (or |>)
+
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r results='hide'}
+tb <- tibble(a = c(2, 1, 3), b = c("a", "b", "c"), c = c("y", "y", "x"))
+tb
+```
+
+```{r echo=FALSE}
+tb %>%
+    kable(align = "c") %>%
+    column_spec(1:3, width = "5em")
+```
+
+---
+
+## select()
+
+```{r eval=FALSE}
+? select
+```
+
+--
+
+Choose variables from a tibble.
+
+**Usage**
+
+select(.data, ...)
+
+... variables to select
+
+---
+
+.pull-left[
+```{r}
+tb
+```
+]
+
+.pull-right[
+```{r}
+select(tb, a, b)
+```
+]
+
+---
+
+## Pipe %>% 
+
+* `x %>% f(...)` is equivalent to `f(x,...)`.
+
+--
+
+.pull-left[
+```{r}
+select(tb, a, b)
+```
+]
+
+.pull-right[
+```{r}
+tb %>% select(a, b)
+```
+]
+
+---
+
+## filter()
+
+Return rows with matching conditions.
+
+.pull-left[
+```{r}
+tb
+```
+]
+
+.pull-right[
+```{r}
+filter(tb, a >= 2, c == "y")
+```
+]
+
+---
+
+* `x %>% f(...)` is equivalent to `f(x,...)`.
+
+.pull-left[
+```{r}
+filter(tb, a >= 2, c == "y")
+```
+]
+
+.pull-right[
+```{r}
+tb %>% filter(a >= 2, c == "y")
+```
+]
+
+---
+
+## Why Pipe %>% ?
+
+--
+
+Easier to read.
+.pull-left[
+```{r}
+filter(tb, a >= 2, c == "y")
+```
+]
+
+.pull-right[
+```{r}
+tb %>% filter(a >= 2, c == "y")
+```
+]
+
+---
+
+Chain multiple operations.
+
+Suppose you want to do the following in sequence:
+
+1. select columns a and c.
+2. choose rows such that a>= 2 and c == "y".
+
+--
+
+.pull-left[
+```{r}
+temp <- select(tb, a, c)
+filter(temp, a >= 2, c == "y")
+```
+]
+
+--
+
+.pull-right[
+```{r}
+tb %>%
+    select(a, c) %>%
+    filter(a >= 2, c == "y")
+```
+]
+
+---
+
+## |>
+
+R started supporting a pipe operator |> from version 4.1.0. Most of time it works the same way.
+
+```{r}
+tb |>
+    select(a, c) |>
+    filter(a >= 2, c == "y")
+```
+
+---
+
+The advantage of |> is that you can use it without loading the tidyverse package.
+
+But %>% offers more features.
+
+Since we will always use tidyverse, we will use %>%.
+
+---
+
+
+Logical operators
+
+- ==
+- !=
+- &
+- |
+- %in%
+
+---
+
+```{r}
+tb2 <- tibble(a = c(1, 1, 1, 2, 2, 2), b = c(1, 2, 3, 3, 4, 4))
+
+tb2
+```
+
+---
+
+.tiny[
+.pull-left[
+```{r}
+tb2
+```
+```{r}
+tb2 %>% filter(2 * a == b)
+```
+]
+
+.pull-right[
+```{r}
+tb2 %>% filter(a == 1 & b == 2)
+```
+```{r}
+tb2 %>% filter(a == 1 | b == 2)
+```
+]]
+
+---
+
+.tiny[
+.pull-left[
+```{r}
+tb2
+```
+```{r}
+tb2 %>% filter(a != 2)
+```
+]
+
+.pull-right[
+
+```{r}
+tb2 %>% filter(b %in% c(1, 3))
+```
+```{r}
+tb2 %>% filter(!b %in% c(1, 3))
+```
+]]
+
+---
+
+### Practice Task
+
+Rewrite the following code using other logical operators 
+
+.pull-left[
+```{r}
+tb2 %>% filter(!b %in% c(1, 3))
+```
+]
+
+--
+
+.pull-right[
+```{r}
+tb2 %>% filter(b != 1 & b != 3)
+```
+]
+
+---
+
+
+## arrange()
+
+Sort rows by variables
+
+.pull-left[
+```{r}
+tb
+```
+]
+
+.pull-right[
+```{r}
+tb %>% arrange(c, a)
+```
+]
+
+---
+
+.pull-left[
+```{r}
+tb
+```
+]
+
+.pull-right[
+```{r}
+tb %>% arrange(desc(c), a)
+```
+]
+
+---
+
+## mutate()
+
+Create variables
+--
+.pull-left[
+```{r}
+tb
+```
+]
+.pull-right[
+```{r}
+tb %>% mutate(
+    d = 3 * a,
+    e = paste0(b, c)
+)
+```
+]
+
+---
+
+## Practice
+
+From the bca dataset, generate a tibble of housing transactions satisfying the following:
+
+- Add a new column called 'sale_year' containing the year of sale. (Use 'year()' function in 'lubridate' package.)
+- Sold in 2017.
+- Condo or townhouse (i.e., "Strata Res" in act_use_cat)
+- Price is greater than 5 million dollars.
+- Contain only the following columns: roll_num, sale_year, price, neigh_label.
+- Sorted in the descending order of price.
+
+---
+
+### Read bca252.rds and store it as bca
+
+--
+
+Restart R
+
+```{r include=params$answers}
+library(tidyverse)
+
+bca <- read_rds("Data/bca252.rds")
+```
+
+---
+
+### Add a new column called 'sale_year' containing the year of sale. (Use 'year()' function in 'lubridate' package.), and store it as temp
+
+--
+
+```{r include=params$answers}
+library(lubridate)
+temp <- bca %>% mutate(sale_year = year(sale_date))
+```
+
+---
+
+### Keep only the rows satisfying the following conditions. Store it as temp.
+
+- Sold in 2017.
+- Condo or townhouse (i.e., "Strata Res" in act_use_cat)
+- Price is greater than 5 million dollars.
+
+--
+
+```{r include=params$answers}
+temp <- temp %>% filter(
+    sale_year == 2017,
+    act_use_cat == "Strata Res",
+    price > 5000000
+)
+```
+
+---
+
+### Keep only the following columns: roll_num, sale_year, price, neigh_label. Store it as temp.
+
+--
+
+```{r include=params$answers}
+temp <- temp %>% select(roll_num, sale_year, price, neigh_label)
+```
+
+---
+
+### Sort in the descending order of price.
+
+--
+
+```{r include=params$answers}
+temp %>% arrange(desc(price))
+```
+
+---
+
+### Rewrite all the codes using the pipes, without using a temp object!
+
+
+```{r eval=FALSE, include=params$answers}
+temp <- bca %>% mutate(sale_year = year(sale_date))
+
+temp <- temp %>% filter(
+    sale_year == 2017,
+    act_use_cat == "Strata Res",
+    price > 5000000
+)
+
+temp <- temp %>%
+    select(roll_num, sale_year, price, neigh_label)
+
+temp %>% arrange(desc(price))
+```
+
+---
+
+```{r eval=FALSE, include=params$answers}
+bca %>%
+    mutate(sale_year = year(sale_date)) %>%
+    filter(
+        sale_year == 2017,
+        act_use_cat == "Strata Res",
+        price > 5000000
+    ) %>%
+    select(roll_num, sale_year, price, neigh_label) %>%
+    arrange(desc(price))
+```
