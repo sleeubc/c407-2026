@@ -1,0 +1,369 @@
+---
+title: "Census PUMF Examples"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA)
+options(tibble.print_max = Inf)
+library(kableExtra)
+```
+
+```{r}
+library(tidyverse)
+library(flextable)
+set_flextable_defaults(background.color = "white")
+
+pumf <- read_rds("../Data/2021_census_pumf_ind.rds")
+```
+
+
+
+---
+
+.small[
+We will generate a table showing the number and the share of households with children aged 25 and over by population group, using the PUMF.
+
+We will use only primary maintainers (or household heads) to avoid double-counting families.
+]
+
+```{r echo=FALSE }
+pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups")) %>% 
+	mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>% 
+	rename(`Population Group` = DPGRSUM, `Number of Observations` = n, `Household Share with Children Aged 25 and Over` = share_PKID25) %>% 
+	flextable(cwidth = c(2, 2, 2)) %>%  
+	align(j=c(2, 3), align="center")
+```
+
+---
+
+Which columns of the PUMF should we use? (Identify them in Chapter 1 of the user guide.)
+
+--
+
+We will use the following variables: DPGRSUM, PKID25, PRIHM. 
+
+Read Chapter 2 of the user guide for more detailed description for each column.
+
+---
+
+For each population group, calculate the percentage of the households with children aged 25 or above, by population group.
+
+- Use only primary maintainer to prevent a family from counted multiple times. (PRIHM)
+- Remove observations where PKID25 is either "Not available" or "Not applicable"
+- To calculate the share of households with children aged 25 or above, you can use `mean(PKID25=="One or more")` in `summarise`.
+- Sort in descending order of the share.
+- See next slide for the output.
+
+---
+
+.small[
+```{r echo=FALSE}
+pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(share_PKID25=mean(PKID25 == "One or more"))
+```
+]
+
+---
+
+.small[
+```{r eval=FALSE}
+pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(share_PKID25=mean(PKID25 == "One or more"))
+```
+]
+
+--
+
+How does `mean(PKID25=="One or more")` work?
+
+```{r}
+c("a", "b", "c", "d") == "c"
+```
+```{r}
+mean(c("a", "b", "c", "d") == "c")
+```
+
+---
+
+Add a new column n showing the number of observations for each group.
+
+Sort in the descending order of the share.
+
+Remove the rows of the output table where DPGRSUM takes one of the following values: "Not available", "Other population groups, n.i.e.", "Other multiple population groups".
+
+See next slide for the output.
+
+---
+
+```{r echo=FALSE}
+pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+```
+
+---
+
+.tiny[
+```{r eval=FALSE}
+pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+```
+]
+
+---
+
+Use flextable to improve the look. 
+
+```{r echo=FALSE}
+tb <- pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+
+tb %>% flextable() %>% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %>%
+  width(width=c(2,2,2))
+```
+
+---
+
+.tiny[
+```{r eval=FALSE}
+tb <- pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+
+tb %>% flextable() %>% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %>%
+  width(width=c(2,2,2))
+```
+]
+
+---
+
+Insert the following code to format the shares in percentage format. Where would you insert it?
+
+.tiny[
+```{r eval=FALSE}
+mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>% 
+```
+]
+
+--
+
+.tiny[
+```{r}
+scales::label_comma(accuracy=0.1, scale=100, suffix="%")(c(0.1231, 3.5465))
+```
+```{r}
+scales::label_comma(accuracy=0.01, scale=100, suffix="%")(c(0.1231, 3.5465))
+```
+```{r}
+scales::label_comma(accuracy=0.1, scale=10, suffix="%")(c(0.1231, 3.5465))
+```
+```{r}
+scales::label_comma(accuracy=0.1, scale=100, suffix="M")(c(0.1231, 3.5465))
+```
+]
+---
+
+```{r echo=FALSE}
+tb <- pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+
+tb %>% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>% 
+  flextable() %>% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %>%
+  width(width=c(2,2,2))
+```
+
+---
+
+.tiny[
+```{r eval=FALSE}
+tb <- pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(DPGRSUM) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+
+tb %>% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>% 
+  flextable() %>% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %>%
+  width(width=c(2,2,2))
+```
+]
+
+---
+
+.tiny[
+.pull-left[
+```{r }
+tb
+```
+]
+.pull-right[
+```{r }
+tb %>% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25))
+```
+]
+]
+
+---
+
+Set the alignment for the number of observations and the share columns to 'center'. (Try Googling "flextable cell alignment".)
+
+```{r echo=FALSE }
+tb %>% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>% 
+  flextable() %>% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %>%
+  width(width=c(2,2,2)) %>%
+	align(j=c(1, 2, 3), align=c("left", "center", "center"))  
+```
+
+---
+
+.tiny[
+```{r eval=FALSE }
+tb %>% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>% 
+  flextable() %>% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %>%
+  width(width=c(2,2,2)) %>%
+	align(j=c(1, 2, 3), align=c("left", "center", "center"))  
+```
+]
+
+---
+
+Save the table as a png file in the temp folder.
+
+.tiny[
+```{r eval=FALSE }
+ft <- tb %>% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>% 
+  flextable() %>% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %>%
+  width(width=c(2,2,2)) %>%
+	align(j=c(2, 3), align="center")
+
+ft %>% save_as_image("temp/families_with_old_kids.png")
+```
+]
+
+---
+
+Generate a similar table using `CMA` instead of `DPGRSUM`. Keep only the cities with more than 3,000 observations.
+
+```{r echo=FALSE}
+tb <- pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(CMA) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(n>=3000) %>% 
+	filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies")
+
+tb %>%
+	mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>%
+  flextable() %>%
+	set_header_labels(CMA = "Census Metropolitan Area", n="Number of Observations", share_PKID25="Household Share with Children Aged 25 and Over") %>% 
+	width(width = c(3, 2, 2)) %>%  
+	align(j=c(2, 3), align="center")
+```
+
+---
+
+.tiny[
+```{r eval=FALSE}
+tb <- pumf %>% filter(PRIHM == "Person is primary maintainer") %>%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %>% 
+	group_by(CMA) %>% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %>% 
+	arrange(desc(share_PKID25)) %>% 
+	filter(n>=3000) %>% 
+	filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies")
+
+tb %>%
+	mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %>%
+  flextable() %>%
+	set_header_labels(
+	  CMA = "Census Metropolitan Area", 
+	  n="Number of Observations", 
+	  share_PKID25="Household Share with Children Aged 25 and Over") %>% 
+	width(width = c(3, 2, 2)) %>%  
+	align(j=c(2, 3), align="center")
+```
+]
+

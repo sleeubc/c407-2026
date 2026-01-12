@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>dplyr 2</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sanghoon Lee" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/tabwid-1.1.3/tabwid.css" rel="stylesheet" />
+    <script src="libs/tabwid-1.1.3/tabwid.js"></script>
+    <link rel="stylesheet" href="c407_slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# dplyr 2
+]
+.author[
+### Sanghoon Lee
+]
+.date[
+### 11 January, 2026
+]
+
+---
+
+
+
+
+summarise()
+
+group_by()
+
+ungroup()
+
+---
+
+
+``` r
+library(tidyverse)
+```
+.pull-left-2[
+
+``` r
+pumf0 &lt;- tibble(
+  WEIGHT=c(1,2,3,4,5), 
+  TotInc=c(14, 13, 12, 8, 10), 
+  CMA=c("x","x","y", "y","y"),
+  Gender=c("Female", "Male", "Female", "Male", "Male")
+  )
+```
+]
+.pull-right-1[
+
+``` r
+pumf0
+```
+
+```
+# A tibble: 5 × 4
+  WEIGHT TotInc CMA   Gender
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+1      1     14 x     Female
+2      2     13 x     Male  
+3      3     12 y     Female
+4      4      8 y     Male  
+5      5     10 y     Male  
+```
+]
+
+---
+
+## summarise()
+
+.pull-left-1[
+
+``` r
+pumf0
+```
+
+```
+# A tibble: 5 × 4
+  WEIGHT TotInc CMA   Gender
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+1      1     14 x     Female
+2      2     13 x     Male  
+3      3     12 y     Female
+4      4      8 y     Male  
+5      5     10 y     Male  
+```
+]
+.pull-right-2[
+
+``` r
+pumf0 %&gt;% 
+  summarise(avg_income = mean(TotInc))
+```
+
+```
+# A tibble: 1 × 1
+  avg_income
+       &lt;dbl&gt;
+1       11.4
+```
+]
+
+---
+
+.tiny[
+.pull-left-1[
+
+``` r
+pumf0
+```
+
+```
+# A tibble: 5 × 4
+  WEIGHT TotInc CMA   Gender
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+1      1     14 x     Female
+2      2     13 x     Male  
+3      3     12 y     Female
+4      4      8 y     Male  
+5      5     10 y     Male  
+```
+]
+.pull-right-2[
+
+
+``` r
+pumf0 %&gt;% 
+  summarise(
+    avg_income = weighted.mean(TotInc, w= WEIGHT)
+    )
+```
+
+```
+# A tibble: 1 × 1
+  avg_income
+       &lt;dbl&gt;
+1       10.5
+```
+]]
+
+---
+
+
+
+``` r
+pumf0 %&gt;% 
+  summarise(total_pop=sum(WEIGHT))
+```
+
+```
+# A tibble: 1 × 1
+  total_pop
+      &lt;dbl&gt;
+1        15
+```
+
+---
+
+
+``` r
+pumf0 %&gt;% summarise(
+  total_pop=sum(WEIGHT), 
+  avg_income = weighted.mean(TotInc, w= WEIGHT)
+  )
+```
+
+```
+# A tibble: 1 × 2
+  total_pop avg_income
+      &lt;dbl&gt;      &lt;dbl&gt;
+1        15       10.5
+```
+
+---
+
+
+### Summary functions
+
+- sum()
+- mean()
+- weighted.mean()
+- median()
+- min()
+- max()
+- n()
+
+--
+
+They all generate one element result when given vectors.
+
+---
+
+
+
+``` r
+pumf0 %&gt;% summarise(n=n())
+```
+
+```
+# A tibble: 1 × 1
+      n
+  &lt;int&gt;
+1     5
+```
+
+---
+
+### group_by() - summarise()
+
+With group_by(), summarise() works on each subset defined by the group variables.
+
+---
+
+.pull-left-1[
+
+``` r
+pumf0
+```
+
+```
+# A tibble: 5 × 4
+  WEIGHT TotInc CMA   Gender
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+1      1     14 x     Female
+2      2     13 x     Male  
+3      3     12 y     Female
+4      4      8 y     Male  
+5      5     10 y     Male  
+```
+]
+.pull-right-2[
+
+``` r
+pumf0 %&gt;% 
+  group_by(CMA) %&gt;% 
+  summarise(pop = sum(WEIGHT))
+```
+
+```
+# A tibble: 2 × 2
+  CMA     pop
+  &lt;chr&gt; &lt;dbl&gt;
+1 x         3
+2 y        12
+```
+]
+
+---
+
+
+``` r
+pumf0 %&gt;% group_by(CMA) %&gt;% 
+  summarise(avg_income = weighted.mean(TotInc, w=WEIGHT))
+```
+
+```
+# A tibble: 2 × 2
+  CMA   avg_income
+  &lt;chr&gt;      &lt;dbl&gt;
+1 x          13.3 
+2 y           9.83
+```
+
+---
+
+.pull-left[
+
+``` r
+pumf0
+```
+
+```
+# A tibble: 5 × 4
+  WEIGHT TotInc CMA   Gender
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+1      1     14 x     Female
+2      2     13 x     Male  
+3      3     12 y     Female
+4      4      8 y     Male  
+5      5     10 y     Male  
+```
+]
+
+.pull-right[
+
+``` r
+pumf0 %&gt;% group_by(CMA)
+```
+
+```
+# A tibble: 5 × 4
+# Groups:   CMA [2]
+  WEIGHT TotInc CMA   Gender
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+1      1     14 x     Female
+2      2     13 x     Male  
+3      3     12 y     Female
+4      4      8 y     Male  
+5      5     10 y     Male  
+```
+]
+
+--
+
+group_by() adds group variables. 
+
+When summarise() sees group variables, it runs on each subset defined by the group variables.
+
+---
+
+### Ungrouping
+
+Each time summarise() is used, the last group variable gets removed.
+
+.tiny[
+.pull-left[
+
+``` r
+pumf0 %&gt;% group_by(CMA, Gender) %&gt;% 
+  summarise(pop = sum(WEIGHT))
+```
+
+```
+# A tibble: 4 × 3
+# Groups:   CMA [2]
+  CMA   Gender   pop
+  &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+1 x     Female     1
+2 x     Male       2
+3 y     Female     3
+4 y     Male       9
+```
+]
+
+.pull-right[
+
+``` r
+pumf0 %&gt;% group_by(CMA, Gender) %&gt;% 
+  summarise(pop = sum(WEIGHT)) %&gt;% 
+  summarise(pop2 = sum(pop))
+```
+
+```
+# A tibble: 2 × 2
+  CMA    pop2
+  &lt;chr&gt; &lt;dbl&gt;
+1 x         3
+2 y        12
+```
+]
+]
+
+---
+
+Use ungroup() to remove all groupings.
+
+
+``` r
+pumf0 %&gt;% group_by(CMA, Gender) %&gt;% ungroup()
+```
+
+```
+# A tibble: 5 × 4
+  WEIGHT TotInc CMA   Gender
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+1      1     14 x     Female
+2      2     13 x     Male  
+3      3     12 y     Female
+4      4      8 y     Male  
+5      5     10 y     Male  
+```
+
+---
+
+### Practice task
+
+Using 2021 Census public use microfile, estimate the population size of Canada. Use summarise().
+
+WEIGHT column indicates the number of people each observation represents.
+
+--
+
+
+``` r
+pumf &lt;- read_rds("../Data/2021_census_pumf_ind.rds")
+
+pumf %&gt;% summarise(population = sum(WEIGHT))
+```
+
+```
+# A tibble: 1 × 1
+  population
+       &lt;dbl&gt;
+1  36328477.
+```
+
+``` r
+pumf$WEIGHT %&gt;% sum
+```
+
+```
+[1] 36328477
+```
+
+---
+
+### Practice task
+
+Using 2021 Census public use microfile, estimate population size by census metropolitan area (CMA). Use group_by()-summarise().
+
+- Use "data/2021_census_pumf_ind.rds".
+- The dataset has WEIGHT column for each individual included in the survey.
+- Read Chapters 1 and 2 of the user guide for CMA.
+- Remove observaions where CMA is "Other census metropolitan areas, census agglomerations and other geographies".
+- Sort in descending order of the population size.
+- Show only the six largest CMAs.
+
+Use pipes.
+
+---
+
+#### Load pumf dataset and calculate population size by CMA
+
+.scroll-output-80[
+.tiny[
+
+``` r
+pumf %&gt;% group_by(CMA) %&gt;% 
+  summarise(pop = sum(WEIGHT))
+```
+
+```
+# A tibble: 24 × 2
+   CMA                              pop
+   &lt;fct&gt;                          &lt;dbl&gt;
+ 1 Halifax                      459286.
+ 2 Moncton –  Saint John        282107.
+ 3 Québec                       818955.
+ 4 Montréal                    4210000.
+ 5 Sherbrooke – Trois-Rivières  372390.
+ 6 Ottawa - Gatineau           1478890.
+ 7 Oshawa                       415157.
+ 8 Toronto                     6130098.
+ 9 Hamilton                     777202.
+10 St. Catharines – Niagara     424602.
+# ℹ 14 more rows
+```
+]]
+
+---
+
+#### Remove observaions where CMA is "Other census metropolitan areas, census agglomerations and other geographies".
+
+.scroll-output-80[
+.tiny[
+
+``` r
+pumf %&gt;% group_by(CMA) %&gt;% 
+  summarise(pop = sum(WEIGHT)) %&gt;% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies")
+```
+
+```
+# A tibble: 23 × 2
+   CMA                              pop
+   &lt;fct&gt;                          &lt;dbl&gt;
+ 1 Halifax                      459286.
+ 2 Moncton –  Saint John        282107.
+ 3 Québec                       818955.
+ 4 Montréal                    4210000.
+ 5 Sherbrooke – Trois-Rivières  372390.
+ 6 Ottawa - Gatineau           1478890.
+ 7 Oshawa                       415157.
+ 8 Toronto                     6130098.
+ 9 Hamilton                     777202.
+10 St. Catharines – Niagara     424602.
+# ℹ 13 more rows
+```
+]]
+
+---
+
+#### Sort in descending order of the population size.
+
+.scroll-output-80[
+.tiny[
+
+``` r
+pumf %&gt;% group_by(CMA) %&gt;% 
+  summarise(pop = sum(WEIGHT)) %&gt;% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %&gt;% 
+  arrange(desc(pop))
+```
+
+```
+# A tibble: 23 × 2
+   CMA                                     pop
+   &lt;fct&gt;                                 &lt;dbl&gt;
+ 1 Toronto                            6130098.
+ 2 Montréal                           4210000.
+ 3 Vancouver                          2608986.
+ 4 Ottawa - Gatineau                  1478890.
+ 5 Calgary                            1467038.
+ 6 Edmonton                           1396903.
+ 7 Winnipeg                            822346.
+ 8 Québec                              818955.
+ 9 Hamilton                            777202.
+10 Kitchener –  Cambridge –  Waterloo  573235.
+# ℹ 13 more rows
+```
+]]
+
+---
+
+#### Show only the six largest CMAs.
+
+.scroll-output-80[
+.tiny[
+
+``` r
+pumf %&gt;% group_by(CMA) %&gt;% 
+  summarise(pop = sum(WEIGHT)) %&gt;% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %&gt;% 
+  arrange(desc(pop)) %&gt;% 
+  head()
+```
+
+```
+# A tibble: 6 × 2
+  CMA                    pop
+  &lt;fct&gt;                &lt;dbl&gt;
+1 Toronto           6130098.
+2 Montréal          4210000.
+3 Vancouver         2608986.
+4 Ottawa - Gatineau 1478890.
+5 Calgary           1467038.
+6 Edmonton          1396903.
+```
+]]
+
+---
+
+### Making publication quality tables using flextable
+
+https://ardata-fr.github.io/flextable-book/index.html
+
+.tiny[
+
+``` r
+# install.packages("flextable") # You have to run it only once on your computer.
+library(flextable)
+```
+]
+
+---
+
+.tiny[
+
+``` r
+ft &lt;- pumf %&gt;% group_by(CMA) %&gt;% 
+  summarise(pop = sum(WEIGHT)) %&gt;% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %&gt;%
+  arrange(desc(pop)) %&gt;% 
+  head() %&gt;% 
+	flextable()
+
+ft
+```
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-7c7a77ce{}.cl-7c68f12a{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-7c783752{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7c78375c{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7c7846f2{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7846f3{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7846f4{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7846f5{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7846f6{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7846f7{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-7c7a77ce'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-7c7846f2"&gt;&lt;p class="cl-7c783752"&gt;&lt;span class="cl-7c68f12a"&gt;Census metropolitan area or census agglomeration of current residence (2021)&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-7c7846f3"&gt;&lt;p class="cl-7c78375c"&gt;&lt;span class="cl-7c68f12a"&gt;pop&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7846f4"&gt;&lt;p class="cl-7c783752"&gt;&lt;span class="cl-7c68f12a"&gt;Toronto&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7846f5"&gt;&lt;p class="cl-7c78375c"&gt;&lt;span class="cl-7c68f12a"&gt;6,130,098&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7846f4"&gt;&lt;p class="cl-7c783752"&gt;&lt;span class="cl-7c68f12a"&gt;Montréal&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7846f5"&gt;&lt;p class="cl-7c78375c"&gt;&lt;span class="cl-7c68f12a"&gt;4,210,000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7846f4"&gt;&lt;p class="cl-7c783752"&gt;&lt;span class="cl-7c68f12a"&gt;Vancouver&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7846f5"&gt;&lt;p class="cl-7c78375c"&gt;&lt;span class="cl-7c68f12a"&gt;2,608,986&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7846f4"&gt;&lt;p class="cl-7c783752"&gt;&lt;span class="cl-7c68f12a"&gt;Ottawa - Gatineau&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7846f5"&gt;&lt;p class="cl-7c78375c"&gt;&lt;span class="cl-7c68f12a"&gt;1,478,890&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7846f4"&gt;&lt;p class="cl-7c783752"&gt;&lt;span class="cl-7c68f12a"&gt;Calgary&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7846f5"&gt;&lt;p class="cl-7c78375c"&gt;&lt;span class="cl-7c68f12a"&gt;1,467,038&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7846f6"&gt;&lt;p class="cl-7c783752"&gt;&lt;span class="cl-7c68f12a"&gt;Edmonton&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7846f7"&gt;&lt;p class="cl-7c78375c"&gt;&lt;span class="cl-7c68f12a"&gt;1,396,903&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+]
+
+---
+
+
+``` r
+ ft &lt;- ft %&gt;% 
+  set_header_labels(
+    CMA = "Census Metropolitan Area,", 
+    pop = "Population")
+
+ft
+```
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-7c81c2a4{}.cl-7c7e1708{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-7c7f94ac{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7c7f94b6{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7c7fa366{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7fa370{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7fa371{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7fa372{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7fa373{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c7fa374{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-7c81c2a4'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-7c7fa366"&gt;&lt;p class="cl-7c7f94ac"&gt;&lt;span class="cl-7c7e1708"&gt;Census Metropolitan Area,&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-7c7fa370"&gt;&lt;p class="cl-7c7f94b6"&gt;&lt;span class="cl-7c7e1708"&gt;Population&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7fa371"&gt;&lt;p class="cl-7c7f94ac"&gt;&lt;span class="cl-7c7e1708"&gt;Toronto&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7fa372"&gt;&lt;p class="cl-7c7f94b6"&gt;&lt;span class="cl-7c7e1708"&gt;6,130,098&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7fa371"&gt;&lt;p class="cl-7c7f94ac"&gt;&lt;span class="cl-7c7e1708"&gt;Montréal&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7fa372"&gt;&lt;p class="cl-7c7f94b6"&gt;&lt;span class="cl-7c7e1708"&gt;4,210,000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7fa371"&gt;&lt;p class="cl-7c7f94ac"&gt;&lt;span class="cl-7c7e1708"&gt;Vancouver&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7fa372"&gt;&lt;p class="cl-7c7f94b6"&gt;&lt;span class="cl-7c7e1708"&gt;2,608,986&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7fa371"&gt;&lt;p class="cl-7c7f94ac"&gt;&lt;span class="cl-7c7e1708"&gt;Ottawa - Gatineau&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7fa372"&gt;&lt;p class="cl-7c7f94b6"&gt;&lt;span class="cl-7c7e1708"&gt;1,478,890&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7fa371"&gt;&lt;p class="cl-7c7f94ac"&gt;&lt;span class="cl-7c7e1708"&gt;Calgary&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7fa372"&gt;&lt;p class="cl-7c7f94b6"&gt;&lt;span class="cl-7c7e1708"&gt;1,467,038&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c7fa373"&gt;&lt;p class="cl-7c7f94ac"&gt;&lt;span class="cl-7c7e1708"&gt;Edmonton&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c7fa374"&gt;&lt;p class="cl-7c7f94b6"&gt;&lt;span class="cl-7c7e1708"&gt;1,396,903&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+
+``` r
+ft &lt;- ft %&gt;% width(width=c(2.5, 1.5))
+
+ft
+```
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-7c88e660{}.cl-7c8555b8{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-7c86ca92{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7c86ca9c{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7c86d8ac{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c86d8ad{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c86d8ae{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c86d8b6{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c86d8b7{width:2.5in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7c86d8b8{width:1.5in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-7c88e660'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-7c86d8ac"&gt;&lt;p class="cl-7c86ca92"&gt;&lt;span class="cl-7c8555b8"&gt;Census Metropolitan Area,&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-7c86d8ad"&gt;&lt;p class="cl-7c86ca9c"&gt;&lt;span class="cl-7c8555b8"&gt;Population&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c86d8ae"&gt;&lt;p class="cl-7c86ca92"&gt;&lt;span class="cl-7c8555b8"&gt;Toronto&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c86d8b6"&gt;&lt;p class="cl-7c86ca9c"&gt;&lt;span class="cl-7c8555b8"&gt;6,130,098&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c86d8ae"&gt;&lt;p class="cl-7c86ca92"&gt;&lt;span class="cl-7c8555b8"&gt;Montréal&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c86d8b6"&gt;&lt;p class="cl-7c86ca9c"&gt;&lt;span class="cl-7c8555b8"&gt;4,210,000&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c86d8ae"&gt;&lt;p class="cl-7c86ca92"&gt;&lt;span class="cl-7c8555b8"&gt;Vancouver&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c86d8b6"&gt;&lt;p class="cl-7c86ca9c"&gt;&lt;span class="cl-7c8555b8"&gt;2,608,986&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c86d8ae"&gt;&lt;p class="cl-7c86ca92"&gt;&lt;span class="cl-7c8555b8"&gt;Ottawa - Gatineau&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c86d8b6"&gt;&lt;p class="cl-7c86ca9c"&gt;&lt;span class="cl-7c8555b8"&gt;1,478,890&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c86d8ae"&gt;&lt;p class="cl-7c86ca92"&gt;&lt;span class="cl-7c8555b8"&gt;Calgary&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c86d8b6"&gt;&lt;p class="cl-7c86ca9c"&gt;&lt;span class="cl-7c8555b8"&gt;1,467,038&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7c86d8b7"&gt;&lt;p class="cl-7c86ca92"&gt;&lt;span class="cl-7c8555b8"&gt;Edmonton&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7c86d8b8"&gt;&lt;p class="cl-7c86ca9c"&gt;&lt;span class="cl-7c8555b8"&gt;1,396,903&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+.small[
+
+``` r
+# The default background color is "transparent".
+# If you want to change it to "white"
+set_flextable_defaults(background.color = "white") 
+
+ft %&gt;% save_as_image("temp/largest_CMAs.png")
+```
+
+```
+[1] "temp/largest_CMAs.png"
+```
+]
+
+Try importing the png file to a Powerpoint presentation.
+
+---
+
+### Practice
+
+Using the 2021 PUMF, determine the religious demographics of Vancouver by estimating the population associated with each religion. Present the top five religions based on their respective number of followers.
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-7cbf05f6{}.cl-7cbb4538{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-7cbcd308{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7cbcd312{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7cbce19a{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cbce1a4{width:1.5in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cbce1a5{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cbce1ae{width:1.5in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cbce1af{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cbce1b0{width:1.5in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-7cbf05f6'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-7cbce19a"&gt;&lt;p class="cl-7cbcd308"&gt;&lt;span class="cl-7cbb4538"&gt;Religion&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-7cbce1a4"&gt;&lt;p class="cl-7cbcd312"&gt;&lt;span class="cl-7cbb4538"&gt;Population Size&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cbce1a5"&gt;&lt;p class="cl-7cbcd308"&gt;&lt;span class="cl-7cbb4538"&gt;Catholic&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cbce1ae"&gt;&lt;p class="cl-7cbcd312"&gt;&lt;span class="cl-7cbb4538"&gt;353,585.68&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cbce1a5"&gt;&lt;p class="cl-7cbcd308"&gt;&lt;span class="cl-7cbb4538"&gt;Christian, n.o.s.&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cbce1ae"&gt;&lt;p class="cl-7cbcd312"&gt;&lt;span class="cl-7cbb4538"&gt;226,032.62&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cbce1a5"&gt;&lt;p class="cl-7cbcd308"&gt;&lt;span class="cl-7cbb4538"&gt;Sikh&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cbce1ae"&gt;&lt;p class="cl-7cbcd312"&gt;&lt;span class="cl-7cbb4538"&gt;218,995.72&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cbce1a5"&gt;&lt;p class="cl-7cbcd308"&gt;&lt;span class="cl-7cbb4538"&gt;Muslim&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cbce1ae"&gt;&lt;p class="cl-7cbcd312"&gt;&lt;span class="cl-7cbb4538"&gt;101,516.54&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cbce1af"&gt;&lt;p class="cl-7cbcd308"&gt;&lt;span class="cl-7cbb4538"&gt;Buddhist&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cbce1b0"&gt;&lt;p class="cl-7cbcd312"&gt;&lt;span class="cl-7cbb4538"&gt;71,480.09&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+
+``` r
+pumf %&gt;% 
+	filter(CMA=="Vancouver") %&gt;% 
+	group_by(Relig) %&gt;% 
+	summarise(n=sum(WEIGHT)) %&gt;% arrange(desc(n)) %&gt;% 
+	filter(Relig != "No religion and secular perspectives") %&gt;% 
+	head(5) %&gt;% 
+  flextable() %&gt;% 
+  set_header_labels(Relig="Religion", n="Population Size") %&gt;% 
+	width(width=c(2, 1.5))
+```
+
+---
+
+### Practice
+
+.compact[
+Using 2021 Census public use microfile, estimate average income by census metropolitan area (CMA). 
+
+- Use 'Income: Total income'. Look up chapter 1 of the user guide to find its column name.
+- Once you find the column name, look up the column name in chapter 2 to read more detailed explanation. See if it has any special values. For example, 88,888,888 means not available. You have to filter out these observations before calculating averages.
+- Use weighted.mean() to account for the WEIGHT for each individual.
+- Remove observaions where CMA is "Other census metropolitan areas, census agglomerations and other geographies".
+- Show only the top 10 highest income CMAs.
+
+See next slide for the output table.
+]
+
+---
+
+.scroll-output-80[
+.tiny[
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-7cf8fc34{}.cl-7cf5274e{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-7cf6b424{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7cf6b42e{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7cf6c40a{width:3in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cf6c40b{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cf6c40c{width:3in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cf6c414{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cf6c415{width:3in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7cf6c416{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-7cf8fc34'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-7cf6c40a"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Census Metropolitan Area&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-7cf6c40b"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;Average Income ($)&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Calgary&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;64,075.38&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Ottawa - Gatineau&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;61,892.16&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Edmonton&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;59,982.46&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Toronto&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;59,159.77&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Hamilton&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;57,878.41&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Victoria&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;57,618.37&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Regina – Saskatoon&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;57,249.71&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Oshawa&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;56,513.06&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c40c"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Vancouver&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c414"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;56,229.28&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7cf6c415"&gt;&lt;p class="cl-7cf6b424"&gt;&lt;span class="cl-7cf5274e"&gt;Greater Sudbury – Thunder Bay&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7cf6c416"&gt;&lt;p class="cl-7cf6b42e"&gt;&lt;span class="cl-7cf5274e"&gt;54,352.77&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+]]
+
+---
+
+.scroll-output-80[
+.tiny[
+
+``` r
+pumf %&gt;% group_by(CMA) %&gt;% 
+  filter( TotInc != 88888888 &amp; TotInc != 99999999 ) %&gt;% 
+  summarise(avg_income = weighted.mean(TotInc, w=WEIGHT)) %&gt;% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %&gt;% 
+  arrange(desc(avg_income)) %&gt;% 
+  head(10) %&gt;%
+  flextable() %&gt;% 
+  set_header_labels(CMA="Census Metropolitan Area", avg_income="Average Income ($)") %&gt;% 
+  width(width = c(3, 2))
+```
+]]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

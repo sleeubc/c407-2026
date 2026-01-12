@@ -1,0 +1,433 @@
+---
+title: "dplyr 2"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA)
+library(kableExtra)
+```
+
+summarise()
+
+group_by()
+
+ungroup()
+
+---
+
+```{r}
+library(tidyverse)
+```
+.pull-left-2[
+```{r}
+pumf0 <- tibble(
+  WEIGHT=c(1,2,3,4,5), 
+  TotInc=c(14, 13, 12, 8, 10), 
+  CMA=c("x","x","y", "y","y"),
+  Gender=c("Female", "Male", "Female", "Male", "Male")
+  )
+```
+]
+.pull-right-1[
+```{r}
+pumf0
+```
+]
+
+---
+
+## summarise()
+
+.pull-left-1[
+```{r}
+pumf0
+```
+]
+.pull-right-2[
+```{r}
+pumf0 %>% 
+  summarise(avg_income = mean(TotInc))
+```
+]
+
+---
+
+.tiny[
+.pull-left-1[
+```{r}
+pumf0
+```
+]
+.pull-right-2[
+
+```{r}
+pumf0 %>% 
+  summarise(
+    avg_income = weighted.mean(TotInc, w= WEIGHT)
+    )
+```
+]]
+
+---
+
+
+```{r}
+pumf0 %>% 
+  summarise(total_pop=sum(WEIGHT))
+```
+
+---
+
+```{r}
+pumf0 %>% summarise(
+  total_pop=sum(WEIGHT), 
+  avg_income = weighted.mean(TotInc, w= WEIGHT)
+  )
+```
+
+---
+
+
+### Summary functions
+
+- sum()
+- mean()
+- weighted.mean()
+- median()
+- min()
+- max()
+- n()
+
+--
+
+They all generate one element result when given vectors.
+
+---
+
+
+```{r}
+pumf0 %>% summarise(n=n())
+```
+
+---
+
+### group_by() - summarise()
+
+With group_by(), summarise() works on each subset defined by the group variables.
+
+---
+
+.pull-left-1[
+```{r}
+pumf0
+```
+]
+.pull-right-2[
+```{r}
+pumf0 %>% 
+  group_by(CMA) %>% 
+  summarise(pop = sum(WEIGHT))
+```
+]
+
+---
+
+```{r}
+pumf0 %>% group_by(CMA) %>% 
+  summarise(avg_income = weighted.mean(TotInc, w=WEIGHT))
+```
+
+---
+
+.pull-left[
+```{r}
+pumf0
+```
+]
+
+.pull-right[
+```{r}
+pumf0 %>% group_by(CMA)
+```
+]
+
+--
+
+group_by() adds group variables. 
+
+When summarise() sees group variables, it runs on each subset defined by the group variables.
+
+---
+
+### Ungrouping
+
+Each time summarise() is used, the last group variable gets removed.
+
+.tiny[
+.pull-left[
+```{r}
+pumf0 %>% group_by(CMA, Gender) %>% 
+  summarise(pop = sum(WEIGHT))
+```
+]
+
+.pull-right[
+```{r}
+pumf0 %>% group_by(CMA, Gender) %>% 
+  summarise(pop = sum(WEIGHT)) %>% 
+  summarise(pop2 = sum(pop))
+```
+]
+]
+
+---
+
+Use ungroup() to remove all groupings.
+
+```{r}
+pumf0 %>% group_by(CMA, Gender) %>% ungroup()
+```
+
+---
+
+### Practice task
+
+Using 2021 Census public use microfile, estimate the population size of Canada. Use summarise().
+
+WEIGHT column indicates the number of people each observation represents.
+
+--
+
+```{r}
+pumf <- read_rds("../Data/2021_census_pumf_ind.rds")
+
+pumf %>% summarise(population = sum(WEIGHT))
+```
+```{r}
+pumf$WEIGHT %>% sum
+```
+
+---
+
+### Practice task
+
+Using 2021 Census public use microfile, estimate population size by census metropolitan area (CMA). Use group_by()-summarise().
+
+- Use "data/2021_census_pumf_ind.rds".
+- The dataset has WEIGHT column for each individual included in the survey.
+- Read Chapters 1 and 2 of the user guide for CMA.
+- Remove observaions where CMA is "Other census metropolitan areas, census agglomerations and other geographies".
+- Sort in descending order of the population size.
+- Show only the six largest CMAs.
+
+Use pipes.
+
+---
+
+#### Load pumf dataset and calculate population size by CMA
+
+.scroll-output-80[
+.tiny[
+```{r include=params$answers}
+pumf %>% group_by(CMA) %>% 
+  summarise(pop = sum(WEIGHT))
+```
+]]
+
+---
+
+#### Remove observaions where CMA is "Other census metropolitan areas, census agglomerations and other geographies".
+
+.scroll-output-80[
+.tiny[
+```{r include=params$answers}
+pumf %>% group_by(CMA) %>% 
+  summarise(pop = sum(WEIGHT)) %>% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies")
+```
+]]
+
+---
+
+#### Sort in descending order of the population size.
+
+.scroll-output-80[
+.tiny[
+```{r include=params$answers}
+pumf %>% group_by(CMA) %>% 
+  summarise(pop = sum(WEIGHT)) %>% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %>% 
+  arrange(desc(pop))
+```
+]]
+
+---
+
+#### Show only the six largest CMAs.
+
+.scroll-output-80[
+.tiny[
+```{r include=params$answers}
+pumf %>% group_by(CMA) %>% 
+  summarise(pop = sum(WEIGHT)) %>% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %>% 
+  arrange(desc(pop)) %>% 
+  head()
+```
+]]
+
+---
+
+### Making publication quality tables using flextable
+
+https://ardata-fr.github.io/flextable-book/index.html
+
+.tiny[
+```{r}
+# install.packages("flextable") # You have to run it only once on your computer.
+library(flextable)
+```
+]
+
+---
+
+.tiny[
+```{r fig.height=0.3}
+ft <- pumf %>% group_by(CMA) %>% 
+  summarise(pop = sum(WEIGHT)) %>% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %>%
+  arrange(desc(pop)) %>% 
+  head() %>% 
+	flextable()
+
+ft
+```
+]
+
+---
+
+```{r}
+ ft <- ft %>% 
+  set_header_labels(
+    CMA = "Census Metropolitan Area,", 
+    pop = "Population")
+
+ft
+```
+
+---
+
+```{r}
+ft <- ft %>% width(width=c(2.5, 1.5))
+
+ft
+```
+
+---
+
+.small[
+```{r}
+# The default background color is "transparent".
+# If you want to change it to "white"
+set_flextable_defaults(background.color = "white") 
+
+ft %>% save_as_image("temp/largest_CMAs.png")
+```
+]
+
+Try importing the png file to a Powerpoint presentation.
+
+---
+
+### Practice
+
+Using the 2021 PUMF, determine the religious demographics of Vancouver by estimating the population associated with each religion. Present the top five religions based on their respective number of followers.
+
+```{r echo=FALSE}
+pumf %>% 
+	filter(CMA=="Vancouver") %>% 
+	group_by(Relig) %>% 
+	summarise(n=sum(WEIGHT)) %>% arrange(desc(n)) %>% 
+	filter(Relig != "No religion and secular perspectives") %>% 
+	head(5) %>% 
+  flextable() %>% 
+  set_header_labels(Relig="Religion", n="Population Size") %>% 
+	width(width=c(2, 1.5))
+```
+
+---
+
+```{r eval=FALSE}
+pumf %>% 
+	filter(CMA=="Vancouver") %>% 
+	group_by(Relig) %>% 
+	summarise(n=sum(WEIGHT)) %>% arrange(desc(n)) %>% 
+	filter(Relig != "No religion and secular perspectives") %>% 
+	head(5) %>% 
+  flextable() %>% 
+  set_header_labels(Relig="Religion", n="Population Size") %>% 
+	width(width=c(2, 1.5))
+```
+
+---
+
+### Practice
+
+.compact[
+Using 2021 Census public use microfile, estimate average income by census metropolitan area (CMA). 
+
+- Use 'Income: Total income'. Look up chapter 1 of the user guide to find its column name.
+- Once you find the column name, look up the column name in chapter 2 to read more detailed explanation. See if it has any special values. For example, 88,888,888 means not available. You have to filter out these observations before calculating averages.
+- Use weighted.mean() to account for the WEIGHT for each individual.
+- Remove observaions where CMA is "Other census metropolitan areas, census agglomerations and other geographies".
+- Show only the top 10 highest income CMAs.
+
+See next slide for the output table.
+]
+
+---
+
+.scroll-output-80[
+.tiny[
+```{r echo=FALSE}
+pumf %>% group_by(CMA) %>% 
+  filter( TotInc != 88888888 & TotInc != 99999999 ) %>% 
+  summarise(avg_income = weighted.mean(TotInc, w=WEIGHT)) %>% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %>% 
+  arrange(desc(avg_income)) %>% 
+  head(10) %>%
+  flextable() %>% 
+  set_header_labels(CMA="Census Metropolitan Area", avg_income="Average Income ($)") %>% 
+  width(width = c(3, 2))
+```
+]]
+
+---
+
+.scroll-output-80[
+.tiny[
+```{r eval=FALSE}
+pumf %>% group_by(CMA) %>% 
+  filter( TotInc != 88888888 & TotInc != 99999999 ) %>% 
+  summarise(avg_income = weighted.mean(TotInc, w=WEIGHT)) %>% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %>% 
+  arrange(desc(avg_income)) %>% 
+  head(10) %>%
+  flextable() %>% 
+  set_header_labels(CMA="Census Metropolitan Area", avg_income="Average Income ($)") %>% 
+  width(width = c(3, 2))
+```
+]]

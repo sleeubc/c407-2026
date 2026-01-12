@@ -1,0 +1,266 @@
+---
+title: "dplyr 3"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA)
+options(tibble.print_max = Inf)
+library(kableExtra)
+```
+
+Group_by() - mutate()
+
+nth()
+
+lag()
+
+---
+
+### group_by() - mutate()
+
+```{r}
+library(tidyverse)
+tb <- tibble(a=c(1,1,1,2,2,2), b=c(1,2,3,3,4,4))
+tb
+```
+
+---
+
+.pull-left[
+```{r}
+tb
+```
+]
+.pull-right[
+```{r}
+tb %>% group_by(a) %>% 
+  summarise(b_1 = nth(b, 1))
+```
+]
+
+---
+
+.pull-left[
+```{r}
+tb
+```
+]
+.pull-right[
+```{r}
+tb %>% group_by(a) %>% 
+  mutate(b_1 = nth(b,1))
+```
+]
+
+---
+
+.pull-left-1[
+```{r}
+tb
+```
+]
+.pull-right-2[
+```{r}
+tb %>% group_by(a) %>% 
+  mutate(b_index = b/nth(b, 1))
+```
+]
+
+---
+
+### lag()
+
+.pull-left[
+```{r}
+tb
+```
+]
+
+.pull-right[
+```{r}
+tb %>% mutate(lag_b = lag(b))
+```
+
+]
+
+---
+
+.pull-left[
+```{r}
+tb
+```
+]
+
+.pull-right[
+```{r}
+tb %>% mutate(diff_b = b - lag(b))
+```
+]
+
+---
+
+.pull-left[
+```{r}
+tb %>% 
+  group_by(a) %>% 
+  mutate(lag_b = lag(b))
+```
+]
+
+.pull-right[
+```{r}
+tb %>% 
+  group_by(a) %>% 
+  mutate(diff_b = b - lag(b))
+```
+]
+
+---
+
+.pull-left-1[
+```{r}
+tb %>% 
+  group_by(a) %>% 
+  mutate(lag_b = lag(b))
+```
+]
+
+.pull-right-2[
+```{r}
+tb %>% 
+  group_by(a) %>% 
+  mutate(growth_b = (b - lag(b)) / lag(b) )
+```
+]
+
+---
+
+### Application
+
+- Load the bca252 data and assigns bca as its name.
+
+- Create sale_year column. Use the `year` function in `lubridate` package to extract year from `sale_date`.
+
+- Calculate average sale price by act_use_cat and sale_year. Use avg_price as its column name.
+
+- Use avg_price for the name of the resulting tibble.
+
+---
+
+```{r include=params$answers}
+bca <- read_rds("../Data/bca252.rds")
+
+avg_price <- bca %>% 
+  mutate(sale_year = lubridate::year(sale_date)) %>% 
+  group_by(act_use_cat, sale_year) %>% 
+  summarise(avg_price = mean(price, na.rm=TRUE)) %>% 
+	ungroup()
+```
+
+---
+
+.scroll-output[
+```{r}
+avg_price
+```
+]
+
+---
+
+```{r}
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point()
+```
+
+---
+
+Using `avg_price`, calculate price index (= avg_price / avg_price of year 2000) by act_use_cat. Name the output tibble `price_index`.
+
+--
+
+```{r include=params$answers}
+price_index <- avg_price %>% group_by(act_use_cat) %>% 
+  mutate( price_index = avg_price / nth(avg_price, 1))
+```
+
+---
+
+.scroll-output[
+```{r}
+price_index
+```
+]
+
+---
+
+```{r}
+ggplot(price_index, aes(sale_year, price_index, color=act_use_cat)) + 
+  geom_line() + geom_point()
+```
+
+---
+
+Modify the previous code to calculate price index (= avg_price / avg_price of year 2010) by act_use_cat. Name the output tibble `price_index`.
+
+--
+
+```{r include=params$answers}
+price_index <- avg_price %>% group_by(act_use_cat) %>% 
+  mutate(price_index = avg_price / nth(avg_price, 11))
+```
+
+---
+
+.scroll-output[
+```{r}
+price_index
+```
+]
+
+---
+
+
+```{r}
+ggplot(price_index, aes(sale_year, price_index, color=act_use_cat)) + 
+  geom_line() + geom_point()
+```
+
+---
+
+Modify the previous code to calculate price growth rate (= (avg_price - avg_price of the previous year)  / avg_price of the previous year) by act_use_cat. Name the output tibble `price_growth`.
+
+--
+
+```{r include=params$answers}
+price_growth <- avg_price %>% group_by(act_use_cat) %>% 
+  mutate( price_growth = (avg_price - lag(avg_price)) / lag(avg_price) )
+```
+
+---
+
+.scroll-output[
+```{r}
+price_growth
+```
+]
+
+---
+
+```{r}
+ggplot(price_growth, aes(sale_year, price_growth, color=act_use_cat)) + 
+  geom_line() + geom_point()
+```
+

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Census PUMF Examples</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sanghoon Lee" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/tabwid-1.1.3/tabwid.css" rel="stylesheet" />
+    <script src="libs/tabwid-1.1.3/tabwid.js"></script>
+    <link rel="stylesheet" href="c407_slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Census PUMF Examples
+]
+.author[
+### Sanghoon Lee
+]
+.date[
+### 11 January, 2026
+]
+
+---
+
+
+
+
+
+``` r
+library(tidyverse)
+library(flextable)
+set_flextable_defaults(background.color = "white")
+
+pumf &lt;- read_rds("../Data/2021_census_pumf_ind.rds")
+```
+
+
+
+---
+
+.small[
+We will generate a table showing the number and the share of households with children aged 25 and over by population group, using the PUMF.
+
+We will use only primary maintainers (or household heads) to avoid double-counting families.
+]
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-74c25560{}.cl-74be079e{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-74bfcb7e{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-74bfcb88{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-74bfcb92{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-74bfdf56{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-74bfdf57{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-74bfdf58{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-74bfdf60{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-74bfdf61{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-74bfdf62{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-74c25560'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-74bfdf56"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Population group&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-74bfdf57"&gt;&lt;p class="cl-74bfcb88"&gt;&lt;span class="cl-74be079e"&gt;Number of Observations&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-74bfdf56"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Household Share with Children Aged 25 and Over&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Southeast Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;1,954&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;21.2%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Korean&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;1,339&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;20.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;West Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;2,287&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;19.6%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Filipino&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;5,443&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;19.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Chinese&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;11,291&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;19.0%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Black&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;7,398&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;18.6%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;South Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;14,585&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;17.4%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Arab&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;4,006&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;15.8%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Japanese&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;401&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;14.2%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Latin American&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;3,582&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;13.9%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf58"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;Indigenous peoples&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;10,133&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf60"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;11.9%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-74bfdf61"&gt;&lt;p class="cl-74bfcb7e"&gt;&lt;span class="cl-74be079e"&gt;White&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf62"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;185,673&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-74bfdf62"&gt;&lt;p class="cl-74bfcb92"&gt;&lt;span class="cl-74be079e"&gt;10.7%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+Which columns of the PUMF should we use? (Identify them in Chapter 1 of the user guide.)
+
+--
+
+We will use the following variables: DPGRSUM, PKID25, PRIHM. 
+
+Read Chapter 2 of the user guide for more detailed description for each column.
+
+---
+
+For each population group, calculate the percentage of the households with children aged 25 or above, by population group.
+
+- Use only primary maintainer to prevent a family from counted multiple times. (PRIHM)
+- Remove observations where PKID25 is either "Not available" or "Not applicable"
+- To calculate the share of households with children aged 25 or above, you can use `mean(PKID25=="One or more")` in `summarise`.
+- Sort in descending order of the share.
+- See next slide for the output.
+
+---
+
+.small[
+
+```
+# A tibble: 15 × 2
+   DPGRSUM                          share_PKID25
+   &lt;fct&gt;                                   &lt;dbl&gt;
+ 1 White                                   0.107
+ 2 South Asian                             0.174
+ 3 Chinese                                 0.190
+ 4 Black                                   0.186
+ 5 Filipino                                0.193
+ 6 Arab                                    0.158
+ 7 Latin American                          0.139
+ 8 Southeast Asian                         0.212
+ 9 West Asian                              0.196
+10 Korean                                  0.203
+11 Japanese                                0.142
+12 Other population groups, n.i.e.         0.198
+13 Other multiple population groups        0.122
+14 Indigenous peoples                      0.119
+15 Not available                           0.209
+```
+]
+
+---
+
+.small[
+
+``` r
+pumf %&gt;% filter(PRIHM == "Person is primary maintainer") %&gt;%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %&gt;% 
+	group_by(DPGRSUM) %&gt;% 
+	summarise(share_PKID25=mean(PKID25 == "One or more"))
+```
+]
+
+--
+
+How does `mean(PKID25=="One or more")` work?
+
+
+``` r
+c("a", "b", "c", "d") == "c"
+```
+
+```
+[1] FALSE FALSE  TRUE FALSE
+```
+
+``` r
+mean(c("a", "b", "c", "d") == "c")
+```
+
+```
+[1] 0.25
+```
+
+---
+
+Add a new column n showing the number of observations for each group.
+
+Sort in the descending order of the share.
+
+Remove the rows of the output table where DPGRSUM takes one of the following values: "Not available", "Other population groups, n.i.e.", "Other multiple population groups".
+
+See next slide for the output.
+
+---
+
+
+```
+# A tibble: 12 × 3
+   DPGRSUM                 n share_PKID25
+   &lt;fct&gt;               &lt;int&gt;        &lt;dbl&gt;
+ 1 Southeast Asian      1954        0.212
+ 2 Korean               1339        0.203
+ 3 West Asian           2287        0.196
+ 4 Filipino             5443        0.193
+ 5 Chinese             11291        0.190
+ 6 Black                7398        0.186
+ 7 South Asian         14585        0.174
+ 8 Arab                 4006        0.158
+ 9 Japanese              401        0.142
+10 Latin American       3582        0.139
+11 Indigenous peoples  10133        0.119
+12 White              185673        0.107
+```
+
+---
+
+.tiny[
+
+``` r
+pumf %&gt;% filter(PRIHM == "Person is primary maintainer") %&gt;%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %&gt;% 
+	group_by(DPGRSUM) %&gt;% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %&gt;% 
+	arrange(desc(share_PKID25)) %&gt;% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+```
+]
+
+---
+
+Use flextable to improve the look. 
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-7530e944{}.cl-752c5e24{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-752e1d4a{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-752e1d54{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-752e3050{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-752e305a{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-752e305b{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-752e305c{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-752e3064{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-752e3065{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-7530e944'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-752e3050"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Population Group&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-752e305a"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;Number of Observations&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-752e305a"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;Household Share with Children Aged 25 and Over&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Southeast Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;1,954&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.2118731&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Korean&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;1,339&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.2031367&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;West Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;2,287&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1958898&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Filipino&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;5,443&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1932758&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Chinese&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;11,291&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1897086&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Black&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;7,398&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1857259&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;South Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;14,585&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1740830&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Arab&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;4,006&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1580130&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Japanese&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;401&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1421446&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Latin American&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;3,582&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1390285&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e305b"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;Indigenous peoples&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;10,133&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e305c"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1186223&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-752e3064"&gt;&lt;p class="cl-752e1d4a"&gt;&lt;span class="cl-752c5e24"&gt;White&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e3065"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;185,673&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-752e3065"&gt;&lt;p class="cl-752e1d54"&gt;&lt;span class="cl-752c5e24"&gt;0.1067737&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+.tiny[
+
+``` r
+tb &lt;- pumf %&gt;% filter(PRIHM == "Person is primary maintainer") %&gt;%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %&gt;% 
+	group_by(DPGRSUM) %&gt;% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %&gt;% 
+	arrange(desc(share_PKID25)) %&gt;% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+
+tb %&gt;% flextable() %&gt;% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %&gt;%
+  width(width=c(2,2,2))
+```
+]
+
+---
+
+Insert the following code to format the shares in percentage format. Where would you insert it?
+
+.tiny[
+
+``` r
+mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %&gt;% 
+```
+]
+
+--
+
+.tiny[
+
+``` r
+scales::label_comma(accuracy=0.1, scale=100, suffix="%")(c(0.1231, 3.5465))
+```
+
+```
+[1] "12.3%"  "354.6%"
+```
+
+``` r
+scales::label_comma(accuracy=0.01, scale=100, suffix="%")(c(0.1231, 3.5465))
+```
+
+```
+[1] "12.31%"  "354.65%"
+```
+
+``` r
+scales::label_comma(accuracy=0.1, scale=10, suffix="%")(c(0.1231, 3.5465))
+```
+
+```
+[1] "1.2%"  "35.5%"
+```
+
+``` r
+scales::label_comma(accuracy=0.1, scale=100, suffix="M")(c(0.1231, 3.5465))
+```
+
+```
+[1] "12.3M"  "354.6M"
+```
+]
+---
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-755dd4ea{}.cl-755974c2{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-755b13cc{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-755b13e0{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-755b236c{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-755b236d{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-755b236e{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-755b2376{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-755b2377{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-755b2380{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-755dd4ea'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-755b236c"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Population Group&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-755b236d"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;Number of Observations&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-755b236c"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Household Share with Children Aged 25 and Over&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Southeast Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;1,954&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;21.2%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Korean&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;1,339&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;20.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;West Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;2,287&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;19.6%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Filipino&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;5,443&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;19.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Chinese&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;11,291&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;19.0%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Black&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;7,398&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;18.6%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;South Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;14,585&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;17.4%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Arab&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;4,006&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;15.8%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Japanese&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;401&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;14.2%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Latin American&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;3,582&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;13.9%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;Indigenous peoples&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2376"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;10,133&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b236e"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;11.9%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-755b2377"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;White&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2380"&gt;&lt;p class="cl-755b13e0"&gt;&lt;span class="cl-755974c2"&gt;185,673&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-755b2377"&gt;&lt;p class="cl-755b13cc"&gt;&lt;span class="cl-755974c2"&gt;10.7%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+.tiny[
+
+``` r
+tb &lt;- pumf %&gt;% filter(PRIHM == "Person is primary maintainer") %&gt;%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %&gt;% 
+	group_by(DPGRSUM) %&gt;% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %&gt;% 
+	arrange(desc(share_PKID25)) %&gt;% 
+	filter(! DPGRSUM %in% c("Not available", "Other population groups, n.i.e.", "Other multiple population groups"))
+
+tb %&gt;% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %&gt;% 
+  flextable() %&gt;% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %&gt;%
+  width(width=c(2,2,2))
+```
+]
+
+---
+
+.tiny[
+.pull-left[
+
+``` r
+tb
+```
+
+```
+# A tibble: 12 × 3
+   DPGRSUM                 n share_PKID25
+   &lt;fct&gt;               &lt;int&gt;        &lt;dbl&gt;
+ 1 Southeast Asian      1954        0.212
+ 2 Korean               1339        0.203
+ 3 West Asian           2287        0.196
+ 4 Filipino             5443        0.193
+ 5 Chinese             11291        0.190
+ 6 Black                7398        0.186
+ 7 South Asian         14585        0.174
+ 8 Arab                 4006        0.158
+ 9 Japanese              401        0.142
+10 Latin American       3582        0.139
+11 Indigenous peoples  10133        0.119
+12 White              185673        0.107
+```
+]
+.pull-right[
+
+``` r
+tb %&gt;% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25))
+```
+
+```
+# A tibble: 12 × 3
+   DPGRSUM                 n share_PKID25
+   &lt;fct&gt;               &lt;int&gt; &lt;chr&gt;       
+ 1 Southeast Asian      1954 21.2%       
+ 2 Korean               1339 20.3%       
+ 3 West Asian           2287 19.6%       
+ 4 Filipino             5443 19.3%       
+ 5 Chinese             11291 19.0%       
+ 6 Black                7398 18.6%       
+ 7 South Asian         14585 17.4%       
+ 8 Arab                 4006 15.8%       
+ 9 Japanese              401 14.2%       
+10 Latin American       3582 13.9%       
+11 Indigenous peoples  10133 11.9%       
+12 White              185673 10.7%       
+```
+]
+]
+
+---
+
+Set the alignment for the number of observations and the share columns to 'center'. (Try Googling "flextable cell alignment".)
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-756d68f6{}.cl-756943a2{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-756b3630{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-756b363a{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-756b3644{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-756b44fe{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-756b44ff{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-756b4500{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-756b4501{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-756b4502{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-756b4508{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-756d68f6'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-756b44fe"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Population Group&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-756b44ff"&gt;&lt;p class="cl-756b363a"&gt;&lt;span class="cl-756943a2"&gt;Number of Observations&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-756b44fe"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Household Share with Children Aged 25 and Over&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Southeast Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;1,954&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;21.2%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Korean&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;1,339&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;20.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;West Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;2,287&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;19.6%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Filipino&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;5,443&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;19.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Chinese&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;11,291&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;19.0%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Black&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;7,398&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;18.6%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;South Asian&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;14,585&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;17.4%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Arab&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;4,006&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;15.8%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Japanese&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;401&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;14.2%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Latin American&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;3,582&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;13.9%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4500"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;Indigenous peoples&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;10,133&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4501"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;11.9%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-756b4502"&gt;&lt;p class="cl-756b3630"&gt;&lt;span class="cl-756943a2"&gt;White&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4508"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;185,673&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-756b4508"&gt;&lt;p class="cl-756b3644"&gt;&lt;span class="cl-756943a2"&gt;10.7%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+.tiny[
+
+``` r
+tb %&gt;% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %&gt;% 
+  flextable() %&gt;% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %&gt;%
+  width(width=c(2,2,2)) %&gt;%
+	align(j=c(1, 2, 3), align=c("left", "center", "center"))  
+```
+]
+
+---
+
+Save the table as a png file in the temp folder.
+
+.tiny[
+
+``` r
+ft &lt;- tb %&gt;% 
+  mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %&gt;% 
+  flextable() %&gt;% 
+  set_header_labels(
+  DPGRSUM = "Population Group", 
+  n = "Number of Observations", 
+  share_PKID25="Household Share with Children Aged 25 and Over"
+  ) %&gt;%
+  width(width=c(2,2,2)) %&gt;%
+	align(j=c(2, 3), align="center")
+
+ft %&gt;% save_as_image("temp/families_with_old_kids.png")
+```
+]
+
+---
+
+Generate a similar table using `CMA` instead of `DPGRSUM`. Keep only the cities with more than 3,000 observations.
+
+&lt;div class="tabwid"&gt;&lt;style&gt;.cl-75945f7e{}.cl-75904146{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-7591be90{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7591be9a{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7591be9b{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-7591ceee{width:3in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7591cef8{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7591cef9{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7591cefa{width:3in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7591cefb{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7591cf02{width:3in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-7591cf03{width:2in;background-color:rgba(255, 255, 255, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table data-quarto-disable-processing='true' class='cl-75945f7e'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;th class="cl-7591ceee"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Census Metropolitan Area&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-7591cef8"&gt;&lt;p class="cl-7591be9a"&gt;&lt;span class="cl-75904146"&gt;Number of Observations&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;th class="cl-7591cef9"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Household Share with Children Aged 25 and Over&lt;/span&gt;&lt;/p&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Toronto&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;42,075&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;20.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Hamilton&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;5,475&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;16.1%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Vancouver&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;18,021&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;15.8%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;St. Catharines – Niagara&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;3,156&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;15.5%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Brantford – Guelph – Barrie&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;3,725&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;14.7%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;London&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;3,860&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;13.5%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Winnipeg&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;5,658&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;13.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Kitchener –  Cambridge –  Waterloo&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;4,040&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;13.2%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Montréal&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;30,109&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;11.8%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Edmonton&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;9,775&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;11.3%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Ottawa - Gatineau&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;10,685&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;11.0%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Calgary&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;10,457&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;10.4%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Halifax&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;3,272&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;10.1%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cefa"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Regina – Saskatoon&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;3,929&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cefb"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;9.7%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-7591cf02"&gt;&lt;p class="cl-7591be90"&gt;&lt;span class="cl-75904146"&gt;Québec&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cf03"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;6,048&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-7591cf03"&gt;&lt;p class="cl-7591be9b"&gt;&lt;span class="cl-75904146"&gt;6.2%&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;
+
+---
+
+.tiny[
+
+``` r
+tb &lt;- pumf %&gt;% filter(PRIHM == "Person is primary maintainer") %&gt;%
+	filter(! PKID25 %in% c("Not available", "Not applicable") ) %&gt;% 
+	group_by(CMA) %&gt;% 
+	summarise(n=n(), share_PKID25=mean(PKID25 == "One or more")) %&gt;% 
+	arrange(desc(share_PKID25)) %&gt;% 
+	filter(n&gt;=3000) %&gt;% 
+	filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies")
+
+tb %&gt;%
+	mutate(share_PKID25 = scales::label_comma(accuracy=0.1, scale = 100, suffix="%")(share_PKID25)) %&gt;%
+  flextable() %&gt;%
+	set_header_labels(
+	  CMA = "Census Metropolitan Area", 
+	  n="Number of Observations", 
+	  share_PKID25="Household Share with Children Aged 25 and Over") %&gt;% 
+	width(width = c(3, 2, 2)) %&gt;%  
+	align(j=c(2, 3), align="center")
+```
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
