@@ -291,67 +291,6 @@ pumf %>% group_by(CMA) %>%
 
 ---
 
-### Making publication quality tables using flextable
-
-https://ardata-fr.github.io/flextable-book/index.html
-
-.tiny[
-```{r}
-# install.packages("flextable") # You have to run it only once on your computer.
-library(flextable)
-```
-]
-
----
-
-.tiny[
-```{r fig.height=0.3}
-ft <- pumf %>% group_by(CMA) %>% 
-  summarise(pop = sum(WEIGHT)) %>% 
-  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %>%
-  arrange(desc(pop)) %>% 
-  head() %>% 
-	flextable()
-
-ft
-```
-]
-
----
-
-```{r}
- ft <- ft %>% 
-  set_header_labels(
-    CMA = "Census Metropolitan Area,", 
-    pop = "Population")
-
-ft
-```
-
----
-
-```{r}
-ft <- ft %>% width(width=c(2.5, 1.5))
-
-ft
-```
-
----
-
-.small[
-```{r}
-# The default background color is "transparent".
-# If you want to change it to "white"
-set_flextable_defaults(background.color = "white") 
-
-ft %>% save_as_image("temp/largest_CMAs.png")
-```
-]
-
-Try importing the png file to a Powerpoint presentation.
-
----
-
 ### Practice
 
 Using the 2021 PUMF, determine the religious demographics of Vancouver by estimating the population associated with each religion. Present the top five religions based on their respective number of followers.
@@ -362,10 +301,7 @@ pumf %>%
 	group_by(Relig) %>% 
 	summarise(n=sum(WEIGHT)) %>% arrange(desc(n)) %>% 
 	filter(Relig != "No religion and secular perspectives") %>% 
-	head(5) %>% 
-  flextable() %>% 
-  set_header_labels(Relig="Religion", n="Population Size") %>% 
-	width(width=c(2, 1.5))
+	head(5)
 ```
 
 ---
@@ -376,10 +312,7 @@ pumf %>%
 	group_by(Relig) %>% 
 	summarise(n=sum(WEIGHT)) %>% arrange(desc(n)) %>% 
 	filter(Relig != "No religion and secular perspectives") %>% 
-	head(5) %>% 
-  flextable() %>% 
-  set_header_labels(Relig="Religion", n="Population Size") %>% 
-	width(width=c(2, 1.5))
+	head(5)
 ```
 
 ---
@@ -408,10 +341,7 @@ pumf %>% group_by(CMA) %>%
   summarise(avg_income = weighted.mean(TotInc, w=WEIGHT)) %>% 
   filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %>% 
   arrange(desc(avg_income)) %>% 
-  head(10) %>%
-  flextable() %>% 
-  set_header_labels(CMA="Census Metropolitan Area", avg_income="Average Income ($)") %>% 
-  width(width = c(3, 2))
+  head(10)
 ```
 ]]
 
@@ -425,9 +355,6 @@ pumf %>% group_by(CMA) %>%
   summarise(avg_income = weighted.mean(TotInc, w=WEIGHT)) %>% 
   filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies") %>% 
   arrange(desc(avg_income)) %>% 
-  head(10) %>%
-  flextable() %>% 
-  set_header_labels(CMA="Census Metropolitan Area", avg_income="Average Income ($)") %>% 
-  width(width = c(3, 2))
+  head(10)
 ```
 ]]
