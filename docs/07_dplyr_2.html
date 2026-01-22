@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### Sanghoon Lee
 ]
 .date[
-### 20 January, 2026
+### 22 January, 2026
 ]
 
 ---
@@ -312,70 +312,6 @@ When summarise() sees group variables, it runs on each subset defined by the gro
 
 ---
 
-### Ungrouping
-
-Each time summarise() is used, the last group variable gets removed.
-
-.tiny[
-.pull-left[
-
-``` r
-pumf0 %&gt;% group_by(CMA, Gender) %&gt;% 
-  summarise(pop = sum(WEIGHT))
-```
-
-```
-# A tibble: 4 × 3
-# Groups:   CMA [2]
-  CMA   Gender   pop
-  &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
-1 x     Female     1
-2 x     Male       2
-3 y     Female     3
-4 y     Male       9
-```
-]
-
-.pull-right[
-
-``` r
-pumf0 %&gt;% group_by(CMA, Gender) %&gt;% 
-  summarise(pop = sum(WEIGHT)) %&gt;% 
-  summarise(pop2 = sum(pop))
-```
-
-```
-# A tibble: 2 × 2
-  CMA    pop2
-  &lt;chr&gt; &lt;dbl&gt;
-1 x         3
-2 y        12
-```
-]
-]
-
----
-
-Use ungroup() to remove all groupings.
-
-
-``` r
-pumf0 %&gt;% group_by(CMA, Gender) %&gt;% ungroup()
-```
-
-```
-# A tibble: 5 × 4
-  WEIGHT TotInc CMA   Gender
-   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-1      1     14 x     Female
-2      2     13 x     Male  
-3      3     12 y     Female
-4      4      8 y     Male  
-5      5     10 y     Male  
-```
-
----
-
 ### Practice task
 
 Using 2021 Census public use microfile, estimate the population size of Canada. Use summarise().
@@ -624,6 +560,71 @@ pumf %&gt;% group_by(CMA) %&gt;%
   head(10)
 ```
 ]]
+
+
+---
+
+### Ungrouping
+
+Each time summarise() is used, the last group variable gets removed.
+
+.tiny[
+.pull-left[
+
+``` r
+pumf0 %&gt;% group_by(CMA, Gender) %&gt;% 
+  summarise(pop = sum(WEIGHT))
+```
+
+```
+# A tibble: 4 × 3
+# Groups:   CMA [2]
+  CMA   Gender   pop
+  &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+1 x     Female     1
+2 x     Male       2
+3 y     Female     3
+4 y     Male       9
+```
+]
+
+.pull-right[
+
+``` r
+pumf0 %&gt;% group_by(CMA, Gender) %&gt;% 
+  summarise(pop = sum(WEIGHT)) %&gt;% 
+  summarise(pop2 = sum(pop))
+```
+
+```
+# A tibble: 2 × 2
+  CMA    pop2
+  &lt;chr&gt; &lt;dbl&gt;
+1 x         3
+2 y        12
+```
+]
+]
+
+---
+
+Use ungroup() to remove all groupings.
+
+
+``` r
+pumf0 %&gt;% group_by(CMA, Gender) %&gt;% ungroup()
+```
+
+```
+# A tibble: 5 × 4
+  WEIGHT TotInc CMA   Gender
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+1      1     14 x     Female
+2      2     13 x     Male  
+3      3     12 y     Female
+4      4      8 y     Male  
+5      5     10 y     Male  
+```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

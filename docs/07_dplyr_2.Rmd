@@ -172,37 +172,6 @@ When summarise() sees group variables, it runs on each subset defined by the gro
 
 ---
 
-### Ungrouping
-
-Each time summarise() is used, the last group variable gets removed.
-
-.tiny[
-.pull-left[
-```{r}
-pumf0 %>% group_by(CMA, Gender) %>% 
-  summarise(pop = sum(WEIGHT))
-```
-]
-
-.pull-right[
-```{r}
-pumf0 %>% group_by(CMA, Gender) %>% 
-  summarise(pop = sum(WEIGHT)) %>% 
-  summarise(pop2 = sum(pop))
-```
-]
-]
-
----
-
-Use ungroup() to remove all groupings.
-
-```{r}
-pumf0 %>% group_by(CMA, Gender) %>% ungroup()
-```
-
----
-
 ### Practice task
 
 Using 2021 Census public use microfile, estimate the population size of Canada. Use summarise().
@@ -358,3 +327,35 @@ pumf %>% group_by(CMA) %>%
   head(10)
 ```
 ]]
+
+
+---
+
+### Ungrouping
+
+Each time summarise() is used, the last group variable gets removed.
+
+.tiny[
+.pull-left[
+```{r}
+pumf0 %>% group_by(CMA, Gender) %>% 
+  summarise(pop = sum(WEIGHT))
+```
+]
+
+.pull-right[
+```{r}
+pumf0 %>% group_by(CMA, Gender) %>% 
+  summarise(pop = sum(WEIGHT)) %>% 
+  summarise(pop2 = sum(pop))
+```
+]
+]
+
+---
+
+Use ungroup() to remove all groupings.
+
+```{r}
+pumf0 %>% group_by(CMA, Gender) %>% ungroup()
+```
