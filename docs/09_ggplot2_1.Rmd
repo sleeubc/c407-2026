@@ -1,0 +1,326 @@
+---
+title: "ggplot2 - 1"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA)
+options(tibble.print_max = Inf)
+library(kableExtra)
+```
+
+ggplot2 grammar
+
+geom_point()
+
+geom_smooth()
+
+---
+
+```{r eval=FALSE}
+install.packages("gapminder")
+```
+Need to install gapminder package, just once.
+
+```{r}
+library(gapminder)
+library(tidyverse)
+```
+
+No need to load ggplot2 package in addition to tidyverse.
+
+```{r}
+gapminder_2007 <- gapminder %>% filter(year == 2007)
+```
+
+```{r eval=FALSE}
+gapminder_2007
+```
+
+---
+
+.scroll-output[
+```{r echo=FALSE}
+gapminder_2007 %>% kable()
+```
+]
+
+---
+
+#### Minimum ggplot2 template
+
+```{r eval=FALSE}
+ggplot() + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>), data = <DATA>)
+```
+
+
+---
+
+.small[
+```{r}
+ggplot() + 
+  geom_point(mapping=aes(x=gdpPercap, y=lifeExp), data=gapminder_2007)
+```
+]
+
+---
+
+#### Different geoms
+
+Click Help - Cheatsheets - Data visualization with ggplot2.
+
+Find geom_point().
+
+Which section is it in?
+
+--
+
+Find geom_smooth()
+
+---
+
+.small[
+```{r}
+ggplot() + 
+  geom_smooth(mapping=aes(x=gdpPercap, y=lifeExp), data=gapminder_2007)
+```
+]
+
+---
+
+#### Overlaying multiple geoms
+
+.small[
+```{r}
+ggplot() + 
+  geom_smooth(mapping=aes(x=gdpPercap, y=lifeExp), data=gapminder_2007) +
+  geom_point(mapping=aes(x=gdpPercap, y=lifeExp), data=gapminder_2007)
+```
+]
+
+---
+
+#### Global option
+
+.small[
+```{r eval=FALSE}
+ggplot() + 
+  geom_smooth(mapping=aes(x=gdpPercap, y=lifeExp), data=gapminder_2007) +
+  geom_point(mapping=aes(x=gdpPercap, y=lifeExp), data=gapminder_2007) 
+```
+]
+
+--
+
+```{r eval=TRUE, fig.height=4.5}
+ggplot(data=gapminder_2007, mapping=aes(x=gdpPercap, y=lifeExp)) + 
+  geom_smooth() +  geom_point()
+```
+
+---
+
+#### Matching arguments by position
+
+[? `ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)
+
+[? `aes`](https://ggplot2.tidyverse.org/reference/aes.html)
+
+```{r eval=FALSE}
+ggplot(data=gapminder_2007, mapping=aes(x=gdpPercap, y=lifeExp)) + 
+  geom_smooth() +  geom_point()
+```
+
+```{r}
+ggplot(gapminder_2007, aes(gdpPercap, lifeExp ) ) + 
+  geom_smooth() + geom_point()
+```
+
+---
+
+[`? geom_point`](https://ggplot2.tidyverse.org/reference/geom_point.html)
+
+```{r}
+ggplot(gapminder_2007) + 
+  geom_point(aes(gdpPercap, lifeExp))
+```
+
+---
+
+#### Aesthetic mappings
+
+`mapping = aes( <MAPPING> )` maps variables (i.e., columns) in the data to visual properties.
+
+---
+
+```{r}
+ggplot(gapminder_2007) + 
+  geom_point(aes(gdpPercap, lifeExp, color=continent))
+```
+
+---
+
+```{r}
+ggplot(gapminder_2007) + 
+  geom_point(aes(gdpPercap, lifeExp, shape=continent))
+```
+
+---
+
+.small[
+```{r}
+ggplot(gapminder_2007) + 
+  geom_point(aes(gdpPercap, lifeExp, shape=continent, color=continent))
+```
+]
+
+---
+
+#### ggplot2 cheatsheet
+
+In RStudio, click Help - Cheatsheets - Data visualization with ggplot2.
+
+--
+
+Note different geom functions may offer different aesthetic properties.
+
+--
+
+Run the example for geom_col()
+
+What are argument names for mpg, aes(class, hwy), class, hwy?
+
+---
+
+```{r include=params$answers}
+f <- ggplot(mpg, aes(class, hwy)) 
+f + geom_col()
+```
+
+---
+
+```{r include=params$answers}
+ggplot(mpg, aes(class, hwy)) + geom_col()
+```
+
+
+---
+
+#### Application - Housing value vs. population size across CMAs
+
+Using the PUMF, calculate population and average housing value for each CMA.
+
+Generate a scatter plot with population on x-axis and average housing value on y-axis. (See next slide for the output.)
+
+---
+
+```{r echo=FALSE}
+pumf <- read_rds("../Data/2016_census_pumf_ind.rds")
+pumf <- pumf %>% mutate(VALUE2 = case_when( VALUE > 80000000 ~ NA, .default = VALUE))
+
+temp <- pumf %>% group_by(CMA) %>% 
+  summarise(
+    avg_VALUE = weighted.mean(VALUE2, w=WEIGHT, na.rm = TRUE), 
+    pop=sum(WEIGHT)
+    )
+
+temp <- temp %>% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies")
+
+temp <- temp %>% arrange( desc(avg_VALUE) )
+
+ggplot() + geom_point(aes(pop, avg_VALUE), temp)
+```
+
+
+---
+
+
+.small[
+Load the pumf dataset.
+
+Add a new column VALUE2 that has NA for VALUE > 80000000 and is equal to VALUE otherwise.(Read chapter 2 VALUE page in the manual to understand why.)
+
+```{r eval=FALSE}
+mutate(VALUE2 = case_when( VALUE > 80000000 ~ NA, .default = VALUE))
+```
+
+Calculate pop (= population size) and avg_VALUE (= average VALUE2) by CMA. Set na.rm = TRUE in weighted.mean(). Assign temp as its name.
+
+Drop observation where CMA is "Other census metropolitan areas, census agglomerations and other geographies".
+
+Sort the remaining observations in the descending order of avg_VALUE.
+]
+
+---
+
+.tiny[
+```{r include=params$answers}
+pumf <- read_rds("../Data/2016_census_pumf_ind.rds")
+pumf <- pumf %>% mutate(VALUE2 = case_when( VALUE > 80000000 ~ NA, .default = VALUE))
+
+temp <- pumf %>% group_by(CMA) %>% 
+  summarise(
+    avg_VALUE = weighted.mean(VALUE2, w=WEIGHT, na.rm = TRUE), 
+    pop=sum(WEIGHT)
+    )
+
+temp <- temp %>% 
+  filter(CMA != "Other census metropolitan areas, census agglomerations and other geographies")
+
+temp <- temp %>% arrange( desc(avg_VALUE) )
+```
+]
+
+---
+
+```{r}
+temp
+```
+
+---
+
+Create a scatterplot showing the population size on x-axis and the average VALUE2 on y-axis.
+
+---
+
+```{r echo=params$answers}
+ggplot() + geom_point(aes(pop, avg_VALUE), temp)
+```
+
+---
+
+Install `ggrepel` package, and add the following geom: 
+
+.tiny[
+```{r eval=FALSE}
++ ggrepel::geom_text_repel(
+  aes(pop, avg_VALUE, label=CMA), 
+  temp %>% arrange(desc(pop)) %>% head(8) 
+  )
+```
+]
+
+
+---
+
+.tiny[
+```{r echo=params$answers}
+ggplot() + geom_point(aes(pop, avg_VALUE), temp) + 
+  ggrepel::geom_text_repel(
+    aes(pop, avg_VALUE, label=CMA), 
+    temp %>% arrange(desc(pop)) %>% head(8) )
+```
+]
