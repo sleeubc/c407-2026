@@ -4,7 +4,7 @@
     <title>ggplot2 - 1</title>
     <meta charset="utf-8" />
     <meta name="author" content="Sanghoon Lee" />
-    <script src="libs/header-attrs-2.30/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="c407_slides.css" type="text/css" />
   </head>
@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### Sanghoon Lee
 ]
 .date[
-### 25 January, 2026
+### 28 January, 2026
 ]
 
 ---
@@ -442,8 +442,8 @@ Sort the remaining observations in the descending order of avg_VALUE.
 .tiny[
 
 ``` r
-pumf &lt;- read_rds("../Data/2016_census_pumf_ind.rds")
-pumf &lt;- pumf %&gt;% mutate(VALUE2 = case_when( VALUE &gt; 80000000 ~ NA, .default = VALUE))
+pumf &lt;- read_rds("../Data/2021_census_pumf_ind.rds")
+pumf &lt;- pumf %&gt;% mutate(VALUE2 = case_when( Value &gt; 80000000 ~ NA_real_, .default = Value))
 
 temp &lt;- pumf %&gt;% group_by(CMA) %&gt;% 
   summarise(
@@ -467,31 +467,31 @@ temp
 
 ```
 # A tibble: 23 × 3
-   CMA                                           avg_VALUE      pop
-   &lt;fct&gt;                                             &lt;dbl&gt;    &lt;dbl&gt;
- 1 Vancouver                                      1126758. 2429307.
- 2 Toronto                                         783080. 5865779.
- 3 Victoria                                        693559.  363644.
- 4 Kelowna – Abbotsford                            584589.  363533.
- 5 Calgary                                         570789. 1371657.
- 6 Hamilton                                        528441.  734301.
- 7 Oshawa                                          497833.  373928.
- 8 Edmonton                                        474164. 1296951.
- 9 Brantford – Guelph – Barrie                     440424.  479336.
-10 Ottawa – Gatineau                               430284. 1295009.
-11 Kitchener – Cambridge – Waterloo                425219.  519411.
-12 Regina – Saskatoon                              420631.  522682.
-13 Montréal                                        396385. 4021972.
-14 Kingston – Peterborough                         370127.  276187.
-15 Winnipeg                                        360736.  757167.
-16 Halifax                                         340319.  395880.
-17 St. Catharines – Niagara                        339900.  393743.
-18 London                                          332961.  489151.
-19 Québec                                          326112.  776428.
-20 Greater Sudbury / Grand Sudbury – Thunder Bay   307401.  278668.
-21 Windsor                                         273285.  327965.
-22 Sherbrooke – Trois-Rivières                     247260.  352265.
-23 Moncton – Saint John                            218994.  267420.
+   CMA                                avg_VALUE      pop
+   &lt;fct&gt;                                  &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Vancouver                           1437121. 2608986.
+ 2 Toronto                             1176785. 6130098.
+ 3 Victoria                            1037726.  391474.
+ 4 Kelowna –  Abbotsford-Mission        918534.  413807.
+ 5 Hamilton                             876699.  777202.
+ 6 Oshawa                               830994.  415157.
+ 7 Brantford – Guelph – Barrie          776248.  515937.
+ 8 Kitchener –  Cambridge –  Waterloo   771579.  573235.
+ 9 St. Catharines – Niagara             652777.  424602.
+10 Ottawa - Gatineau                    632245. 1478890.
+11 London                               628229.  534827.
+12 Kingston – Peterborough              606571.  289599.
+13 Calgary                              561070. 1467038.
+14 Montréal                             535646. 4210000.
+15 Windsor                              528895.  413231.
+16 Edmonton                             468571. 1396903.
+17 Halifax                              426470.  459286.
+18 Regina – Saskatoon                   418132.  554343.
+19 Winnipeg                             403718.  822346.
+20 Greater Sudbury – Thunder Bay        384102.  288006.
+21 Québec                               353270.  818955.
+22 Sherbrooke – Trois-Rivières          296506.  372390.
+23 Moncton –  Saint John                257534.  282107.
 ```
 
 ---

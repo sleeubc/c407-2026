@@ -16,7 +16,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = NA)
 options(tibble.print_max = Inf)
 library(kableExtra)
 ```
@@ -33,7 +33,7 @@ lag()
 
 ```{r}
 library(tidyverse)
-tb <- tibble(a=c(1,1,1,2,2,2), b=c(1,2,3,3,4,4))
+tb <- tibble(a = c(1, 1, 1, 2, 2, 2), b = c(1, 2, 3, 3, 4, 4))
 tb
 ```
 
@@ -46,7 +46,8 @@ tb
 ]
 .pull-right[
 ```{r}
-tb %>% group_by(a) %>% 
+tb %>%
+  group_by(a) %>%
   summarise(b_1 = nth(b, 1))
 ```
 ]
@@ -60,8 +61,9 @@ tb
 ]
 .pull-right[
 ```{r}
-tb %>% group_by(a) %>% 
-  mutate(b_1 = nth(b,1))
+tb %>%
+  group_by(a) %>%
+  mutate(b_1 = nth(b, 1))
 ```
 ]
 
@@ -74,8 +76,9 @@ tb
 ]
 .pull-right-2[
 ```{r}
-tb %>% group_by(a) %>% 
-  mutate(b_index = b/nth(b, 1))
+tb %>%
+  group_by(a) %>%
+  mutate(b_index = b / nth(b, 1))
 ```
 ]
 
@@ -114,16 +117,16 @@ tb %>% mutate(diff_b = b - lag(b))
 
 .pull-left[
 ```{r}
-tb %>% 
-  group_by(a) %>% 
+tb %>%
+  group_by(a) %>%
   mutate(lag_b = lag(b))
 ```
 ]
 
 .pull-right[
 ```{r}
-tb %>% 
-  group_by(a) %>% 
+tb %>%
+  group_by(a) %>%
   mutate(diff_b = b - lag(b))
 ```
 ]
@@ -132,17 +135,17 @@ tb %>%
 
 .pull-left-1[
 ```{r}
-tb %>% 
-  group_by(a) %>% 
+tb %>%
+  group_by(a) %>%
   mutate(lag_b = lag(b))
 ```
 ]
 
 .pull-right-2[
 ```{r}
-tb %>% 
-  group_by(a) %>% 
-  mutate(growth_b = (b - lag(b)) / lag(b) )
+tb %>%
+  group_by(a) %>%
+  mutate(growth_b = (b - lag(b)) / lag(b))
 ```
 ]
 
@@ -150,7 +153,7 @@ tb %>%
 
 ### Application
 
-- Load the bca252 data and assigns bca as its name.
+- Load the bca242 data and assigns bca as its name.
 
 - Create sale_year column. Use the `year` function in `lubridate` package to extract year from `sale_date`.
 
@@ -161,13 +164,13 @@ tb %>%
 ---
 
 ```{r include=params$answers}
-bca <- read_rds("../Data/bca252.rds")
+bca <- read_rds("Data/bca242.rds")
 
-avg_price <- bca %>% 
-  mutate(sale_year = lubridate::year(sale_date)) %>% 
-  group_by(act_use_cat, sale_year) %>% 
-  summarise(avg_price = mean(price, na.rm=TRUE)) %>% 
-	ungroup()
+avg_price <- bca %>%
+  mutate(sale_year = lubridate::year(sale_date)) %>%
+  group_by(act_use_cat, sale_year) %>%
+  summarise(avg_price = mean(price, na.rm = TRUE)) %>%
+  ungroup()
 ```
 
 ---
@@ -181,8 +184,9 @@ avg_price
 ---
 
 ```{r}
-ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
-  geom_line() + geom_point()
+ggplot(avg_price, aes(sale_year, avg_price, color = act_use_cat)) +
+  geom_line() +
+  geom_point()
 ```
 
 ---
@@ -192,8 +196,9 @@ Using `avg_price`, calculate price index (= avg_price / avg_price of year 2000) 
 --
 
 ```{r include=params$answers}
-price_index <- avg_price %>% group_by(act_use_cat) %>% 
-  mutate( price_index = avg_price / nth(avg_price, 1))
+price_index <- avg_price %>%
+  group_by(act_use_cat) %>%
+  mutate(price_index = avg_price / nth(avg_price, 1))
 ```
 
 ---
@@ -207,8 +212,9 @@ price_index
 ---
 
 ```{r}
-ggplot(price_index, aes(sale_year, price_index, color=act_use_cat)) + 
-  geom_line() + geom_point()
+ggplot(price_index, aes(sale_year, price_index, color = act_use_cat)) +
+  geom_line() +
+  geom_point()
 ```
 
 ---
@@ -218,7 +224,8 @@ Modify the previous code to calculate price index (= avg_price / avg_price of ye
 --
 
 ```{r include=params$answers}
-price_index <- avg_price %>% group_by(act_use_cat) %>% 
+price_index <- avg_price %>%
+  group_by(act_use_cat) %>%
   mutate(price_index = avg_price / nth(avg_price, 11))
 ```
 
@@ -234,8 +241,9 @@ price_index
 
 
 ```{r}
-ggplot(price_index, aes(sale_year, price_index, color=act_use_cat)) + 
-  geom_line() + geom_point()
+ggplot(price_index, aes(sale_year, price_index, color = act_use_cat)) +
+  geom_line() +
+  geom_point()
 ```
 
 ---
@@ -245,8 +253,9 @@ Modify the previous code to calculate price growth rate (= (avg_price - avg_pric
 --
 
 ```{r include=params$answers}
-price_growth <- avg_price %>% group_by(act_use_cat) %>% 
-  mutate( price_growth = (avg_price - lag(avg_price)) / lag(avg_price) )
+price_growth <- avg_price %>%
+  group_by(act_use_cat) %>%
+  mutate(price_growth = (avg_price - lag(avg_price)) / lag(avg_price))
 ```
 
 ---
@@ -260,7 +269,8 @@ price_growth
 ---
 
 ```{r}
-ggplot(price_growth, aes(sale_year, price_growth, color=act_use_cat)) + 
-  geom_line() + geom_point()
+ggplot(price_growth, aes(sale_year, price_growth, color = act_use_cat)) +
+  geom_line() +
+  geom_point()
 ```
 
