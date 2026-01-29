@@ -227,7 +227,7 @@ Generate a scatter plot with population on x-axis and average housing value on y
 ---
 
 ```{r echo=FALSE}
-pumf <- read_rds("../Data/2021_census_pumf_ind.rds")
+pumf <- read_rds("Data/2021_census_pumf_ind.rds")
 pumf <- pumf %>% mutate(VALUE2 = case_when( Value > 80000000 ~ NA_real_, .default = Value))
 
 temp <- pumf %>% group_by(CMA) %>% 
@@ -268,7 +268,7 @@ Sort the remaining observations in the descending order of avg_VALUE.
 
 .tiny[
 ```{r include=params$answers}
-pumf <- read_rds("../Data/2021_census_pumf_ind.rds")
+pumf <- read_rds("Data/2021_census_pumf_ind.rds")
 pumf <- pumf %>% mutate(VALUE2 = case_when( Value > 80000000 ~ NA_real_, .default = Value))
 
 temp <- pumf %>% group_by(CMA) %>% 

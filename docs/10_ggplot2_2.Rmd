@@ -43,7 +43,7 @@ library(tidyverse)
 ```
 
 ```{r}
-bca <- read_rds("../Data/bca252.rds")
+bca <- read_rds("Data/bca252.rds")
 ```
 
 ---
