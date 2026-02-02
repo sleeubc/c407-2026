@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Factor</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sanghoon Lee" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="c407_slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Factor
+]
+.author[
+### Sanghoon Lee
+]
+.date[
+### 02 February, 2026
+]
+
+---
+
+
+
+
+
+``` r
+library(tidyverse)
+library(lubridate)
+```
+
+
+``` r
+bca2020 &lt;- read_rds("Data/bca252.rds") %&gt;%
+	filter(year(sale_date)==2020) 
+```
+
+---
+
+
+``` r
+n_wday &lt;- bca2020 %&gt;% 
+	group_by(wday = wday(sale_date, label=TRUE)) %&gt;% 
+	summarise(n=n())
+```
+
+
+``` r
+n_wday
+```
+
+```
+# A tibble: 7 × 2
+  wday      n
+  &lt;ord&gt; &lt;int&gt;
+1 Sun       2
+2 Mon    9844
+3 Tue   10674
+4 Wed   10852
+5 Thu   14630
+6 Fri    7336
+7 Sat       8
+```
+
+---
+
+
+``` r
+ggplot(n_wday) + geom_col( aes(wday, n))
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+How does `ggplot()` know the order among the weekdays on x-axis?
+
+---
+
+Factor
+
+
+``` r
+n_wday$wday %&gt;% class
+```
+
+```
+[1] "ordered" "factor" 
+```
+
+
+``` r
+n_wday$wday
+```
+
+```
+[1] Sun Mon Tue Wed Thu Fri Sat
+Levels: Sun &lt; Mon &lt; Tue &lt; Wed &lt; Thu &lt; Fri &lt; Sat
+```
+
+---
+
+
+``` r
+n_wday %&gt;% mutate(wday2 = as.numeric(wday))
+```
+
+
+|wday |     n| wday2|
+|:----|-----:|-----:|
+|Sun  |     2|     1|
+|Mon  |  9844|     2|
+|Tue  | 10674|     3|
+|Wed  | 10852|     4|
+|Thu  | 14630|     5|
+|Fri  |  7336|     6|
+|Sat  |     8|     7|
+
+For a factor, `ggplot` uses the order in the underlying levels as coordinates. 
+
+---
+
+
+``` r
+n_wday2 &lt;- n_wday %&gt;% mutate(wday = as.character(wday))
+```
+
+
+``` r
+n_wday2
+```
+
+```
+# A tibble: 7 × 2
+  wday      n
+  &lt;chr&gt; &lt;int&gt;
+1 Sun       2
+2 Mon    9844
+3 Tue   10674
+4 Wed   10852
+5 Thu   14630
+6 Fri    7336
+7 Sat       8
+```
+
+---
+
+
+``` r
+ggplot(n_wday2) + geom_col(aes(wday, n))
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+For a character vector, it uses the alphabetical order for the position.
+
+---
+
+You can create a factor using factor().
+
+.small[
+
+``` r
+tb &lt;- tibble(
+	municipality = c("Vancouver", "Richmond", "Surrey", "Port Moody"), 
+	value=c(5,1,8,3))
+```
+]
+
+|municipality | value|
+|:------------|-----:|
+|Vancouver    |     5|
+|Richmond     |     1|
+|Surrey       |     8|
+|Port Moody   |     3|
+
+---
+
+
+``` r
+ggplot(tb) + geom_col(aes(x=value, y=municipality))
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-15-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+.small[
+
+``` r
+tb &lt;- tb %&gt;% mutate(
+	municipality2 = factor(municipality, levels=c("Richmond", "Port Moody", "Vancouver", "Surrey")))
+```
+]
+
+|municipality | value|municipality2 |
+|:------------|-----:|:-------------|
+|Vancouver    |     5|Vancouver     |
+|Richmond     |     1|Richmond      |
+|Surrey       |     8|Surrey        |
+|Port Moody   |     3|Port Moody    |
+
+
+``` r
+tb$municipality2
+```
+
+```
+[1] Vancouver  Richmond   Surrey     Port Moody
+Levels: Richmond Port Moody Vancouver Surrey
+```
+
+---
+
+
+``` r
+ggplot(tb) + geom_col(aes(x=value, y=municipality2))
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+``` r
+ggplot(tb) + geom_col(aes(x=value, y=fct_reorder(municipality,value)))
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-20-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+.small[
+
+``` r
+ggplot(tb) + 
+	geom_col(aes(x=value, y=fct_reorder(municipality,value) %&gt;% fct_rev() ))
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-21-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+### Pracice: Create the figure on the following slide.
+
+.small[
+
+``` r
+avgp_aa &lt;- bca2020 %&gt;% group_by(aa_label) %&gt;% 
+	summarise(avgp = mean(price))
+```
+]
+
+|aa_label                    |      avgp|
+|:---------------------------|---------:|
+|Fraser Valley               |  725104.7|
+|North Fraser                |  755604.1|
+|North Shore-Squamish Valley | 1485434.0|
+|Richmond-Delta              |  889509.4|
+|Surrey-White Rock           |  822154.2|
+|Vancouver                   | 1326285.8|
+
+---
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-24-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+.tiny[
+
+``` r
+ggplot(avgp_aa) + geom_col(aes(avgp, fct_reorder(aa_label, avgp))) + 
+	scale_x_continuous(name="Average Price", labels = scales::label_comma(scale=0.000001, prefix="$", suffix = "M")) + scale_y_discrete(name=NULL)
+```
+]
+
+---
+
+#### Don't use it if the x values have a natural order by themselves.
+
+
+``` r
+ggplot(n_wday2) + geom_col(aes(fct_reorder(wday,n), n)) 
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-26-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Ordered factor
+
+.small[
+
+``` r
+tb &lt;- tb %&gt;% mutate(municipality3 = factor(municipality, levels=c("Surrey", "Vancouver", "Richmond", "Port Moody"), ordered = TRUE))
+```
+
+
+``` r
+tb$municipality3 %&gt;% class
+```
+
+```
+[1] "ordered" "factor" 
+```
+
+
+``` r
+tb$municipality3
+```
+
+```
+[1] Vancouver  Richmond   Surrey     Port Moody
+Levels: Surrey &lt; Vancouver &lt; Richmond &lt; Port Moody
+```
+]
+
+---
+
+You can use inequality conditions with an ordered factor.
+
+
+``` r
+tb %&gt;% mutate(temp = municipality3 &gt;= "Richmond")
+```
+
+|municipality | value|municipality2 |municipality3 |temp  |
+|:------------|-----:|:-------------|:-------------|:-----|
+|Vancouver    |     5|Vancouver     |Vancouver     |FALSE |
+|Richmond     |     1|Richmond      |Richmond      |TRUE  |
+|Surrey       |     8|Surrey        |Surrey        |FALSE |
+|Port Moody   |     3|Port Moody    |Port Moody    |TRUE  |
+
+---
+
+Suppose you want to combine Vancouver and Richmond to have the same name "Vancouver-Richmond".
+
+
+``` r
+tb %&gt;% mutate( municipality4 = case_when(
+	municipality3 == "Surrey" ~ "Surrey",
+	municipality3 &lt;= "Richmond" ~ "Vancouver-Richmond",
+	municipality3 == "Port Moody" ~ "Port Moody",
+	.default = NA
+))
+```
+
+---
+
+
+|municipality | value|municipality2 |municipality3 |municipality4      |
+|:------------|-----:|:-------------|:-------------|:------------------|
+|Vancouver    |     5|Vancouver     |Vancouver     |Vancouver-Richmond |
+|Richmond     |     1|Richmond      |Richmond      |Vancouver-Richmond |
+|Surrey       |     8|Surrey        |Surrey        |Surrey             |
+|Port Moody   |     3|Port Moody    |Port Moody    |Port Moody         |
+
+---
+
+Practice
+
+
+``` r
+pumf &lt;- read_rds("data/2021_census_pumf_ind.rds")
+```
+
+``` r
+pumf$HDGREE %&gt;% class
+```
+
+```
+[1] "factor"
+```
+
+---
+
+.scroll-output[
+.tiny[
+
+``` r
+pumf$HDGREE	%&gt;% levels()
+```
+
+```
+ [1] "No certificate, diploma or degree"                                                                         
+ [2] "High (secondary) school diploma or equivalency certificate"                                                
+ [3] "Non-apprenticeship trades certificate or diploma"                                                          
+ [4] " Apprenticeship certificate"                                                                               
+ [5] "Program of 3 months to less than 1 year (College, CEGEP and other non-university certificates or diplomas)"
+ [6] "Program of 1 to 2 years (College, CEGEP and other non-university certificates or diplomas)"                
+ [7] "Program of more than 2 years (College, CEGEP and other non-university certificates or diplomas)"           
+ [8] "University certificate or diploma below bachelor level"                                                    
+ [9] "Bachelor's degree"                                                                                         
+[10] "University certificate or diploma above bachelor level"                                                    
+[11] "Degree in medicine, dentistry, veterinary medicine or optometry"                                           
+[12] "Master's degree"                                                                                           
+[13] "Earned doctorate"                                                                                          
+[14] "Not available"                                                                                             
+[15] "Not applicable"                                                                                            
+```
+]]
+
+---
+
+.small[
+Generate the figure on the following slide.
+
+1. Convert HDGREE to an ordered factor
+    
+    ``` r
+    pumf &lt;- pumf %&gt;% mutate(HDGREE = as.ordered(HDGREE))
+    ```
+
+2. Create HDGREE2 that simplfies HDGREE to have the following levels:  "Less Than High School", "High School Diploma", "Post-Secondary (No Degree)", "Bachelor's Degree", "Graduate Degree". Use case_when()
+
+3. Convert HDGREE2 into a factor so that it will have the natural order.
+
+4. Filter out the observations where HDGREE2 is missing.
+    
+    ``` r
+    filter(! is.na(HDGREE2))
+    ```
+]
+
+---
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-39-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+.small[
+
+``` r
+pumf &lt;- pumf %&gt;% mutate(
+	HDGREE2 = case_when(
+		HDGREE == "No certificate, diploma or degree" ~ "Less Than High School",
+		HDGREE == "High (secondary) school diploma or equivalency certificate" ~ "High School Diploma",
+		HDGREE &lt;= "University certificate or diploma below bachelor level" ~ "Post-Secondary (No Degree)",
+		HDGREE == "Bachelor's degree" ~ "Bachelor's Degree",
+		HDGREE &lt;= "Earned doctorate" ~ "Graduate Degree",
+		.default = NA
+	)
+)
+```
+]
+
+---
+
+.small[
+
+``` r
+pumf %&gt;% filter(!is.na(HDGREE2)) %&gt;% ggplot() + 
+	geom_bar(aes(y=HDGREE2, weight=WEIGHT))
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-41-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+pumf &lt;- pumf %&gt;% mutate(
+	HDGREE2 = factor(HDGREE2, levels=c("Less Than High School", "High School Diploma", "Post-Secondary (No Degree)", "Bachelor's Degree", "Graduate Degree" )))
+```
+
+
+``` r
+pumf %&gt;% filter(!is.na(HDGREE2)) %&gt;% ggplot() + 
+	geom_bar(aes(y=HDGREE2, weight=WEIGHT))
+```
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-43-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+Create this figure.
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-44-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+.tiny[
+
+``` r
+pumf %&gt;% filter(!is.na(HDGREE2)) %&gt;% ggplot() + 
+	geom_bar(aes(y=HDGREE2, weight=WEIGHT, fill=Gender), position = "fill")
+```
+]
+
+---
+
+.tiny[
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-46-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.tiny[
+
+``` r
+pumf %&gt;% filter(! is.na(HDGREE2)) %&gt;% 
+	ggplot() + geom_bar(aes(y=HDGREE2, weight=WEIGHT, fill=Gender), position = "fill") +
+	geom_vline(xintercept = c(0.45,0.5,0.55), linetype="dashed") +
+	coord_cartesian(xlim = c(0.4, 0.6)) +
+	scale_y_discrete(name=NULL) +
+	scale_x_continuous(name= NULL, labels = scales::label_percent()) +
+	scale_fill_discrete(name= NULL)
+```
+]
+
+---
+
+&lt;img src="12_Factor_files/figure-html/unnamed-chunk-48-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+.tiny[
+
+``` r
+pumf %&gt;% filter(
+	! is.na(HDGREE2), 
+	MarStH == "Never married (not living common law)",
+	CMA %&gt;% str_detect("Vancouver|Toronto")) %&gt;% 
+ggplot() + geom_bar(aes(y=HDGREE2, weight=WEIGHT, fill=Gender), position = "fill") +
+	geom_vline(xintercept = c(0.45,0.5,0.55), linetype="dashed") +
+	coord_cartesian(xlim = c(0.4, 0.6)) +
+	scale_y_discrete(name=NULL) +
+	scale_x_continuous(name= NULL, labels = scales::label_percent()) +
+	scale_fill_discrete(name= NULL) +
+	facet_wrap(~CMA, nrow = 3) +
+	labs(title = "Gender Distributions by Education Level", 
+			 subtitle = "- Singles (Never Married)", 
+			 caption = "Source: Census 2021 Public Use Microdata File.")
+```
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

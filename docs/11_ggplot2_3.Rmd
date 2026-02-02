@@ -1,0 +1,392 @@
+---
+title: "ggplot2 - 3"
+subtitle: "Geometries"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA, fig.asp = 0.56, out.width='70%', dpi = 300, fig.align = 'center')
+options(tibble.print_max = Inf)
+library(kableExtra)
+```
+
+Labeling points in a scatter plot
+
+Bar plots
+
+Histogram
+
+---
+
+.small[
+```{r results='hide'}
+library(tidyverse)
+library(gapminder)
+gapminder_2007 <- gapminder %>% filter(year == 2007)
+gapminder_2007
+```
+]
+
+.scroll-output[
+```{r echo=FALSE}
+gapminder_2007 %>% knitr::kable()
+```
+]
+
+---
+
+#### Labeling points
+
+.tiny[
+```{r}
+gapminder_2007_big <- gapminder_2007 %>% top_n(20, pop)
+
+ggplot(gapminder_2007, aes(gdpPercap, lifeExp)) + geom_point() + 
+  geom_text(aes(label=country), gapminder_2007_big)+ scale_x_log10()
+```
+]
+
+---
+
+```{r}
+ggplot(gapminder_2007, aes(gdpPercap, lifeExp)) + geom_point() + 
+  ggrepel::geom_text_repel(aes(label=country), gapminder_2007_big) + 
+  scale_x_log10()
+```
+
+---
+
+```{r}
+ggplot(gapminder_2007, aes(gdpPercap, lifeExp)) + geom_point() + 
+  ggrepel::geom_label_repel(aes(label=country), gapminder_2007_big) + 
+  scale_x_log10()
+```
+
+---
+
+Practice tasks
+
+```{r}
+bca <- read_rds("Data/bca252.rds")
+
+by_aa <- bca %>% 
+  filter(! is.na(aa_label)) %>% 
+  group_by(aa_label) %>% 
+  summarise(
+    avg_floorarea = mean(floorarea, na.rm = TRUE), 
+    avg_price=mean(price, na.rm=TRUE), 
+    n=n())
+
+```
+
+---
+
+.small[
+Generate the figure on next slide, by building on the following codes:
+]
+
+.tiny[
+```{r}
+ggplot(by_aa) +
+  geom_point(aes(avg_floorarea, avg_price, color=aa_label, size=n)) +
+  scale_color_discrete(name="Assessment Area") +   scale_size(guide=NULL) +
+  scale_x_continuous(name="Average Floor Area (sq ft)", labels = scales::label_comma()) +
+  scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K"))
+```
+]
+
+---
+
+```{r echo=FALSE}
+ggplot(by_aa, aes(avg_floorarea, avg_price, color=aa_label)) +
+  geom_point(aes(size=n)) +
+  ggrepel::geom_text_repel(aes(label=aa_label)) +
+  scale_color_discrete(guide=NULL) + 
+  scale_size(guide=NULL) +
+  scale_x_continuous(name="Average Floor Area (sq ft)", labels = scales::label_comma()) +
+  scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K"))
+```
+--
+
+.tiny[
+```{r echo=params$answers, eval=FALSE}
+ggplot(by_aa, aes(avg_floorarea, avg_price, color=aa_label)) +
+  geom_point(aes(size=n)) + ggrepel::geom_text_repel(aes(label=aa_label)) +
+  scale_color_discrete(guide=NULL) + scale_size(guide=NULL) +
+  scale_x_continuous(name="Average Floor Area (sq ft)", labels = scales::label_comma()) +
+  scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K"))
+```
+]
+
+---
+
+### Barchart
+
+```{r}
+bca_2017 <- read_rds("Data/bca252.rds") %>% 
+  filter(lubridate::year(sale_date) == 2017)
+```
+
+---
+
+```{r}
+aa_n <- bca_2017 %>% group_by(aa_label) %>% summarise(n=n())
+```
+
+```{r echo=FALSE}
+aa_n %>% kable
+```
+
+---
+
+```{r}
+ggplot(aa_n) + geom_col(aes(aa_label, n))
+```
+
+---
+
+```{r}
+ggplot(bca_2017) + geom_bar(aes(aa_label))
+```
+
+---
+
+.scroll-output[
+.tiny[
+```{r echo=FALSE}
+bca_2017 %>% head(20) %>% kable
+```
+]]
+
+---
+
+.tiny[
+```{r}
+bca_2017_aa_act <- bca_2017 %>% group_by(aa_label, act_use_cat) %>% 
+	summarise(n=n(), avg_price = mean(price, na.rm=TRUE))
+```
+]
+
+.scroll-output[
+.tiny[
+```{r echo=FALSE}
+bca_2017_aa_act %>% head(20) %>% kable
+```
+]]
+
+
+---
+
+.tiny[
+```{r}
+ggplot(bca_2017_aa_act) + geom_col(aes(aa_label, n, fill=act_use_cat), position = "stack")
+```
+]
+
+---
+
+```{r}
+ggplot(bca_2017_aa_act) + 
+  geom_col(aes(aa_label, n, fill=act_use_cat), position = "fill")
+```
+
+---
+
+```{r}
+ggplot(bca_2017_aa_act) + 
+  geom_col(aes(aa_label, n, fill=act_use_cat), position = "dodge")
+```
+
+---
+
+`geom_bar()` automatically calculates counts and use them as y. But `geom_col()` is more flexible. 
+
+```{r}
+ggplot(bca_2017_aa_act) + 
+  geom_col(aes(aa_label, avg_price, fill=act_use_cat), position = "dodge")
+```
+
+---
+
+Default value for `position=`
+
+[? geom_col()](https://ggplot2.tidyverse.org/reference/geom_bar.html)
+--
+
+```{r}
+ggplot(bca_2017_aa_act) + geom_col(aes(aa_label, n, fill=act_use_cat))
+```
+
+---
+
+```{r}
+ggplot(bca_2017_aa_act) + geom_col(aes(aa_label, n, fill=act_use_cat)) + coord_flip()
+```
+
+---
+
+Practice task - Generate this figure, using `bca_2017_aa_act`.
+
+```{r echo=FALSE}
+ggplot(bca_2017_aa_act) + 
+  geom_col(aes(act_use_cat, avg_price, fill=aa_label), position = "dodge")
+```
+
+--
+
+.tiny[
+```{r echo=params$answers, eval=FALSE}
+ggplot(bca_2017_aa_act) + geom_col(aes(act_use_cat, avg_price, fill=aa_label), position = "dodge")
+```
+]
+
+---
+
+Practice task
+
+```{r}
+pumf_prihm <- read_rds("Data/2021_census_pumf_ind.rds") %>% 
+  filter(PRIHM == "Person is primary maintainer", 
+         AGEGRP != "Not available", 
+         Tenur != "Not available")
+```
+
+Generate figures on next two slides. Try both `geom_col()` and `geom_bar()`.
+
+---
+ 
+```{r echo=FALSE}
+ggplot(pumf_prihm) + geom_bar(aes(AGEGRP, fill=Tenur, weight=WEIGHT), position = "fill") + coord_flip()
+```
+--
+
+.tiny[
+```{r echo=params$answers, eval=FALSE}
+ggplot(pumf_prihm) + 
+  geom_bar(aes(AGEGRP, fill=Tenur, weight=WEIGHT), position = "fill") + 
+  coord_flip()
+```
+]
+
+---
+
+```{r echo=FALSE}
+ggplot(pumf_prihm) + geom_bar(aes(AGEGRP, fill=Tenur, weight=WEIGHT), position = "fill") + coord_flip() +
+  scale_x_discrete(name=NULL) + 
+  scale_y_continuous(name = NULL, labels= scales::label_number(scale=100, suffix = '%')) +
+  scale_fill_discrete(name= NULL, labels= c("Own", "Rent"))
+```
+--
+.tiny[
+```{r echo=params$answers, eval=FALSE}
+ggplot(pumf_prihm) + geom_bar(aes(AGEGRP, fill=Tenur, weight=WEIGHT), position = "fill") + coord_flip() +
+  scale_x_discrete(name=NULL) + 
+  scale_y_continuous(name = NULL, labels= scales::label_number(scale=100, suffix = '%')) +
+  scale_fill_discrete(name= NULL, labels= c("Own", "Rent"))
+```
+]
+
+---
+
+### Histogram
+
+```{r}
+ggplot(bca_2017) + geom_histogram(aes(price))
+```
+
+---
+
+```{r}
+ggplot(bca_2017) + geom_histogram(aes(price)) + 
+  scale_x_continuous(limits = c(0,6000000))
+```
+
+---
+
+```{r}
+ggplot(bca_2017) + 
+  geom_histogram(aes(price), binwidth = 1000) + 
+  scale_x_continuous(limits = c(0,6000000))
+```
+
+---
+
+```{r}
+ggplot(bca_2017) + 
+  geom_histogram(aes(price), binwidth = 1000) + 
+  scale_x_continuous(limits = c(400000,450000))
+```
+
+---
+
+```{r}
+ggplot(bca_2017) + 
+  geom_histogram(aes(price), binwidth = 100000) + 
+  scale_x_continuous(limits = c(0,6000000))
+```
+
+---
+
+```{r}
+ggplot(bca_2017) + 
+  geom_histogram(aes(price, fill=act_use_cat), binwidth = 100000) + 
+  scale_x_continuous(limits = c(0,6000000))
+```
+
+---
+
+.tiny[
+```{r}
+ggplot(bca_2017) + 
+  geom_histogram(aes(price, fill=act_use_cat), binwidth = 100000, position = "dodge") + 
+  scale_x_continuous(limits = c(0,6000000))
+```
+]
+
+---
+
+.tiny[
+```{r}
+ggplot(bca_2017) + 
+  geom_histogram(aes(price, fill=act_use_cat), binwidth = 1000000, position = "fill") + 
+  scale_x_continuous(limits = c(0,10000000))
+```
+]
+
+---
+
+### Practice task
+
+Build on the last code to create this plot.
+```{r echo=FALSE}
+ggplot(bca_2017) + 
+  geom_histogram(aes(price, fill=act_use_cat), binwidth = 1000000, position = "fill") + 
+  scale_x_continuous(name = "Price", limits = c(0,10000000), labels = scales::label_comma(scale=0.000001, prefix = "$", suffix = "M")) +
+  scale_y_continuous(name = NULL, labels = scales::label_comma(scale=100, suffix = "%")) +
+  scale_fill_discrete(name = NULL, labels = c("Single family", "Condo or \nTownhouse")) 
+```
+
+---
+
+.tiny[
+```{r echo=params$answers, eval=FALSE}
+ggplot(bca_2017) + 
+  geom_histogram(aes(price, fill=act_use_cat), binwidth = 1000000, position = "fill") + 
+  scale_x_continuous(name = "Price", limits = c(0,10000000), labels = scales::label_comma(scale=0.000001, prefix = "$", suffix = "M")) +
+  scale_y_continuous(name = NULL, labels = scales::label_comma(scale=100, suffix = "%")) +
+  scale_fill_discrete(name = NULL, labels = c("Single family", "Condo or \nTownhouse")) 
+```
+]
+
