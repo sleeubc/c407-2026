@@ -283,8 +283,7 @@ Generate the figure on next slide, by building on the following code:
 .tiny[
 ```{r}
 ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
-  geom_line() +
-  geom_point()
+  geom_line() + geom_point()
 ```
 ]
 
@@ -292,8 +291,7 @@ ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
 
 ```{r echo=FALSE}
 ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
-  geom_line() +
-  geom_point() +
+  geom_line() + geom_point() +
   scale_color_discrete(name = "Assessment Area") +
   scale_x_continuous(name = "Year") +
   scale_y_continuous(name = "Average Price", labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M"))
@@ -304,8 +302,7 @@ ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
 .tiny[
 ```{r echo=params$answers, eval=FALSE}
 ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
-  geom_line() +
-  geom_point() +
+  geom_line() + geom_point() +
   scale_color_discrete(name = "Assessment Area") +
   scale_x_continuous(name = "Year") +
   scale_y_continuous(name = "Average Price", labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M"))
@@ -323,8 +320,7 @@ Generate the figure on next slide, by modifying the code below. (Use log scale f
 .scroll-output[
 ```{r }
 ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
-  geom_line() +
-  geom_point() +
+  geom_line() + geom_point() +
   scale_color_discrete(name = "Assessment Area") +
   scale_x_continuous(name = "Year") +
   scale_y_continuous(name = "Average Price", labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M"))
@@ -336,8 +332,7 @@ ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
 
 ```{r echo=FALSE}
 ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
-  geom_line() +
-  geom_point() +
+  geom_line() + geom_point() +
   scale_color_discrete(name = "Assessment Area") +
   scale_x_continuous(name = "Year") +
   scale_y_log10(
@@ -353,15 +348,9 @@ ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
 .tiny[
 ```{r echo=params$answers, eval=FALSE}
 ggplot(by_aa_yr, aes(year, avg_price, color = aa_label)) +
-  geom_line() +
-  geom_point() +
-  scale_color_discrete(name = "Assessment Area") +
-  scale_x_continuous(name = "Year") +
-  scale_y_log10(
-    name = "Average Price",
-    labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M"),
-    breaks = c(200000, 300000, 500000, 700000, 1000000, 1500000, 2000000)
-  )
+  geom_line() + geom_point() + scale_color_discrete(name = "Assessment Area") + scale_x_continuous(name = "Year") +
+  scale_y_log10( name = "Average Price",labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M"), 
+  							 breaks = c(200000, 300000, 500000, 700000, 1000000, 1500000, 2000000))
 ```
 ]
 ]
@@ -396,8 +385,7 @@ Use log scale
 ```{r}
 ggplot(van17) +
   geom_point(aes(floorarea, price), alpha = 0.1) +
-  scale_x_log10() +
-  scale_y_log10()
+  scale_x_log10() + scale_y_log10()
 ```
 
 ---
