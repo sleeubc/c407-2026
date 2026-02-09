@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>ggplot2 - 4</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sanghoon Lee" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="c407_slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# ggplot2 - 4
+]
+.subtitle[
+## Theme, facet_wrap, labs
+]
+.author[
+### Sanghoon Lee
+]
+.date[
+### 09 February, 2026
+]
+
+---
+
+
+
+
+- theme
+    - customize the non-data components of your plots: i.e. fonts, background, gridlines, legend style, etc.
+    - default themes
+    - legend.position
+    - text = element_text(size=  )
+
+- facet_wrap
+
+- labs
+
+---
+
+
+``` r
+library(tidyverse)
+
+bca &lt;- read_rds("Data/bca252.rds")
+
+avg_price &lt;- bca %&gt;% 
+  mutate(sale_year = year(sale_date)) %&gt;% 
+  group_by(act_use_cat, sale_year) %&gt;% 
+  summarise(avg_price = mean(price, na.rm = TRUE))
+```
+
+---
+
+.scroll-output[
+
+|act_use_cat | sale_year| avg_price|
+|:-----------|---------:|---------:|
+|S/F Res     |      2000|  334016.6|
+|S/F Res     |      2001|  330706.4|
+|S/F Res     |      2002|  347530.2|
+|S/F Res     |      2003|  388933.8|
+|S/F Res     |      2004|  453036.9|
+|S/F Res     |      2005|  515860.5|
+|S/F Res     |      2006|  612594.3|
+|S/F Res     |      2007|  707251.9|
+|S/F Res     |      2008|  734846.2|
+|S/F Res     |      2009|  710359.7|
+|S/F Res     |      2010|  810833.8|
+|S/F Res     |      2011|  936671.2|
+|S/F Res     |      2012|  915295.0|
+|S/F Res     |      2013|  997300.2|
+|S/F Res     |      2014| 1054603.4|
+|S/F Res     |      2015| 1197446.3|
+|S/F Res     |      2016| 1489876.3|
+|S/F Res     |      2017| 1528182.8|
+|S/F Res     |      2018| 1562259.5|
+|S/F Res     |      2019| 1431752.1|
+|S/F Res     |      2020| 1483322.2|
+|S/F Res     |      2021| 1745077.6|
+|S/F Res     |      2022| 2035205.5|
+|S/F Res     |      2023| 1986565.0|
+|S/F Res     |      2024| 2027601.4|
+|S/F Res     |      2025| 1992798.5|
+|Strata Res  |      2000|  190493.5|
+|Strata Res  |      2001|  181710.3|
+|Strata Res  |      2002|  198694.6|
+|Strata Res  |      2003|  218716.9|
+]
+
+---
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point() +
+	scale_color_discrete(name=NULL) +
+	scale_x_continuous(name="Year") +
+	scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K"))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point() +
+	scale_color_discrete(name=NULL) +
+	scale_x_continuous(name="Year") +
+	scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K")) +
+	theme_bw()
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point() +
+	scale_color_discrete(name=NULL) +
+	scale_x_continuous(name="Year") +
+	scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K")) +
+	theme_bw() + theme(legend.position = c(0.2, 0.8))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point() +
+	scale_color_discrete(name=NULL) +
+	scale_x_continuous(name="Year") +
+	scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K")) +
+	theme_bw() + theme(legend.position = c(0.2, 0.8), text=element_text(size=14))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+Practice Task
+
+.tiny[
+
+``` r
+by_aa_yr &lt;- bca %&gt;% 
+  filter(! is.na(aa_label)) %&gt;% 
+  group_by(aa_label, year=year(sale_date)) %&gt;% 
+  summarise(avg_price = mean(price, na.rm = TRUE), n=n())
+```
+]
+.scroll-output[
+.tiny[
+
+|aa_label      | year| avg_price|    n|
+|:-------------|----:|---------:|----:|
+|Fraser Valley | 2000|  197638.8| 3623|
+|Fraser Valley | 2001|  198221.6| 4435|
+|Fraser Valley | 2002|  213642.7| 5750|
+|Fraser Valley | 2003|  236177.3| 6539|
+|Fraser Valley | 2004|  265539.3| 6599|
+|Fraser Valley | 2005|  293045.1| 7453|
+|Fraser Valley | 2006|  352464.3| 6948|
+|Fraser Valley | 2007|  394121.6| 6914|
+|Fraser Valley | 2008|  416129.9| 4792|
+|Fraser Valley | 2009|  388059.9| 4997|
+]]
+
+---
+
+Create the figure on next slide. Try the themes in the cheatsheet.
+
+.tiny[
+
+``` r
+ggplot(by_aa_yr, aes(year, avg_price, color=aa_label)) + geom_line() + geom_point() +
+  scale_color_discrete(name="Assessment Area") + 
+  scale_x_continuous(name="Year") +
+  scale_y_continuous(name="Average Price", labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M"))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+.tiny[
+
+``` r
+ggplot(by_aa_yr, aes(year, avg_price, color=aa_label)) + geom_line() + geom_point() +
+  scale_color_discrete(name=NULL) + 
+  scale_x_continuous(name="Year") +
+  scale_y_continuous(name="Average Price", labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M")) +
+	theme_minimal() +	theme(legend.position = c(0.25, 0.7), text=element_text(size=12))
+```
+]
+
+---
+
+facet_wrap()
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point() +
+	scale_color_discrete(name=NULL) +
+	scale_x_continuous(name="Year") +
+	scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K"))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price)) + 
+  geom_line() + geom_point() +
+	scale_color_discrete(name=NULL) +
+	scale_x_continuous(name="Year") +
+	scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K")) +
+	facet_wrap(~act_use_cat)
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+Practice task
+
+.tiny[
+
+``` r
+ggplot(by_aa_yr, aes(year, avg_price, color=aa_label)) + geom_line() + geom_point() +
+  scale_color_discrete(name="Assessment Area") + 
+  scale_x_continuous(name="Year") +
+  scale_y_continuous(name="Average Price", labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M"))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-15-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+.tiny[
+
+``` r
+ggplot(by_aa_yr, aes(year, avg_price)) + geom_line() + geom_point() +
+  scale_color_discrete(name="Assessment Area") + 
+  scale_x_continuous(name="Year") +
+  scale_y_continuous(name="Average Price", labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M")) + 
+	facet_wrap(~aa_label)
+```
+]
+
+---
+labs()
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point() +	
+	scale_color_discrete(name=NULL) +	scale_x_continuous(name="Year") +
+	scale_y_continuous(name="Average Price", labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K")) +
+	theme_bw() + theme(legend.position = c(0.2, 0.8))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-17-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point() +	
+	scale_y_continuous(labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K")) + 
+	labs(color=NULL, x="Year", y="Average Price") +
+	theme_bw() + theme(legend.position = c(0.2, 0.8))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-18-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+ggplot(avg_price, aes(sale_year, avg_price, color=act_use_cat)) + 
+  geom_line() + geom_point() +	
+	scale_y_continuous(labels = scales::label_comma(scale = 0.001, prefix = "$", suffix = "K")) + 
+	labs(color=NULL, x="Year", y="Average Price", title = "Average Transanction Price History by Building Type", caption = "Data source: BC Assessment Authority") +
+	theme_bw() + theme(legend.position = c(0.2, 0.8))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+Practice task
+
+.tiny[
+
+``` r
+ggplot(by_aa_yr, aes(year, avg_price, color=aa_label)) + geom_line() + geom_point() +
+  scale_color_discrete(name=NULL) + scale_x_continuous(name="Year") +
+  scale_y_continuous(name="Average Price", labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M")) +
+	theme_minimal() + theme(legend.position = c(0.25, 0.7), text=element_text(size=12))
+```
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-20-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+&lt;img src="12_ggplot2_4_files/figure-html/unnamed-chunk-21-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+.tiny[
+
+``` r
+ggplot(by_aa_yr, aes(year, avg_price, color=aa_label)) + geom_line() + geom_point() +
+  scale_y_continuous(labels = scales::label_comma(accuracy = 0.1, scale = 0.000001, prefix = "$", suffix = "M")) +
+	labs(color=NULL, x="Year", y="Average Price", title= "Average Transaction Price History By Assessment Area", caption = "Data Source: BC Assessment Authority") +
+	theme_minimal() + theme(legend.position = c(0.2, 0.7), text=element_text(size=12)) 
+```
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
