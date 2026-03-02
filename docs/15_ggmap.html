@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### Sanghoon Lee
 ]
 .date[
-### 01 March, 2026
+### 12 March, 2025
 ]
 
 ---
@@ -98,8 +98,7 @@ We need
 ``` r
 tb &lt;- tibble(
   label = c("Sauder School of Business", "Pacific Poke", "Chan centre"),
-  address = c("2053 main mall Vancouver", "Pacific Poke UBC", "Chan centre")
-)
+  address = c("2053 main mall Vancouver", "Pacific Poke UBC", "Chan centre"))
 
 tb
 ```
@@ -136,8 +135,7 @@ tb
 
 
 ``` r
-ggplot(tb) +
-  geom_point(aes(lon, lat))
+ggplot(tb) + geom_point(aes(lon, lat))
 ```
 
 &lt;img src="15_ggmap_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -160,12 +158,12 @@ ggmap(ubcmap)
 
 
 ``` r
-ubcmap &lt;- get_map("Sauder School of Business", zoom = 15)
+ubcmap &lt;- get_map("Sauder School of Business", zoom=15)
 ```
 
 
 ``` r
-ggmap(ubcmap) + geom_point(aes(lon, lat), tb, color = "red", size = 3)
+ggmap(ubcmap) + geom_point(aes(lon, lat), tb, color="red", size=3)
 ```
 
 &lt;img src="15_ggmap_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -174,8 +172,8 @@ ggmap(ubcmap) + geom_point(aes(lon, lat), tb, color = "red", size = 3)
 
 
 ``` r
-ggmap(ubcmap) + geom_point(aes(lon, lat), tb, color = "red", size = 3) +
-  ggrepel::geom_text_repel(aes(lon, lat, label = label), tb)
+ggmap(ubcmap) + geom_point(aes(lon, lat), tb, color="red", size=3) +
+ ggrepel::geom_text_repel(aes(lon, lat, label=label), tb)
 ```
 
 &lt;img src="15_ggmap_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -187,8 +185,8 @@ ggmap(ubcmap) + geom_point(aes(lon, lat), tb, color = "red", size = 3) +
 
 ``` r
 ggmap(ubcmap, base_layer = ggplot(tb, aes(lon, lat))) +
-  geom_point(color = "red", size = 3) +
-  ggrepel::geom_text_repel(aes(label = label))
+  geom_point(color="red", size=3) +
+  ggrepel::geom_text_repel(aes(label=label))
 ```
 
 &lt;img src="15_ggmap_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -203,13 +201,13 @@ Practice - create the following map.
 
 
 ``` r
-tb2 &lt;- tibble(label = "Canada Place", address = c("999 Canada Pl")) %&gt;%
-  mutate_geocode(address)
+tb2 &lt;- tibble(label="Canada Place", address = c("999 Canada Pl")) %&gt;% 
+	mutate_geocode(address)
 
 downtown_map &lt;- get_map("999 Canada Pl", zoom = 14)
-ggmap(downtown_map, base_layer = ggplot(tb2, aes(lon, lat))) +
-  geom_point(color = "red", size = 4, alpha = 0.7) +
-  ggrepel::geom_text_repel(aes(label = label)) +
+ggmap(downtown_map, base_layer = ggplot(tb2, aes(lon, lat))) + 
+  geom_point(color="red", size=4, alpha=0.7) + 
+  ggrepel::geom_text_repel(aes(label=label)) + 
   scale_y_continuous(limits = c(49.28, 49.3))
 ```
 
@@ -237,7 +235,7 @@ get_map(location = c(lon = -95.3632715, lat = 29.7632836),
 .tiny[
 
 ``` r
-ubcmap_2 &lt;- get_map("Sauder School of Business", zoom = 15, maptype = "roadmap")
+ubcmap_2 &lt;- get_map("Sauder School of Business", zoom=15, maptype="roadmap")
 ggmap(ubcmap_2)
 ```
 
@@ -249,10 +247,8 @@ ggmap(ubcmap_2)
 .small[
 
 ``` r
-ubcmap_stamen &lt;- get_map("Sauder School of Business",
-  maptype = "stamen_toner_lite",
-  zoom = 15, source = "stadia"
-)
+ubcmap_stamen &lt;- get_map("Sauder School of Business", maptype = "stamen_toner_lite",
+                         zoom=15, source="stadia")
 ggmap(ubcmap_stamen)
 ```
 
@@ -265,8 +261,8 @@ ggmap(ubcmap_stamen)
 
 ``` r
 ggmap(ubcmap_stamen, base_layer = ggplot(tb, aes(lon, lat))) +
-  geom_point(color = "red", size = 3) +
-  ggrepel::geom_text_repel(aes(label = label))
+  geom_point(color="red", size=3) +
+  ggrepel::geom_text_repel(aes(label=label))
 ```
 
 &lt;img src="15_ggmap_files/figure-html/unnamed-chunk-18-1.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -279,8 +275,8 @@ ggmap(ubcmap_stamen, base_layer = ggplot(tb, aes(lon, lat))) +
 
 ``` r
 ggmap(ubcmap_stamen, base_layer = ggplot(tb, aes(lon, lat))) +
-  geom_point(color = "red", size = 3) +
-  ggrepel::geom_text_repel(aes(label = label)) + theme_void()
+  geom_point(color="red", size=3) +
+ggrepel::geom_text_repel(aes(label=label)) + theme_void()
 ```
 
 &lt;img src="15_ggmap_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;" /&gt;
@@ -297,15 +293,15 @@ Practice - create this map.
 .small[
 
 ``` r
-tb2 &lt;- tibble(label = "Canada Place", address = c("999 Canada place")) %&gt;%
-  mutate_geocode(address)
+tb2 &lt;- tibble(label="Canada Place", address = c("999 Canada place")) %&gt;% 
+	mutate_geocode(address)
 
 downtown_map2 &lt;- get_map("999 Canada place", zoom = 14, source = "stadia", maptype = "stamen_toner_lite")
 
-ggmap(downtown_map2, base_layer = ggplot(tb2, aes(lon, lat))) +
-  geom_point(color = "red", size = 4, alpha = 0.7) +
-  ggrepel::geom_text_repel(aes(label = label), color = "red") +
-  scale_y_continuous(limits = c(49.28, 49.3)) +
+ggmap(downtown_map2, base_layer = ggplot(tb2, aes(lon, lat))) + 
+  geom_point(color="red", size=4, alpha=0.7) + 
+  ggrepel::geom_text_repel(aes(label=label), color="red") + 
+  scale_y_continuous(limits = c(49.28, 49.3)) + 
   theme_void()
 ```
 ]
@@ -317,9 +313,9 @@ Practice - show the most expensive 300 transactions in year 2019 in the BCA data
 
 
 ``` r
-bca_top300 &lt;- read_rds("Data/bca252.rds") %&gt;%
-  filter(lubridate::year(sale_date) == 2019) %&gt;%
-  slice_max(price, n = 300)
+bca_top300 &lt;- read_rds("Data/bca242.rds") %&gt;% 
+  filter(lubridate::year(sale_date) == 2019) %&gt;% 
+  slice_max(price, n=300)
 ```
 
 
@@ -332,13 +328,11 @@ bca_top300 &lt;- read_rds("Data/bca252.rds") %&gt;%
 
 
 ``` r
-vanmap2 &lt;- get_map("Surrey Canada",
-  zoom = 10,
-  source = "stadia", maptype = "stamen_toner_lite"
-)
+vanmap2 &lt;- get_map("Surrey Canada", zoom=10, 
+                   source = "stadia", maptype = "stamen_toner_lite")
 
-ggmap(vanmap2) +
-  geom_point(aes(lon, lat), bca_top300, color = "red", alpha = 0.3) +
+ggmap(vanmap2) + 
+  geom_point(aes(lon, lat), bca_top300, color="red", alpha=0.3) + 
   scale_y_continuous(limits = c(49, 49.35)) +
   theme_void()
 ```
@@ -347,10 +341,10 @@ ggmap(vanmap2) +
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-  "ratio": "16:9",
-  "highlightStyle": "github",
-  "highlightLines": true,
-  "countIncrementalSlides": false
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
