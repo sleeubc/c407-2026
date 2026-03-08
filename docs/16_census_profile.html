@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Census profile</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sanghoon Lee" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="c407_slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Census profile
+]
+.author[
+### Sanghoon Lee
+]
+.date[
+### 08 March, 2026
+]
+
+---
+
+
+
+
+
+
+Census public use microdata file (PUMF) publishes data at individual level. 
+
+Census Profile publishes data at geographic area level (e.g., whole Canada, province, CMA, CSD, tract).
+
+- The smallest geographic unit for PUMF is CMA.
+
+- Use PUMF if the unit of your analysis is individuals. Use Profile if it is geographic areas.
+
+To see the type of available information at a geographic level, go to the '[Census Profile, 2021 Census](https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/index.cfm?Lang=E)' page at the Statistics Canada website (Google it). Click 'Canada' in the Browse box. 
+
+---
+
+Most of the data are available at each of the Census geographic levels.
+
+.small[
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class="header"&gt;
+&lt;th&gt;Code&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;th align="center"&gt;Count in Census 2016&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;Canada (total)&lt;/td&gt;
+&lt;td align="center"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;PR&lt;/td&gt;
+&lt;td&gt;Provinces/Territories&lt;/td&gt;
+&lt;td align="center"&gt;13&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;CMA&lt;/td&gt;
+&lt;td&gt;Census Metropolitan Area&lt;/td&gt;
+&lt;td align="center"&gt;35&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;CA&lt;/td&gt;
+&lt;td&gt;Census Agglomeration&lt;/td&gt;
+&lt;td align="center"&gt;14&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;CD&lt;/td&gt;
+&lt;td&gt;Census Division&lt;/td&gt;
+&lt;td align="center"&gt;287&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;CSD&lt;/td&gt;
+&lt;td&gt;Census Subdivision&lt;/td&gt;
+&lt;td align="center"&gt;713&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;CT&lt;/td&gt;
+&lt;td&gt;Census Tracts&lt;/td&gt;
+&lt;td align="center"&gt;5621&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;DA&lt;/td&gt;
+&lt;td&gt;Dissemination Area&lt;/td&gt;
+&lt;td align="center"&gt;56589&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;EA&lt;/td&gt;
+&lt;td&gt;Enumeration Area (1996 only)&lt;/td&gt;
+&lt;td align="center"&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;DB&lt;/td&gt;
+&lt;td&gt;Dissemination Block (2001-2021)&lt;/td&gt;
+&lt;td align="center"&gt;489676&lt;/td&gt;
+&lt;/tr&gt;
+&lt;!-- &lt;tr class="odd"&gt; --&gt;
+&lt;!-- &lt;td&gt;Regions&lt;/td&gt; --&gt;
+&lt;!-- &lt;td&gt;Named Census Region&lt;/td&gt; --&gt;
+&lt;!-- &lt;td align="center"&gt;&lt;/td&gt; --&gt;
+&lt;!-- &lt;/tr&gt; --&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+
+```
+
+Downloading: 7.6 kB     
+Downloading: 7.6 kB     
+Downloading: 7.6 kB     
+Downloading: 7.6 kB     
+Downloading: 24 kB     
+Downloading: 24 kB     
+Downloading: 49 kB     
+Downloading: 49 kB     
+Downloading: 49 kB     
+Downloading: 49 kB     
+```
+
+![](16_census_profile_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+
+
+```
+
+Downloading: 16 kB     
+Downloading: 16 kB     
+Downloading: 82 kB     
+Downloading: 82 kB     
+Downloading: 82 kB     
+Downloading: 82 kB     
+Downloading: 98 kB     
+Downloading: 98 kB     
+Downloading: 230 kB     
+Downloading: 230 kB     
+Downloading: 230 kB     
+Downloading: 230 kB     
+Downloading: 330 kB     
+Downloading: 330 kB     
+Downloading: 360 kB     
+Downloading: 360 kB     
+Downloading: 360 kB     
+Downloading: 360 kB     
+```
+
+![](16_census_profile_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+
+We will learn how to import Census profile data into R, using `cancensus` package. For example, 
+
+.scroll-output[
+.tiny[
+
+```
+
+Downloading: 5 kB     
+Downloading: 5 kB     
+Downloading: 5 kB     
+Downloading: 5 kB     
+```
+
+
+
+|GeoUID |Region Name                                                        | v_CA21_4311: Median value of dwellings ($) (60)|
+|:------|:------------------------------------------------------------------|-----------------------------------------------:|
+|35535  |Toronto (B)                                                        |                                          980000|
+|24462  |Montréal (B)                                                       |                                          416000|
+|59933  |Vancouver (B)                                                      |                                         1050000|
+|24505  |Ottawa - Gatineau (partie du Québec / Quebec part) (B)             |                                          348000|
+|35505  |Ottawa - Gatineau (Ontario part / partie de l'Ontario) (B)         |                                          600000|
+|505    |Ottawa - Gatineau (B)                                              |                                          548000|
+|48825  |Calgary (B)                                                        |                                          460000|
+|48835  |Edmonton (B)                                                       |                                          400000|
+|24421  |Québec (B)                                                         |                                          300000|
+|46602  |Winnipeg (B)                                                       |                                          348000|
+|35537  |Hamilton (B)                                                       |                                          755000|
+|35541  |Kitchener - Cambridge - Waterloo (B)                               |                                          700000|
+|35555  |London (B)                                                         |                                          548000|
+|12205  |Halifax (B)                                                        |                                          348000|
+|35539  |St. Catharines - Niagara (B)                                       |                                          552000|
+|35559  |Windsor (B)                                                        |                                          420000|
+|35532  |Oshawa (B)                                                         |                                          755000|
+|59935  |Victoria (B)                                                       |                                          850000|
+|47725  |Saskatoon (B)                                                      |                                          376000|
+|47705  |Regina (B)                                                         |                                          348000|
+|24433  |Sherbrooke (B)                                                     |                                          270000|
+|59915  |Kelowna (B)                                                        |                                          750000|
+|35568  |Barrie (B)                                                         |                                          700000|
+|10001  |St. John's (B)                                                     |                                          312000|
+|59932  |Abbotsford - Mission (B)                                           |                                          850000|
+|35521  |Kingston (B)                                                       |                                          492000|
+|35580  |Greater Sudbury / Grand Sudbury (B)                                |                                          348000|
+|35550  |Guelph (B)                                                         |                                          750000|
+|24408  |Saguenay (B)                                                       |                                          214000|
+|24442  |Trois-Rivières (B)                                                 |                                          200000|
+|13305  |Moncton (B)                                                        |                                          200000|
+|35543  |Brantford (B)                                                      |                                          600000|
+|13310  |Saint John (B)                                                     |                                          200000|
+|35529  |Peterborough (B)                                                   |                                          552000|
+|48810  |Lethbridge (B)                                                     |                                          320000|
+|35595  |Thunder Bay (B)                                                    |                                          300000|
+|59938  |Nanaimo (B)                                                        |                                          600000|
+|59925  |Kamloops (B)                                                       |                                          552000|
+|59930  |Chilliwack (B)                                                     |                                          750000|
+|35522  |Belleville - Quinte West (B)                                       |                                          424000|
+|13320  |Fredericton (B)                                                    |                                          240000|
+|35556  |Chatham-Kent (D)                                                   |                                          348000|
+|24447  |Drummondville (B)                                                  |                                          240000|
+|48830  |Red Deer (B)                                                       |                                          340000|
+|12225  |Cape Breton (D)                                                    |                                          160000|
+|35562  |Sarnia (K)                                                         |                                          400000|
+|24450  |Granby (K)                                                         |                                          290000|
+|59970  |Prince George (K)                                                  |                                          400000|
+|35530  |Kawartha Lakes (D)                                                 |                                          572000|
+|11105  |Charlottetown (D)                                                  |                                          348000|
+|35590  |Sault Ste. Marie (K)                                               |                                          250000|
+|48805  |Medicine Hat (K)                                                   |                                          300000|
+|48860  |Wood Buffalo (K)                                                   |                                          472000|
+|35575  |North Bay (K)                                                      |                                          302000|
+|35547  |Norfolk (D)                                                        |                                          500000|
+|59918  |Vernon (D)                                                         |                                          600000|
+|48850  |Grande Prairie (K)                                                 |                                          328000|
+|59943  |Courtenay (D)                                                      |                                          645000|
+|35501  |Cornwall (D)                                                       |                                          300000|
+|24452  |Saint-Hyacinthe (K)                                                |                                          300000|
+|46610  |Brandon (D)                                                        |                                          300000|
+|24404  |Rimouski (D)                                                       |                                          224000|
+|24440  |Victoriaville (D)                                                  |                                          200000|
+|24456  |Joliette (D)                                                       |                                          260000|
+|24444  |Shawinigan (D)                                                     |                                          150000|
+|59937  |Duncan (D)                                                         |                                          600000|
+|59913  |Penticton (D)                                                      |                                          552000|
+|35544  |Woodstock (D)                                                      |                                          536000|
+|12215  |Truro (D)                                                          |                                          200000|
+|47745  |Prince Albert (D)                                                  |                                          266000|
+|24465  |Salaberry-de-Valleyfield (D)                                       |                                          250000|
+|24485  |Rouyn-Noranda (D)                                                  |                                          276000|
+|24454  |Sorel-Tracy (D)                                                    |                                          210000|
+|35586  |Timmins (D)                                                        |                                          226000|
+|59944  |Campbell River (D)                                                 |                                          548000|
+|47840  |Lloydminster (Saskatchewan part / partie de la Saskatchewan) (D)   |                                          300000|
+|48840  |Lloydminster (Alberta part / partie de l'Alberta) (D)              |                                          340000|
+|840    |Lloydminster (D)                                                   |                                          318000|
+|47715  |Moose Jaw (D)                                                      |                                          258000|
+|24428  |Saint-Georges (D)                                                  |                                          200000|
+|12220  |New Glasgow (D)                                                    |                                          160000|
+|24480  |Val-d'Or (D)                                                       |                                          280000|
+|35569  |Orillia (D)                                                        |                                          552000|
+|35553  |Stratford (D)                                                      |                                          500000|
+|35566  |Owen Sound (D)                                                     |                                          452000|
+|46603  |Winkler (D)                                                        |                                          310000|
+|60990  |Whitehorse (D)                                                     |                                          500000|
+|35512  |Brockville (D)                                                     |                                          324000|
+|13328  |Bathurst (D)                                                       |                                          140000|
+|35531  |Centre Wellington (D)                                              |                                          715000|
+|59939  |Parksville (D)                                                     |                                          660000|
+|48820  |Okotoks (D)                                                        |                                          452000|
+|24410  |Alma (D)                                                           |                                          200000|
+|24405  |Rivière-du-Loup (D)                                                |                                          214000|
+|10015  |Corner Brook (D)                                                   |                                          240000|
+|59977  |Fort St. John (D)                                                  |                                          368000|
+|24430  |Thetford Mines (D)                                                 |                                          150000|
+|35571  |Midland (D)                                                        |                                          500000|
+|24412  |Sept-Îles (D)                                                      |                                          220000|
+|13329  |Miramichi (D)                                                      |                                          151000|
+|59905  |Cranbrook (D)                                                      |                                          400000|
+|12210  |Kentville (D)                                                      |                                          250000|
+|24406  |Baie-Comeau (D)                                                    |                                          150000|
+|59940  |Port Alberni (D)                                                   |                                          448000|
+|35565  |Wasaga Beach (D)                                                   |                                          600000|
+|35567  |Collingwood (D)                                                    |                                          700000|
+|59934  |Squamish (D)                                                       |                                         1000000|
+|35515  |Pembroke (D)                                                       |                                          290000|
+|59950  |Williams Lake (D)                                                  |                                          348000|
+|59952  |Quesnel (D)                                                        |                                          300000|
+|35563  |Essa (D)                                                           |                                          700000|
+|13335  |Edmundston (D)                                                     |                                          150000|
+|35527  |Cobourg (D)                                                        |                                          600000|
+|61995  |Yellowknife (D)                                                    |                                          448000|
+|24467  |Sainte-Agathe-des-Monts (D)                                        |                                          290000|
+|47710  |Yorkton (D)                                                        |                                          250000|
+|59920  |Salmon Arm (D)                                                     |                                          500000|
+|59965  |Terrace (D)                                                        |                                          400000|
+|47735  |North Battleford (D)                                               |                                          246000|
+|59907  |Nelson (D)                                                         |                                          584000|
+|24481  |Amos (D)                                                           |                                          230000|
+|48833  |Camrose (D)                                                        |                                          300000|
+|47720  |Swift Current (D)                                                  |                                          300000|
+|35546  |Tillsonburg (D)                                                    |                                          500000|
+|24403  |Matane (D)                                                         |                                          150000|
+|35516  |Petawawa (D)                                                       |                                          348000|
+|11110  |Summerside (D)                                                     |                                          250000|
+|59975  |Dawson Creek (D)                                                   |                                          300000|
+|59945  |Powell River (D)                                                   |                                          500000|
+|46605  |Steinbach (D)                                                      |                                          300000|
+|35528  |Port Hope (D)                                                      |                                          600000|
+|48831  |Sylvan Lake (D)                                                    |                                          360000|
+|48828  |Canmore (D)                                                        |                                          850000|
+|59936  |Ladysmith (D)                                                      |                                          600000|
+|24411  |Dolbeau-Mistassini (D)                                             |                                          151000|
+|24437  |Cowansville (D)                                                    |                                          250000|
+|35598  |Kenora (D)                                                         |                                          300000|
+|48806  |Brooks (D)                                                         |                                          266000|
+|48826  |Strathmore (D)                                                     |                                          340000|
+|48821  |High River (D)                                                     |                                          348000|
+|59910  |Trail (D)                                                          |                                          348000|
+|24468  |Lachute (D)                                                        |                                          250000|
+|10010  |Grand Falls-Windsor (D)                                            |                                          210000|
+|35533  |Ingersoll (D)                                                      |                                          500000|
+|59955  |Prince Rupert (D)                                                  |                                          400000|
+|10011  |Gander (D)                                                         |                                          250000|
+|48832  |Lacombe (D)                                                        |                                          340000|
+|13330  |Campbellton (New Brunswick part / partie du Nouveau-Brunswick) (D) |                                          125000|
+|24330  |Campbellton (partie du Québec / Quebec part) (D)                   |                                          150000|
+|330    |Campbellton (D)                                                    |                                          125000|
+|46607  |Portage la Prairie (D)                                             |                                          226000|
+|24423  |Sainte-Marie (D)                                                   |                                          240000|
+|46640  |Thompson (D)                                                       |                                          200000|
+|47750  |Estevan (D)                                                        |                                          268000|
+|48865  |Wetaskiwin (D)                                                     |                                          250000|
+|47755  |Weyburn (D)                                                        |                                          296000|
+|24502  |Hawkesbury (partie du Québec / Quebec part) (D)                    |                                          200000|
+|35502  |Hawkesbury (Ontario part / partie de l'Ontario) (D)                |                                          224000|
+|502    |Hawkesbury (D)                                                     |                                          224000|
+|35582  |Elliot Lake (D)                                                    |                                          150000|
+]]
+
+---
+
+.scroll-output[
+.tiny[
+
+```
+
+Downloading: 11 kB     
+Downloading: 11 kB     
+Downloading: 11 kB     
+Downloading: 11 kB     
+Downloading: 11 kB     
+Downloading: 11 kB     
+```
+
+
+
+|GeoUID     | v_CA21_4311: Median value of dwellings ($) (60)|
+|:----------|-----------------------------------------------:|
+|9330001.01 |                                          800000|
+|9330001.02 |                                          800000|
+|9330002.01 |                                         1000000|
+|9330002.03 |                                         2000000|
+|9330002.04 |                                         1100000|
+|9330003.01 |                                         1600000|
+|9330003.02 |                                         1600000|
+|9330004.01 |                                         1340000|
+|9330004.02 |                                         1600000|
+|9330005.00 |                                          500000|
+|9330006.01 |                                         2000000|
+|9330006.02 |                                         2000000|
+|9330007.01 |                                         2500000|
+|9330007.02 |                                         3480000|
+|9330008.02 |                                         3200000|
+|9330009.00 |                                         2500000|
+|9330010.01 |                                         1800000|
+|9330010.02 |                                         3520000|
+|9330011.00 |                                         1800000|
+|9330012.01 |                                         2300000|
+|9330012.02 |                                         1600000|
+|9330013.01 |                                         1600000|
+|9330013.03 |                                         1700000|
+|9330013.04 |                                         1600000|
+|9330014.01 |                                         1600000|
+|9330014.02 |                                         1600000|
+|9330015.01 |                                         1800000|
+|9330015.02 |                                         1800000|
+|9330016.01 |                                         1510000|
+|9330016.04 |                                         1200000|
+|9330016.05 |                                         1450000|
+|9330016.06 |                                          552000|
+|9330017.02 |                                         1300000|
+|9330017.03 |                                         1500000|
+|9330017.04 |                                         1700000|
+|9330018.01 |                                         1600000|
+|9330018.02 |                                         1600000|
+|9330019.00 |                                         1800000|
+|9330020.00 |                                         1840000|
+|9330021.00 |                                         5000000|
+|9330022.00 |                                         1000000|
+|9330023.00 |                                         3100000|
+|9330024.00 |                                         3200000|
+|9330025.00 |                                         2780000|
+|9330026.00 |                                         3020000|
+|9330027.01 |                                         3000000|
+|9330027.02 |                                         2800000|
+|9330028.00 |                                         4480000|
+|9330029.00 |                                         1800000|
+|9330030.00 |                                         1900000|
+|9330031.01 |                                         2400000|
+|9330031.02 |                                         1700000|
+|9330032.01 |                                         1400000|
+|9330032.02 |                                         1500000|
+|9330033.01 |                                         1600000|
+|9330033.02 |                                         1510000|
+|9330034.01 |                                         1400000|
+|9330034.02 |                                         1500000|
+|9330035.01 |                                         1600000|
+|9330035.02 |                                         1500000|
+|9330036.01 |                                         1510000|
+|9330036.02 |                                         1600000|
+|9330037.01 |                                         1550000|
+|9330037.02 |                                         1440000|
+|9330038.00 |                                          900000|
+|9330039.01 |                                         1200000|
+|9330039.02 |                                          850000|
+|9330040.01 |                                          700000|
+|9330040.02 |                                          755000|
+|9330041.01 |                                          800000|
+|9330041.02 |                                         1100000|
+|9330042.00 |                                         2500000|
+|9330043.01 |                                         2780000|
+|9330043.02 |                                         3000000|
+|9330044.00 |                                         3200000|
+|9330045.01 |                                         2000000|
+|9330045.02 |                                         1620000|
+|9330046.00 |                                          910000|
+|9330047.01 |                                          950000|
+|9330047.02 |                                          700000|
+|9330048.01 |                                          900000|
+|9330048.02 |                                         1000000|
+|9330049.02 |                                          980000|
+|9330049.03 |                                         1000000|
+|9330049.04 |                                          900000|
+|9330049.05 |                                          820000|
+|9330049.06 |                                          850000|
+|9330050.02 |                                          730000|
+|9330050.03 |                                          685000|
+|9330050.04 |                                          500000|
+|9330051.01 |                                         1700000|
+|9330051.02 |                                         1510000|
+|9330052.01 |                                         1560000|
+|9330052.02 |                                         1500000|
+|9330053.01 |                                         1500000|
+|9330053.02 |                                         1500000|
+|9330054.01 |                                         1600000|
+|9330054.02 |                                         1510000|
+|9330055.01 |                                         1200000|
+|9330055.02 |                                          600000|
+]]
+
+---
+
+.small[It is difficult to interpret data at small geographic units. We will learn how to show them on a map.]
+
+```
+
+Downloading: 9.6 kB     
+Downloading: 9.6 kB     
+Downloading: 9.6 kB     
+Downloading: 9.6 kB     
+```
+
+&lt;img src="16_census_profile_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+``` r
+install.packages("cancensus")
+install.packages("sf")
+```
+
+
+``` r
+library(cancensus)
+library(tidyverse)
+```
+
+---
+
+Click [here](https://censusmapper.ca/users/sign_up) to sign up for Censusmapper.ca to obtain your own API key. You can use your Google, Facebook or Twitter account.
+
+Run the following code &lt;i&gt;in Console just once&lt;/i&gt;, to store your API key in your computer and automatically use it in API calls. 
+
+``` r
+set_cancensus_api_key("your_api_key", install=TRUE)
+```
+
+Run the following code &lt;i&gt;in Console just once&lt;/i&gt;, to set the cache folder.
+
+``` r
+set_cancensus_cache_path("~/cancensus_cache", install=TRUE)
+```
+
+---
+
+Suppose we want to calculate Chinese shares by CMA.
+
+
+``` r
+chinese_cma &lt;- get_census(dataset='CA21', regions=list(C="01"), 
+                          vectors=c("v_CA21_4872", "v_CA21_4881"), level='CMA')
+```
+
+```
+
+Downloading: 3.6 kB     
+Downloading: 3.6 kB     
+Downloading: 5.6 kB     
+Downloading: 5.6 kB     
+Downloading: 5.6 kB     
+Downloading: 5.6 kB     
+```
+
+This code downloads total population and the number of Chinese by CMA.
+
+The following columns are included by default: Area (sq km), Population, Dwellings, Households.
+
+---
+
+.scroll-output[
+.tiny[
+
+|GeoUID |Type |Region Name                                                        | Area (sq km)| Population| Dwellings| Households|PR_UID |C_UID | v_CA21_4872: Total - Visible minority for the population in private households| v_CA21_4881: Chinese|
+|:------|:----|:------------------------------------------------------------------|------------:|----------:|---------:|----------:|:------|:-----|------------------------------------------------------------------------------:|--------------------:|
+|10001  |CMA  |St. John's (B)                                                     |     931.5637|     212579|     97429|      89999|       |      |                                                                         208820|                 1745|
+|10010  |CMA  |Grand Falls-Windsor (D)                                            |      54.8429|      13853|      6628|       6122|       |      |                                                                          13605|                   50|
+|10011  |CMA  |Gander (D)                                                         |    2412.6700|      13414|      6293|       5745|       |      |                                                                          13075|                   15|
+|10015  |CMA  |Corner Brook (D)                                                   |    1122.5751|      29762|     14431|      13245|       |      |                                                                          28975|                   45|
+|11105  |CMA  |Charlottetown (D)                                                  |    1112.4274|      78858|     36359|      32943|       |      |                                                                          77385|                 2865|
+|11110  |CMA  |Summerside (D)                                                     |     125.1185|      18157|      8342|       7953|       |      |                                                                          17675|                  175|
+|12205  |CMA  |Halifax (B)                                                        |    7276.2157|     465703|    211789|     201138|       |      |                                                                         461140|                 9770|
+|12210  |CMA  |Kentville (D)                                                      |     607.0513|      26929|     12746|      11936|       |      |                                                                          26600|                  115|
+|12215  |CMA  |Truro (D)                                                          |    2732.5279|      46157|     22637|      20698|       |      |                                                                          45320|                  165|
+|12220  |CMA  |New Glasgow (D)                                                    |    2066.4671|      34397|     17071|      15483|       |      |                                                                          33780|                  100|
+|12225  |CMA  |Cape Breton (D)                                                    |    2457.2065|      98318|     48020|      43799|       |      |                                                                          96640|                  615|
+|13305  |CMA  |Moncton (B)                                                        |    2562.4663|     157717|     70460|      67179|       |      |                                                                         154250|                  875|
+|13310  |CMA  |Saint John (B)                                                     |    3505.6642|     130613|     59272|      55865|       |      |                                                                         128385|                 1485|
+|13320  |CMA  |Fredericton (B)                                                    |    6014.6624|     108610|     48761|      46357|       |      |                                                                         107165|                 1275|
+|13328  |CMA  |Bathurst (D)                                                       |    2100.0493|      31387|     15658|      14396|       |      |                                                                          30545|                   80|
+|13329  |CMA  |Miramichi (D)                                                      |    7564.0600|      27593|     13238|      12301|       |      |                                                                          27040|                   50|
+|13330  |CMA  |Campbellton (New Brunswick part / partie du Nouveau-Brunswick) (D) |    1090.4908|      13330|      6565|       6131|       |      |                                                                          11335|                   20|
+|13335  |CMA  |Edmundston (D)                                                     |    1582.3597|      22144|     10818|      10266|       |      |                                                                          20925|                   15|
+|24330  |CMA  |Campbellton (partie du Québec / Quebec part) (D)                   |     434.9604|      13330|      6565|       6131|       |      |                                                                           1325|                    0|
+|24403  |CMA  |Matane (D)                                                         |     865.8684|      18474|     10083|       9171|       |      |                                                                          18020|                    0|
+|24404  |CMA  |Rimouski (D)                                                       |     772.9257|      53944|     27299|      25618|       |      |                                                                          52475|                  135|
+|24405  |CMA  |Rivière-du-Loup (D)                                                |     543.0159|      30025|     14696|      13737|       |      |                                                                          28680|                   50|
+|24406  |CMA  |Baie-Comeau (D)                                                    |     682.8931|      26643|     13252|      12358|       |      |                                                                          25720|                   35|
+|24408  |CMA  |Saguenay (B)                                                       |    3133.5308|     161567|     79976|      74809|       |      |                                                                         157900|                  265|
+|24410  |CMA  |Alma (D)                                                           |     194.9230|      30331|     14493|      13815|       |      |                                                                          29325|                   55|
+|24411  |CMA  |Dolbeau-Mistassini (D)                                             |     647.7548|      15306|      7639|       6962|       |      |                                                                          14725|                   20|
+|24412  |CMA  |Sept-Îles (D)                                                      |    1750.4394|      27729|     13878|      12293|       |      |                                                                          27155|                   30|
+|24421  |CMA  |Québec (B)                                                         |    3499.4572|     839311|    411415|     387954|       |      |                                                                         817105|                 3355|
+|24423  |CMA  |Sainte-Marie (D)                                                   |     107.5486|      13134|      5630|       5500|       |      |                                                                          12640|                   25|
+|24428  |CMA  |Saint-Georges (D)                                                  |     365.2126|      34833|     16822|      16137|       |      |                                                                          33985|                   35|
+|24430  |CMA  |Thetford Mines (D)                                                 |     405.9157|      28287|     14392|      13260|       |      |                                                                          26425|                   45|
+|24433  |CMA  |Sherbrooke (B)                                                     |    1458.0974|     227398|    113325|     104650|       |      |                                                                         220110|                  915|
+|24437  |CMA  |Cowansville (D)                                                    |      46.8746|      15234|      7247|       6980|       |      |                                                                          14285|                   35|
+|24440  |CMA  |Victoriaville (D)                                                  |     378.1030|      52936|     25279|      23910|       |      |                                                                          50555|                  115|
+|24442  |CMA  |Trois-Rivières (B)                                                 |    1038.6392|     161489|     80767|      76635|       |      |                                                                         155535|                  450|
+|24444  |CMA  |Shawinigan (D)                                                     |     729.9823|      49620|     27444|      25060|       |      |                                                                          47640|                   55|
+|24447  |CMA  |Drummondville (B)                                                  |    1094.3642|     101610|     47323|      45697|       |      |                                                                          98565|                  185|
+|24450  |CMA  |Granby (K)                                                         |     494.1004|      90833|     43360|      41097|       |      |                                                                          88250|                  190|
+|24452  |CMA  |Saint-Hyacinthe (K)                                                |     259.3757|      59980|     29215|      27960|       |      |                                                                          57570|                  165|
+|24454  |CMA  |Sorel-Tracy (D)                                                    |     170.3051|      41934|     21173|      20309|       |      |                                                                          40460|                   60|
+|24456  |CMA  |Joliette (D)                                                       |     108.6636|      52706|     25714|      24565|       |      |                                                                          50165|                   85|
+|24462  |CMA  |Montréal (B)                                                       |    4670.0980|    4291732|   1929263|    1835698|       |      |                                                                        4206450|               103505|
+|24465  |CMA  |Salaberry-de-Valleyfield (D)                                       |     108.5609|      42787|     20962|      20073|       |      |                                                                          41200|                   40|
+|24467  |CMA  |Sainte-Agathe-des-Monts (D)                                        |     210.9639|      19892|     12071|       9669|       |      |                                                                          19415|                   25|
+|24468  |CMA  |Lachute (D)                                                        |     108.6571|      14100|      6862|       6531|       |      |                                                                          13360|                   25|
+|24480  |CMA  |Val-d'Or (D)                                                       |    3539.9760|      34037|     16227|      15375|       |      |                                                                          33420|                   55|
+|24481  |CMA  |Amos (D)                                                           |    2298.1551|      18873|      8762|       8248|       |      |                                                                          18215|                   10|
+|24485  |CMA  |Rouyn-Noranda (D)                                                  |    5963.5674|      42313|     20874|      19282|       |      |                                                                          41290|                   60|
+|24502  |CMA  |Hawkesbury (partie du Québec / Quebec part) (D)                    |       2.8174|      12010|      6259|       5983|       |      |                                                                           1820|                   30|
+|24505  |CMA  |Ottawa - Gatineau (partie du Québec / Quebec part) (B)             |    3381.8311|    1488307|    638013|     604721|       |      |                                                                         347700|                 3410|
+|330    |CMA  |Campbellton (D)                                                    |    1525.4512|      13330|      6565|       6131|       |      |                                                                          12655|                   20|
+|35501  |CMA  |Cornwall (D)                                                       |     509.2145|      61415|     27797|      26798|       |      |                                                                          59750|                  205|
+|35502  |CMA  |Hawkesbury (Ontario part / partie de l'Ontario) (D)                |      10.0963|      12010|      6259|       5983|       |      |                                                                           9825|                   15|
+|35505  |CMA  |Ottawa - Gatineau (Ontario part / partie de l'Ontario) (B)         |    4665.1591|    1488307|    638013|     604721|       |      |                                                                        1116795|                46620|
+|35512  |CMA  |Brockville (D)                                                     |     576.8673|      31661|     15117|      14438|       |      |                                                                          30885|                  190|
+|35515  |CMA  |Pembroke (D)                                                       |     553.4027|      23814|     10765|      10257|       |      |                                                                          23085|                  110|
+|35516  |CMA  |Petawawa (D)                                                       |     164.6985|      18160|      7174|       6762|       |      |                                                                          17290|                   60|
+|35521  |CMA  |Kingston (B)                                                       |    1919.1686|     172546|     80955|      73506|       |      |                                                                         168075|                 3275|
+|35522  |CMA  |Belleville - Quinte West (B)                                       |    1337.4982|     111184|     48274|      46213|       |      |                                                                         109250|                  710|
+|35527  |CMA  |Cobourg (D)                                                        |      22.4072|      20519|      9520|       9134|       |      |                                                                          19780|                   75|
+|35528  |CMA  |Port Hope (D)                                                      |     278.8012|      17294|      7607|       7318|       |      |                                                                          16885|                  100|
+|35529  |CMA  |Peterborough (B)                                                   |    1508.4421|     128624|     57761|      53370|       |      |                                                                         125990|                 1040|
+|35530  |CMA  |Kawartha Lakes (D)                                                 |    3033.6568|      79247|     38947|      32708|       |      |                                                                          77230|                  390|
+|35531  |CMA  |Centre Wellington (D)                                              |     409.4129|      31093|     12701|      11972|       |      |                                                                          30650|                  115|
+|35532  |CMA  |Oshawa (B)                                                         |     903.2512|     415311|    153565|     149047|       |      |                                                                         411405|                 8925|
+|35533  |CMA  |Ingersoll (D)                                                      |      12.7337|      13693|      5627|       5467|       |      |                                                                          13545|                   15|
+|35535  |CMA  |Toronto (B)                                                        |    5902.7499|    6202225|   2394205|    2262473|       |      |                                                                        6142880|               679725|
+|35537  |CMA  |Hamilton (B)                                                       |    1373.1460|     785184|    320081|     307382|       |      |                                                                         773440|                15550|
+|35539  |CMA  |St. Catharines - Niagara (B)                                       |    1397.0882|     433604|    190878|     179224|       |      |                                                                         425480|                 6380|
+|35541  |CMA  |Kitchener - Cambridge - Waterloo (B)                               |    1092.3295|     575847|    229809|     219060|       |      |                                                                         568065|                17180|
+|35543  |CMA  |Brantford (B)                                                      |    1074.0011|     144162|     58047|      56003|       |      |                                                                         141910|                  780|
+|35544  |CMA  |Woodstock (D)                                                      |      56.4607|      46705|     19528|      18886|       |      |                                                                          45945|                  280|
+|35546  |CMA  |Tillsonburg (D)                                                    |      22.1987|      18615|      8494|       8229|       |      |                                                                          18295|                   35|
+|35547  |CMA  |Norfolk (D)                                                        |    1597.6846|      67490|     30085|      27594|       |      |                                                                          66225|                  205|
+|35550  |CMA  |Guelph (B)                                                         |     595.0842|     165588|     67685|      64175|       |      |                                                                         163485|                 4445|
+|35553  |CMA  |Stratford (D)                                                      |      30.0210|      33232|     15388|      14743|       |      |                                                                          32485|                  230|
+|35555  |CMA  |London (B)                                                         |    2661.4818|     543551|    235522|     222239|       |      |                                                                         535775|                12435|
+|35556  |CMA  |Chatham-Kent (D)                                                   |    2464.5232|     104316|     46921|      44178|       |      |                                                                         102095|                  350|
+|35559  |CMA  |Windsor (B)                                                        |    1803.1734|     422630|    174072|     165665|       |      |                                                                         415505|                 8790|
+|35562  |CMA  |Sarnia (K)                                                         |    1117.1968|      97592|     45210|      42581|       |      |                                                                          96290|                  585|
+|35563  |CMA  |Essa (D)                                                           |     279.9161|      22970|      8232|       7949|       |      |                                                                          22790|                  105|
+|35565  |CMA  |Wasaga Beach (D)                                                   |      57.4219|      24862|     13768|      10811|       |      |                                                                          24585|                  110|
+|35566  |CMA  |Owen Sound (D)                                                     |     624.1760|      32712|     15675|      14390|       |      |                                                                          31875|                  165|
+|35567  |CMA  |Collingwood (D)                                                    |      33.1546|      24811|     13216|      11174|       |      |                                                                          24275|                  215|
+|35568  |CMA  |Barrie (B)                                                         |     897.2559|     212856|     82649|      78540|       |      |                                                                         210150|                 2910|
+|35569  |CMA  |Orillia (D)                                                        |      28.5299|      33411|     15428|      14422|       |      |                                                                          32275|                  345|
+|35571  |CMA  |Midland (D)                                                        |      60.7517|      27894|     12652|      11825|       |      |                                                                          26360|                  120|
+|35575  |CMA  |North Bay (K)                                                      |    5314.8520|      71736|     34049|      31182|       |      |                                                                          70175|                  335|
+|35580  |CMA  |Greater Sudbury / Grand Sudbury (B)                                |    4187.3969|     170605|     78225|      73387|       |      |                                                                         167620|                  985|
+|35582  |CMA  |Elliot Lake (D)                                                    |     696.0556|      11372|      6275|       5839|       |      |                                                                          11225|                   50|
+|35586  |CMA  |Timmins (D)                                                        |    2955.3257|      41145|     19390|      17886|       |      |                                                                          40315|                  195|
+|35590  |CMA  |Sault Ste. Marie (K)                                               |     802.5786|      76731|     37101|      34416|       |      |                                                                          75425|                  455|
+|35595  |CMA  |Thunder Bay (B)                                                    |    2550.7877|     123258|     57877|      54212|       |      |                                                                         120960|                 1040|
+|35598  |CMA  |Kenora (D)                                                         |     211.6536|      14967|      7637|       6510|       |      |                                                                          14610|                   45|
+|46602  |CMA  |Winnipeg (B)                                                       |    5285.4554|     834678|    347144|     330326|       |      |                                                                         819715|                23030|
+|46603  |CMA  |Winkler (D)                                                        |     872.1924|      32655|     11755|      11363|       |      |                                                                          32210|                   55|
+|46605  |CMA  |Steinbach (D)                                                      |      37.5551|      17806|      7092|       6836|       |      |                                                                          17575|                   45|
+|46607  |CMA  |Portage la Prairie (D)                                             |      24.7206|      13270|      6109|       5644|       |      |                                                                          12835|                   20|
+|46610  |CMA  |Brandon (D)                                                        |    1232.8141|      54268|     23674|      22283|       |      |                                                                          52750|                 1500|
+|46640  |CMA  |Thompson (D)                                                       |      16.6198|      13035|      5442|       4676|       |      |                                                                          12885|                   75|
+|47705  |CMA  |Regina (B)                                                         |    4323.6641|     249217|    108120|     100211|       |      |                                                                         244950|                 5925|
+|47710  |CMA  |Yorkton (D)                                                        |    1623.3177|      19859|      9114|       8424|       |      |                                                                          19505|                  110|
+|47715  |CMA  |Moose Jaw (D)                                                      |     843.4351|      34872|     16700|      15215|       |      |                                                                          34155|                  625|
+|47720  |CMA  |Swift Current (D)                                                  |    1129.7761|      18745|      8669|       7949|       |      |                                                                          18065|                  185|
+|47725  |CMA  |Saskatoon (B)                                                      |    5864.4799|     317480|    134720|     125100|       |      |                                                                         311520|                 9525|
+|47735  |CMA  |North Battleford (D)                                               |    1118.5439|      19374|      8674|       7865|       |      |                                                                          18785|                  135|
+|47745  |CMA  |Prince Albert (D)                                                  |    2537.6759|      45718|     18431|      17061|       |      |                                                                          43325|                  175|
+|47750  |CMA  |Estevan (D)                                                        |     793.3552|      12798|      6250|       5342|       |      |                                                                          12555|                   80|
+|47755  |CMA  |Weyburn (D)                                                        |     828.2775|      12247|      5613|       5089|       |      |                                                                          11820|                   70|
+|47840  |CMA  |Lloydminster (Saskatchewan part / partie de la Saskatchewan) (D)   |    1960.2635|      36508|     15545|      13887|       |      |                                                                          16690|                   20|
+|48805  |CMA  |Medicine Hat (K)                                                   |   13106.1110|      76376|     34157|      32060|       |      |                                                                          74590|                  675|
+|48806  |CMA  |Brooks (D)                                                         |      18.2051|      14924|      5489|       5140|       |      |                                                                          14640|                  320|
+|48810  |CMA  |Lethbridge (B)                                                     |    2958.9554|     123847|     51735|      48647|       |      |                                                                         120500|                 1515|
+|48820  |CMA  |Okotoks (D)                                                        |      38.5490|      30405|     10750|      10476|       |      |                                                                          30020|                  170|
+|48821  |CMA  |High River (D)                                                     |      22.1948|      14324|      5950|       5787|       |      |                                                                          14110|                   15|
+|48825  |CMA  |Calgary (B)                                                        |    5098.6807|    1481806|    594513|     563440|       |      |                                                                        1465175|                93510|
+|48826  |CMA  |Strathmore (D)                                                     |      26.9758|      14339|      5754|       5517|       |      |                                                                          14110|                   85|
+|48828  |CMA  |Canmore (D)                                                        |      68.4694|      15990|      9173|       6804|       |      |                                                                          15525|                  255|
+|48830  |CMA  |Red Deer (B)                                                       |     104.3433|     100844|     43404|      40512|       |      |                                                                          98045|                 1050|
+|48831  |CMA  |Sylvan Lake (D)                                                    |      24.2547|      16514|      7486|       6618|       |      |                                                                          16430|                   80|
+|48832  |CMA  |Lacombe (D)                                                        |      20.5856|      13396|      5552|       5194|       |      |                                                                          13070|                   35|
+|48833  |CMA  |Camrose (D)                                                        |      41.6685|      18772|      8747|       8136|       |      |                                                                          18185|                  140|
+|48835  |CMA  |Edmonton (B)                                                       |    9416.1887|    1418118|    589554|     548624|       |      |                                                                        1397750|                62680|
+|48840  |CMA  |Lloydminster (Alberta part / partie de l'Alberta) (D)              |      23.9810|      36508|     15545|      13887|       |      |                                                                          19230|                   95|
+|48850  |CMA  |Grande Prairie (K)                                                 |     132.7063|      64141|     27551|      24816|       |      |                                                                          63175|                  495|
+|48860  |CMA  |Wood Buffalo (K)                                                   |   60957.2057|      73837|     31100|      26479|       |      |                                                                          73290|                  740|
+|48865  |CMA  |Wetaskiwin (D)                                                     |      18.7535|      12594|      5643|       5186|       |      |                                                                          12120|                  100|
+|502    |CMA  |Hawkesbury (D)                                                     |      12.9137|      12010|      6259|       5983|       |      |                                                                          11645|                   45|
+|505    |CMA  |Ottawa - Gatineau (B)                                              |    8046.9902|    1488307|    638013|     604721|       |      |                                                                        1464500|                50030|
+|59905  |CMA  |Cranbrook (D)                                                      |    4563.8689|      27040|     11976|      11379|       |      |                                                                          26295|                  275|
+|59907  |CMA  |Nelson (D)                                                         |    1224.3003|      19119|      9426|       8507|       |      |                                                                          18710|                  140|
+|59910  |CMA  |Trail (D)                                                          |     279.1345|      14268|      6838|       6513|       |      |                                                                          13865|                   80|
+|59913  |CMA  |Penticton (D)                                                      |    1734.7213|      47380|     24027|      21920|       |      |                                                                          46160|                  440|
+|59915  |CMA  |Kelowna (B)                                                        |    2902.4539|     222162|    102097|      94335|       |      |                                                                         218530|                 3340|
+|59918  |CMA  |Vernon (D)                                                         |    1041.0866|      67086|     31677|      28723|       |      |                                                                          65325|                  595|
+|59920  |CMA  |Salmon Arm (D)                                                     |     165.4230|      19705|      8637|       8215|       |      |                                                                          18895|                  125|
+|59925  |CMA  |Kamloops (B)                                                       |    5654.0827|     114142|     50235|      47102|       |      |                                                                         110545|                 1400|
+|59930  |CMA  |Chilliwack (B)                                                     |    1444.0238|     113767|     46708|      44365|       |      |                                                                         111560|                 1550|
+|59932  |CMA  |Abbotsford - Mission (B)                                           |     606.7175|     195726|     70648|      67613|       |      |                                                                         192110|                 2895|
+|59933  |CMA  |Vancouver (B)                                                      |    2878.9307|    2642825|   1104532|    1043319|       |      |                                                                        2607010|               512260|
+|59934  |CMA  |Squamish (D)                                                       |     105.4301|      24232|     10033|       9308|       |      |                                                                          23960|                  310|
+|59935  |CMA  |Victoria (B)                                                       |     695.2920|     397237|    186674|     176676|       |      |                                                                         388475|                17385|
+|59936  |CMA  |Ladysmith (D)                                                      |     412.0119|      15501|      7136|       6502|       |      |                                                                          15235|                  145|
+|59937  |CMA  |Duncan (D)                                                         |     373.2193|      47582|     20901|      20012|       |      |                                                                          46430|                  495|
+|59938  |CMA  |Nanaimo (B)                                                        |    1279.2760|     115459|     51568|      49348|       |      |                                                                         112410|                 2985|
+|59939  |CMA  |Parksville (D)                                                     |      81.8096|      31054|     15647|      14766|       |      |                                                                          30015|                  220|
+|59940  |CMA  |Port Alberni (D)                                                   |    1633.1279|      25786|     12682|      11714|       |      |                                                                          25375|                  160|
+|59943  |CMA  |Courtenay (D)                                                      |     624.3332|      63282|     29985|      28204|       |      |                                                                          62025|                  625|
+|59944  |CMA  |Campbell River (D)                                                 |    1734.0503|      40704|     18433|      17640|       |      |                                                                          39935|                  245|
+|59945  |CMA  |Powell River (D)                                                   |     799.7984|      17825|      8884|       8191|       |      |                                                                          17460|                  195|
+|59950  |CMA  |Williams Lake (D)                                                  |   12422.1404|      23608|     11177|      10044|       |      |                                                                          23340|                   95|
+|59952  |CMA  |Quesnel (D)                                                        |   21708.6198|      23113|     10943|      10156|       |      |                                                                          22900|                   95|
+|59955  |CMA  |Prince Rupert (D)                                                  |    3303.6339|      13442|      6316|       5498|       |      |                                                                          13300|                  130|
+|59965  |CMA  |Terrace (D)                                                        |    9721.8369|      19606|      8661|       8000|       |      |                                                                          19515|                  120|
+|59970  |CMA  |Prince George (K)                                                  |   17650.9918|      89490|     39207|      36799|       |      |                                                                          87910|                  980|
+|59975  |CMA  |Dawson Creek (D)                                                   |   11716.7959|      17878|      8578|       7542|       |      |                                                                          17380|                   80|
+|59977  |CMA  |Fort St. John (D)                                                  |     617.7325|      28729|     13054|      11592|       |      |                                                                          28430|                  175|
+|60990  |CMA  |Whitehorse (D)                                                     |    8465.2077|      31913|     14121|      13186|       |      |                                                                          31425|                  565|
+|61995  |CMA  |Yellowknife (D)                                                    |     103.3722|      20340|      7975|       7519|       |      |                                                                          19910|                  255|
+|840    |CMA  |Lloydminster (D)                                                   |    1984.2445|      36508|     15545|      13887|       |      |                                                                          35920|                  110|
+]]
+
+---
+
+.tiny[
+
+``` r
+chinese_cma %&gt;% transmute(
+  `Region Name`, 
+  Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;% 
+  arrange(desc(Chinese_share))
+```
+]
+.scroll-output[
+.tiny[
+
+|Region Name                                                        | Chinese_share|
+|:------------------------------------------------------------------|-------------:|
+|Vancouver (B)                                                      |     0.1964933|
+|Toronto (B)                                                        |     0.1106525|
+|Calgary (B)                                                        |     0.0638217|
+|Edmonton (B)                                                       |     0.0448435|
+|Victoria (B)                                                       |     0.0447519|
+|Ottawa - Gatineau (Ontario part / partie de l'Ontario) (B)         |     0.0417445|
+|Charlottetown (D)                                                  |     0.0370227|
+|Ottawa - Gatineau (B)                                              |     0.0341618|
+|Saskatoon (B)                                                      |     0.0305759|
+|Kitchener - Cambridge - Waterloo (B)                               |     0.0302430|
+|Brandon (D)                                                        |     0.0284360|
+|Winnipeg (B)                                                       |     0.0280951|
+|Guelph (B)                                                         |     0.0271890|
+|Nanaimo (B)                                                        |     0.0265546|
+|Montréal (B)                                                       |     0.0246063|
+|Regina (B)                                                         |     0.0241886|
+|London (B)                                                         |     0.0232094|
+|Brooks (D)                                                         |     0.0218579|
+|Oshawa (B)                                                         |     0.0216940|
+|Halifax (B)                                                        |     0.0211866|
+|Windsor (B)                                                        |     0.0211550|
+|Hamilton (B)                                                       |     0.0201050|
+|Kingston (B)                                                       |     0.0194853|
+|Moose Jaw (D)                                                      |     0.0182989|
+|Whitehorse (D)                                                     |     0.0179793|
+|Hawkesbury (partie du Québec / Quebec part) (D)                    |     0.0164835|
+|Canmore (D)                                                        |     0.0164251|
+|Kelowna (B)                                                        |     0.0152839|
+|Abbotsford - Mission (B)                                           |     0.0150695|
+|St. Catharines - Niagara (B)                                       |     0.0149948|
+|Chilliwack (B)                                                     |     0.0138939|
+|Barrie (B)                                                         |     0.0138473|
+|Squamish (D)                                                       |     0.0129382|
+|Yellowknife (D)                                                    |     0.0128076|
+|Kamloops (B)                                                       |     0.0126645|
+|Lethbridge (B)                                                     |     0.0125726|
+|Fredericton (B)                                                    |     0.0118975|
+|Saint John (B)                                                     |     0.0115668|
+|Powell River (D)                                                   |     0.0111684|
+|Prince George (K)                                                  |     0.0111478|
+|Red Deer (B)                                                       |     0.0107094|
+|Orillia (D)                                                        |     0.0106894|
+|Duncan (D)                                                         |     0.0106612|
+|Cranbrook (D)                                                      |     0.0104583|
+|Swift Current (D)                                                  |     0.0102408|
+|Wood Buffalo (K)                                                   |     0.0100969|
+|Courtenay (D)                                                      |     0.0100766|
+|Summerside (D)                                                     |     0.0099010|
+|Ottawa - Gatineau (partie du Québec / Quebec part) (B)             |     0.0098073|
+|Prince Rupert (D)                                                  |     0.0097744|
+|Penticton (D)                                                      |     0.0095321|
+|Ladysmith (D)                                                      |     0.0095176|
+|Vernon (D)                                                         |     0.0091083|
+|Medicine Hat (K)                                                   |     0.0090495|
+|Collingwood (D)                                                    |     0.0088568|
+|Thunder Bay (B)                                                    |     0.0085979|
+|St. John's (B)                                                     |     0.0083565|
+|Peterborough (B)                                                   |     0.0082546|
+|Wetaskiwin (D)                                                     |     0.0082508|
+|Grande Prairie (K)                                                 |     0.0078354|
+|Camrose (D)                                                        |     0.0076987|
+|Nelson (D)                                                         |     0.0074826|
+|Parksville (D)                                                     |     0.0073297|
+|North Battleford (D)                                               |     0.0071866|
+|Stratford (D)                                                      |     0.0070802|
+|Salmon Arm (D)                                                     |     0.0066155|
+|Belleville - Quinte West (B)                                       |     0.0064989|
+|Estevan (D)                                                        |     0.0063720|
+|Cape Breton (D)                                                    |     0.0063638|
+|Port Alberni (D)                                                   |     0.0063054|
+|Fort St. John (D)                                                  |     0.0061555|
+|Brockville (D)                                                     |     0.0061519|
+|Terrace (D)                                                        |     0.0061491|
+|Campbell River (D)                                                 |     0.0061350|
+|Woodstock (D)                                                      |     0.0060942|
+|Sarnia (K)                                                         |     0.0060754|
+|Sault Ste. Marie (K)                                               |     0.0060325|
+|Strathmore (D)                                                     |     0.0060241|
+|Port Hope (D)                                                      |     0.0059224|
+|Weyburn (D)                                                        |     0.0059222|
+|Greater Sudbury / Grand Sudbury (B)                                |     0.0058764|
+|Thompson (D)                                                       |     0.0058207|
+|Trail (D)                                                          |     0.0057699|
+|Moncton (B)                                                        |     0.0056726|
+|Okotoks (D)                                                        |     0.0056629|
+|Yorkton (D)                                                        |     0.0056396|
+|Brantford (B)                                                      |     0.0054964|
+|Owen Sound (D)                                                     |     0.0051765|
+|Kawartha Lakes (D)                                                 |     0.0050499|
+|Lloydminster (Alberta part / partie de l'Alberta) (D)              |     0.0049402|
+|Sylvan Lake (D)                                                    |     0.0048691|
+|Timmins (D)                                                        |     0.0048369|
+|North Bay (K)                                                      |     0.0047738|
+|Pembroke (D)                                                       |     0.0047650|
+|Essa (D)                                                           |     0.0046073|
+|Dawson Creek (D)                                                   |     0.0046030|
+|Midland (D)                                                        |     0.0045524|
+|Wasaga Beach (D)                                                   |     0.0044743|
+|Elliot Lake (D)                                                    |     0.0044543|
+|Kentville (D)                                                      |     0.0043233|
+|Sherbrooke (B)                                                     |     0.0041570|
+|Quesnel (D)                                                        |     0.0041485|
+|Québec (B)                                                         |     0.0041060|
+|Williams Lake (D)                                                  |     0.0040703|
+|Prince Albert (D)                                                  |     0.0040392|
+|Hawkesbury (D)                                                     |     0.0038643|
+|Cobourg (D)                                                        |     0.0037917|
+|Centre Wellington (D)                                              |     0.0037520|
+|Grand Falls-Windsor (D)                                            |     0.0036751|
+|Truro (D)                                                          |     0.0036408|
+|Petawawa (D)                                                       |     0.0034702|
+|Cornwall (D)                                                       |     0.0034310|
+|Chatham-Kent (D)                                                   |     0.0034282|
+|Norfolk (D)                                                        |     0.0030955|
+|Kenora (D)                                                         |     0.0030801|
+|Lloydminster (D)                                                   |     0.0030624|
+|New Glasgow (D)                                                    |     0.0029603|
+|Trois-Rivières (B)                                                 |     0.0028932|
+|Saint-Hyacinthe (K)                                                |     0.0028661|
+|Lacombe (D)                                                        |     0.0026779|
+|Bathurst (D)                                                       |     0.0026191|
+|Rimouski (D)                                                       |     0.0025727|
+|Steinbach (D)                                                      |     0.0025605|
+|Cowansville (D)                                                    |     0.0024501|
+|Victoriaville (D)                                                  |     0.0022748|
+|Granby (K)                                                         |     0.0021530|
+|Sainte-Marie (D)                                                   |     0.0019778|
+|Tillsonburg (D)                                                    |     0.0019131|
+|Drummondville (B)                                                  |     0.0018769|
+|Alma (D)                                                           |     0.0018755|
+|Lachute (D)                                                        |     0.0018713|
+|Miramichi (D)                                                      |     0.0018491|
+|Campbellton (New Brunswick part / partie du Nouveau-Brunswick) (D) |     0.0017644|
+|Rivière-du-Loup (D)                                                |     0.0017434|
+|Winkler (D)                                                        |     0.0017075|
+|Thetford Mines (D)                                                 |     0.0017029|
+|Joliette (D)                                                       |     0.0016944|
+|Saguenay (B)                                                       |     0.0016783|
+|Val-d'Or (D)                                                       |     0.0016457|
+|Campbellton (D)                                                    |     0.0015804|
+|Portage la Prairie (D)                                             |     0.0015582|
+|Corner Brook (D)                                                   |     0.0015531|
+|Hawkesbury (Ontario part / partie de l'Ontario) (D)                |     0.0015267|
+|Sorel-Tracy (D)                                                    |     0.0014829|
+|Rouyn-Noranda (D)                                                  |     0.0014531|
+|Baie-Comeau (D)                                                    |     0.0013608|
+|Dolbeau-Mistassini (D)                                             |     0.0013582|
+|Sainte-Agathe-des-Monts (D)                                        |     0.0012877|
+|Lloydminster (Saskatchewan part / partie de la Saskatchewan) (D)   |     0.0011983|
+|Shawinigan (D)                                                     |     0.0011545|
+|Gander (D)                                                         |     0.0011472|
+|Ingersoll (D)                                                      |     0.0011074|
+|Sept-Îles (D)                                                      |     0.0011048|
+|High River (D)                                                     |     0.0010631|
+|Saint-Georges (D)                                                  |     0.0010299|
+|Salaberry-de-Valleyfield (D)                                       |     0.0009709|
+|Edmundston (D)                                                     |     0.0007168|
+|Amos (D)                                                           |     0.0005490|
+|Campbellton (partie du Québec / Quebec part) (D)                   |     0.0000000|
+|Matane (D)                                                         |     0.0000000|
+]]
+
+---
+
+
+``` r
+chinese_cma &lt;- get_census(dataset='CA21', 
+                          regions=list(C="01"), 
+                          vectors=c("v_CA21_4872","v_CA21_4881"), 
+                          level='CMA')
+```
+
+---
+
+#### dataset="CA21"
+
+
+``` r
+list_census_datasets() %&gt;% view
+```
+
+.scroll-output[
+.tiny[
+
+|dataset |description                                                |geo_dataset |attribution                        |reference          |reference_url                                                         |
+|:-------|:----------------------------------------------------------|:-----------|:----------------------------------|:------------------|:---------------------------------------------------------------------|
+|CA1996  |1996 Canada Census                                         |CA1996      |StatCan 1996 Census                |92-351-U           |https://www150.statcan.gc.ca/n1/en/catalogue/92-351-U                 |
+|CA01    |2001 Canada Census                                         |CA01        |StatCan 2001 Census                |92-378-X           |https://www150.statcan.gc.ca/n1/en/catalogue/92-378-X                 |
+|CA06    |2006 Canada Census                                         |CA06        |StatCan 2006 Census                |92-566-X           |https://www150.statcan.gc.ca/n1/en/catalogue/92-566-X                 |
+|CA11    |2011 Canada Census and NHS                                 |CA11        |StatCan 2011 Census and NHS        |98-301-X, 99-000-X |https://www12.statcan.gc.ca/census-recensement/2011/ref/index-eng.cfm |
+|CA16    |2016 Canada Census                                         |CA16        |StatCan 2016 Census                |98-301-X           |https://www150.statcan.gc.ca/n1/en/catalogue/98-301-X                 |
+|CA21    |2021 Canada Census                                         |CA21        |StatCan 2021 Census                |98-301-X           |https://www150.statcan.gc.ca/n1/en/catalogue/98-301-X                 |
+|CA01xSD |2001 Canada Census xtab - Structural type by Document type |CA01        |StatCan 2001 Census xtab, via CMHC |92-378-X           |https://www150.statcan.gc.ca/n1/en/catalogue/92-378-X                 |
+|CA06xSD |2006 Canada Census xtab - Structural type by Document type |CA06        |StatCan 2006 Census xtab, via CMHC |92-566-X           |https://www150.statcan.gc.ca/n1/en/catalogue/92-566-X                 |
+|CA11xSD |2011 Canada Census xtab - Structural type by Document type |CA11        |StatCan 2011 Census xtab, via CMHC |98-301-X           |https://www150.statcan.gc.ca/n1/en/catalogue/98-301-X                 |
+|CA16xSD |2016 Canada Census xtab - Structural type by Document type |CA16        |StatCan 2016 Census xtab, via CMHC |98-301-X           |https://www150.statcan.gc.ca/n1/en/catalogue/98-301-X                 |
+|TX2000  |2000 T1FF taxfiler data                                    |CA1996      |StatCan 2000 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2001  |2001 T1FF taxfiler data                                    |CA01        |StatCan 2001 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2002  |2002 T1FF taxfiler data                                    |CA01        |StatCan 2002 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2003  |2003 T1FF taxfiler data                                    |CA01        |StatCan 2003 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2004  |2004 T1FF taxfiler data                                    |CA01        |StatCan 2004 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2005  |2005 T1FF taxfiler data                                    |CA01        |StatCan 2005 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2006  |2006 T1FF taxfiler data                                    |CA06        |StatCan 2006 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2007  |2007 T1FF taxfiler data                                    |CA06        |StatCan 2007 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2008  |2008 T1FF taxfiler data                                    |CA06        |StatCan 2008 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2009  |2009 T1FF taxfiler data                                    |CA06        |StatCan 2009 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2010  |2010 T1FF taxfiler data                                    |CA06        |StatCan 2010 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2011  |2011 T1FF taxfiler data                                    |CA06        |StatCan 2011 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2012  |2012 T1FF taxfiler data                                    |CA11        |StatCan 2012 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2013  |2013 T1FF taxfiler data                                    |CA11        |StatCan 2013 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2014  |2014 T1FF taxfiler data                                    |CA11        |StatCan 2014 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2015  |2015 T1FF taxfiler data                                    |CA11        |StatCan 2015 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2016  |2016 T1FF taxfiler data                                    |CA16        |StatCan 2016 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2017  |2017 T1FF taxfiler data                                    |CA16        |StatCan 2017 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+|TX2018  |2018 T1FF taxfiler data                                    |CA16        |StatCan 2018 T1FF, via CMHC        |72-212-X           |https://www150.statcan.gc.ca/n1/en/catalogue/72-212-X                 |
+]]
+
+---
+
+#### regions= list(C="01")
+
+Used for geographic coverage
+
+
+``` r
+list_census_regions("CA21") %&gt;% view
+```
+
+.scroll-output[
+.tiny[
+
+|region |name                             |level |      pop|municipal_status |CMA_UID |CD_UID |PR_UID |
+|:------|:--------------------------------|:-----|--------:|:----------------|:-------|:------|:------|
+|01     |Canada                           |C     | 36991981|NA               |NA      |NA     |NA     |
+|35     |Ontario                          |PR    | 14223942|Ont.             |NA      |NA     |NA     |
+|24     |Quebec                           |PR    |  8501833|Que.             |NA      |NA     |NA     |
+|59     |British Columbia                 |PR    |  5000879|B.C.             |NA      |NA     |NA     |
+|48     |Alberta                          |PR    |  4262635|Alta.            |NA      |NA     |NA     |
+|46     |Manitoba                         |PR    |  1342153|Man.             |NA      |NA     |NA     |
+|47     |Saskatchewan                     |PR    |  1132505|Sask.            |NA      |NA     |NA     |
+|12     |Nova Scotia                      |PR    |   969383|N.S.             |NA      |NA     |NA     |
+|13     |New Brunswick                    |PR    |   775610|N.B.             |NA      |NA     |NA     |
+|10     |Newfoundland and Labrador        |PR    |   510550|N.L.             |NA      |NA     |NA     |
+|11     |Prince Edward Island             |PR    |   154331|P.E.I.           |NA      |NA     |NA     |
+|61     |Northwest Territories            |PR    |    41070|N.W.T.           |NA      |NA     |NA     |
+|60     |Yukon                            |PR    |    40232|Y.T.             |NA      |NA     |NA     |
+|62     |Nunavut                          |PR    |    36858|Nvt.             |NA      |NA     |NA     |
+|35535  |Toronto                          |CMA   |  6202225|B                |NA      |NA     |35     |
+|24462  |Montréal                         |CMA   |  4291732|B                |NA      |NA     |24     |
+|59933  |Vancouver                        |CMA   |  2642825|B                |NA      |NA     |59     |
+|505    |Ottawa - Gatineau                |CMA   |  1488307|B                |NA      |NA     |NA     |
+|48825  |Calgary                          |CMA   |  1481806|B                |NA      |NA     |48     |
+|48835  |Edmonton                         |CMA   |  1418118|B                |NA      |NA     |48     |
+|24421  |Québec                           |CMA   |   839311|B                |NA      |NA     |24     |
+|46602  |Winnipeg                         |CMA   |   834678|B                |NA      |NA     |46     |
+|35537  |Hamilton                         |CMA   |   785184|B                |NA      |NA     |35     |
+|35541  |Kitchener - Cambridge - Waterloo |CMA   |   575847|B                |NA      |NA     |35     |
+|35555  |London                           |CMA   |   543551|B                |NA      |NA     |35     |
+|12205  |Halifax                          |CMA   |   465703|B                |NA      |NA     |12     |
+|35539  |St. Catharines - Niagara         |CMA   |   433604|B                |NA      |NA     |35     |
+|35559  |Windsor                          |CMA   |   422630|B                |NA      |NA     |35     |
+|35532  |Oshawa                           |CMA   |   415311|B                |NA      |NA     |35     |
+|59935  |Victoria                         |CMA   |   397237|B                |NA      |NA     |59     |
+|47725  |Saskatoon                        |CMA   |   317480|B                |NA      |NA     |47     |
+|47705  |Regina                           |CMA   |   249217|B                |NA      |NA     |47     |
+|24433  |Sherbrooke                       |CMA   |   227398|B                |NA      |NA     |24     |
+|59915  |Kelowna                          |CMA   |   222162|B                |NA      |NA     |59     |
+|35568  |Barrie                           |CMA   |   212856|B                |NA      |NA     |35     |
+|10001  |St. John's                       |CMA   |   212579|B                |NA      |NA     |10     |
+|59932  |Abbotsford - Mission             |CMA   |   195726|B                |NA      |NA     |59     |
+|35521  |Kingston                         |CMA   |   172546|B                |NA      |NA     |35     |
+|35580  |Greater Sudbury / Grand Sudbury  |CMA   |   170605|B                |NA      |NA     |35     |
+|35550  |Guelph                           |CMA   |   165588|B                |NA      |NA     |35     |
+|24408  |Saguenay                         |CMA   |   161567|B                |NA      |NA     |24     |
+|24442  |Trois-Rivières                   |CMA   |   161489|B                |NA      |NA     |24     |
+|13305  |Moncton                          |CMA   |   157717|B                |NA      |NA     |13     |
+|35543  |Brantford                        |CMA   |   144162|B                |NA      |NA     |35     |
+|13310  |Saint John                       |CMA   |   130613|B                |NA      |NA     |13     |
+|35529  |Peterborough                     |CMA   |   128624|B                |NA      |NA     |35     |
+|48810  |Lethbridge                       |CMA   |   123847|B                |NA      |NA     |48     |
+|35595  |Thunder Bay                      |CMA   |   123258|B                |NA      |NA     |35     |
+|59938  |Nanaimo                          |CMA   |   115459|B                |NA      |NA     |59     |
+|59925  |Kamloops                         |CMA   |   114142|B                |NA      |NA     |59     |
+|59930  |Chilliwack                       |CMA   |   113767|B                |NA      |NA     |59     |
+|35522  |Belleville - Quinte West         |CMA   |   111184|B                |NA      |NA     |35     |
+|13320  |Fredericton                      |CMA   |   108610|B                |NA      |NA     |13     |
+|24447  |Drummondville                    |CMA   |   101610|B                |NA      |NA     |24     |
+|48830  |Red Deer                         |CMA   |   100844|B                |NA      |NA     |48     |
+|35562  |Sarnia                           |CA    |    97592|K                |NA      |NA     |35     |
+|24450  |Granby                           |CA    |    90833|K                |NA      |NA     |24     |
+|59970  |Prince George                    |CA    |    89490|K                |NA      |NA     |59     |
+|35590  |Sault Ste. Marie                 |CA    |    76731|K                |NA      |NA     |35     |
+|48805  |Medicine Hat                     |CA    |    76376|K                |NA      |NA     |48     |
+|48860  |Wood Buffalo                     |CA    |    73837|K                |NA      |NA     |48     |
+|35575  |North Bay                        |CA    |    71736|K                |NA      |NA     |35     |
+|48850  |Grande Prairie                   |CA    |    64141|K                |NA      |NA     |48     |
+|24452  |Saint-Hyacinthe                  |CA    |    59980|K                |NA      |NA     |24     |
+|3520   |Toronto                          |CD    |  2794356|CDR              |NA      |NA     |35     |
+|5915   |Greater Vancouver                |CD    |  2642825|RD               |NA      |NA     |59     |
+|2466   |Montréal                         |CD    |  2004265|TÉ               |NA      |NA     |24     |
+|4806   |Division No.  6                  |CD    |  1590639|CDR              |NA      |NA     |48     |
+|4811   |Division No. 11                  |CD    |  1462041|CDR              |NA      |NA     |48     |
+|3521   |Peel                             |CD    |  1451022|RM               |NA      |NA     |35     |
+|3519   |York                             |CD    |  1173334|RM               |NA      |NA     |35     |
+|3506   |Ottawa                           |CD    |  1017449|CDR              |NA      |NA     |35     |
+|4611   |Division No. 11                  |CD    |   753938|CDR              |NA      |NA     |46     |
+|3518   |Durham                           |CD    |   696992|RM               |NA      |NA     |35     |
+|3524   |Halton                           |CD    |   596637|RM               |NA      |NA     |35     |
+|2423   |Québec                           |CD    |   588777|TÉ               |NA      |NA     |24     |
+|3530   |Waterloo                         |CD    |   587165|RM               |NA      |NA     |35     |
+|3525   |Hamilton                         |CD    |   569353|CDR              |NA      |NA     |35     |
+|3543   |Simcoe                           |CD    |   533169|CTY              |NA      |NA     |35     |
+|3539   |Middlesex                        |CD    |   500563|CTY              |NA      |NA     |35     |
+|3526   |Niagara                          |CD    |   477941|RM               |NA      |NA     |35     |
+|1209   |Halifax                          |CD    |   440072|CTY              |NA      |NA     |12     |
+|2465   |Laval                            |CD    |   438366|TÉ               |NA      |NA     |24     |
+|2458   |Longueuil                        |CD    |   436785|TÉ               |NA      |NA     |24     |
+|3537   |Essex                            |CD    |   422860|CTY              |NA      |NA     |35     |
+|5917   |Capital                          |CD    |   415451|RD               |NA      |NA     |59     |
+|4711   |Division No. 11                  |CD    |   326109|CDR              |NA      |NA     |47     |
+|5909   |Fraser Valley                    |CD    |   324005|RD               |NA      |NA     |59     |
+|2481   |Gatineau                         |CD    |   291041|TÉ               |NA      |NA     |24     |
+|4706   |Division No.  6                  |CD    |   276564|CDR              |NA      |NA     |47     |
+|1001   |Division No.  1                  |CD    |   271878|CDR              |NA      |NA     |10     |
+|3523   |Wellington                       |CD    |   241026|CTY              |NA      |NA     |35     |
+|5935   |Central Okanagan                 |CD    |   222162|RD               |NA      |NA     |59     |
+|4808   |Division No.  8                  |CD    |   213470|CDR              |NA      |NA     |48     |
+|2467   |Roussillon                       |CD    |   185568|MRC              |NA      |NA     |24     |
+|4802   |Division No.  2                  |CD    |   178513|CDR              |NA      |NA     |48     |
+|2443   |Sherbrooke                       |CD    |   172950|TÉ               |NA      |NA     |24     |
+|2464   |Les Moulins                      |CD    |   171127|MRC              |NA      |NA     |24     |
+|5921   |Nanaimo                          |CD    |   170367|RD               |NA      |NA     |59     |
+|2494   |Le Saguenay-et-son-Fjord         |CD    |   167833|CDR              |NA      |NA     |24     |
+]]
+
+---
+
+.small[
+Whole Canada
+
+``` r
+regions = list(C="01")
+```
+
+Vancouver CMA
+
+``` r
+regions = list(CMA="59933")
+```
+
+Vancouver or Toronto CMAs
+
+``` r
+regions = list(CMA = c("59933","35535"))
+```
+
+Vancouver or Toronto CMAs or Alberta
+
+``` r
+regions = list(CMA = c("59933","35535"), PR="48")
+```
+]
+
+---
+
+#### level="CMA"
+
+.small[
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class="header"&gt;
+&lt;th&gt;Code&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;th align="center"&gt;Count in Census 2016&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;td&gt;Canada (total)&lt;/td&gt;
+&lt;td align="center"&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;PR&lt;/td&gt;
+&lt;td&gt;Provinces/Territories&lt;/td&gt;
+&lt;td align="center"&gt;13&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;CMA&lt;/td&gt;
+&lt;td&gt;Census Metropolitan Area&lt;/td&gt;
+&lt;td align="center"&gt;35&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;CA&lt;/td&gt;
+&lt;td&gt;Census Agglomeration&lt;/td&gt;
+&lt;td align="center"&gt;14&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;CD&lt;/td&gt;
+&lt;td&gt;Census Division&lt;/td&gt;
+&lt;td align="center"&gt;287&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;CSD&lt;/td&gt;
+&lt;td&gt;Census Subdivision&lt;/td&gt;
+&lt;td align="center"&gt;713&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;CT&lt;/td&gt;
+&lt;td&gt;Census Tracts&lt;/td&gt;
+&lt;td align="center"&gt;5621&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;DA&lt;/td&gt;
+&lt;td&gt;Dissemination Area&lt;/td&gt;
+&lt;td align="center"&gt;56589&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td&gt;EA&lt;/td&gt;
+&lt;td&gt;Enumeration Area (1996 only)&lt;/td&gt;
+&lt;td align="center"&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td&gt;DB&lt;/td&gt;
+&lt;td&gt;Dissemination Block (2001-2016)&lt;/td&gt;
+&lt;td align="center"&gt;489676&lt;/td&gt;
+&lt;/tr&gt;
+&lt;!-- &lt;tr class="odd"&gt; --&gt;
+&lt;!-- &lt;td&gt;Regions&lt;/td&gt; --&gt;
+&lt;!-- &lt;td&gt;Named Census Region&lt;/td&gt; --&gt;
+&lt;!-- &lt;td align="center"&gt;&lt;/td&gt; --&gt;
+&lt;!-- &lt;/tr&gt; --&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+
+#### vectors= c("v_CA21_4872","v_CA21_4881")
+
+At [the Canada page of Census Profile, 2021 Census website](https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/page.cfm?Lang=E&amp;Geo1=PR&amp;Code1=01&amp;Geo2=&amp;Code2=&amp;SearchText=Canada&amp;SearchType=Begins&amp;SearchPR=01&amp;B1=All&amp;TABID=1&amp;type=0), find the characteric label you are looking for.
+
+Note the hierarchy of the characteristics. Chinese &lt; Total visible minority population &lt; Total - Visible minority for the population in private households - 25% sample data
+
+
+``` r
+explore_census_vectors("CA21")
+```
+
+Type "Chinese" in the Search box.
+
+---
+
+
+``` r
+chinese_cma &lt;- get_census(dataset='CA21', 
+                          regions=list(C="01"), 
+                          vectors=c("v_CA21_4872","v_CA21_4881"), 
+                          level='CMA')
+```
+
+
+---
+
+### Practice
+
+Calculate Chinese share by CSD in Vancouver CMA. Sort them in the descending order in the share.
+
+---
+
+.small[
+The following code downloads total population and the number of Chinese by CSD within Vancouver CMA.
+
+
+``` r
+chinese_csd_van &lt;- get_census(dataset='CA21', regions=list(CMA="59933"), 
+                          vectors=c("v_CA21_4872", "v_CA21_4881"), level='CSD')
+```
+
+```
+
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+```
+]
+
+---
+
+.scroll-output[
+.tiny[
+
+|GeoUID  |Type |Region Name             | Area (sq km)| Population| Dwellings| Households|CD_UID |PR_UID |CMA_UID | v_CA21_4872: Total - Visible minority for the population in private households| v_CA21_4881: Chinese|
+|:-------|:----|:-----------------------|------------:|----------:|---------:|----------:|:------|:------|:-------|------------------------------------------------------------------------------:|--------------------:|
+|5915001 |CSD  |Langley (DM)            |     307.2193|     132603|     49011|      46928|5915   |59     |59933   |                                                                         130960|                 7000|
+|5915002 |CSD  |Langley (CY)            |      10.1796|      28963|     13271|      12598|5915   |59     |59933   |                                                                          28025|                  585|
+|5915004 |CSD  |Surrey (CY)             |     316.1071|     568322|    195098|     185671|5915   |59     |59933   |                                                                         562565|                48350|
+|5915007 |CSD  |White Rock (CY)         |       5.1736|      21939|     11541|      10735|5915   |59     |59933   |                                                                          20725|                 1600|
+|5915011 |CSD  |Delta (CY)              |     179.6628|     108455|     39736|      38058|5915   |59     |59933   |                                                                         107270|                 9660|
+|5915015 |CSD  |Richmond (CY)           |     128.8718|     209937|     85035|      81080|5915   |59     |59933   |                                                                         208400|               113060|
+|5915020 |CSD  |Metro Vancouver A (RDA) |     815.2061|      18612|      9201|       7682|5915   |59     |59933   |                                                                          17080|                 6610|
+|5915022 |CSD  |Vancouver (CY)          |     115.1756|     662248|    328347|     305336|5915   |59     |59933   |                                                                         650380|               168385|
+|5915025 |CSD  |Burnaby (CY)            |      90.5678|     249125|    107046|     101136|5915   |59     |59933   |                                                                         245725|                81795|
+|5915029 |CSD  |New Westminster (CY)    |      15.6194|      78916|     37737|      36099|5915   |59     |59933   |                                                                          78055|                 8530|
+|5915034 |CSD  |Coquitlam (CY)          |     122.1535|     148625|     58683|      55949|5915   |59     |59933   |                                                                         147465|                32770|
+|5915036 |CSD  |Belcarra (VL)           |       5.5027|        687|       289|        262|5915   |59     |59933   |                                                                            645|                   20|
+|5915038 |CSD  |Anmore (VL)             |      27.5283|       2356|       768|        744|5915   |59     |59933   |                                                                           2395|                  285|
+|5915039 |CSD  |Port Coquitlam (CY)     |      29.1640|      61498|     23671|      22884|5915   |59     |59933   |                                                                          60390|                 7075|
+|5915043 |CSD  |Port Moody (CY)         |      25.8503|      33535|     13603|      13109|5915   |59     |59933   |                                                                          33455|                 3675|
+|5915046 |CSD  |North Vancouver (DM)    |     160.6647|      88168|     34179|      32700|5915   |59     |59933   |                                                                          87385|                 6070|
+|5915051 |CSD  |North Vancouver (CY)    |      11.8298|      58120|     29021|      27293|5915   |59     |59933   |                                                                          57505|                 3005|
+|5915055 |CSD  |West Vancouver (DM)     |      87.1800|      44122|     18795|      17690|5915   |59     |59933   |                                                                          43385|                 8780|
+|5915062 |CSD  |Bowen Island (IM)       |      50.1235|       4256|      2036|       1724|5915   |59     |59933   |                                                                           4225|                   85|
+|5915065 |CSD  |Lions Bay (VL)          |       2.5320|       1390|       557|        506|5915   |59     |59933   |                                                                           1390|                   55|
+|5915070 |CSD  |Pitt Meadows (CY)       |      86.3411|      19146|      7628|       7404|5915   |59     |59933   |                                                                          19025|                  770|
+|5915075 |CSD  |Maple Ridge (CY)        |     267.8161|      90990|     34254|      33103|5915   |59     |59933   |                                                                          89860|                 3465|
+|5915801 |CSD  |Semiahmoo (IRI)         |       1.3222|         71|        33|         31|5915   |59     |59933   |                                                                             75|                    0|
+|5915802 |CSD  |Tsawwassen (TWL)        |       6.5719|       2256|      1081|        930|5915   |59     |59933   |                                                                           2155|                  360|
+|5915803 |CSD  |Musqueam 2 (IRI)        |       1.8398|       1646|       584|        562|5915   |59     |59933   |                                                                           1650|                  125|
+|5915804 |CSD  |Coquitlam 2 (IRI)       |       0.8096|          0|         1|          0|5915   |59     |59933   |                                                                             NA|                   NA|
+|5915805 |CSD  |Coquitlam 1 (IRI)       |       0.0310|         55|        26|         24|5915   |59     |59933   |                                                                             55|                    0|
+|5915806 |CSD  |Burrard Inlet 3 (IRI)   |       1.1176|       2373|      1168|       1136|5915   |59     |59933   |                                                                           2370|                  105|
+|5915807 |CSD  |Mission 1 (IRI)         |       0.2767|        570|       199|        172|5915   |59     |59933   |                                                                            570|                    0|
+|5915808 |CSD  |Capilano 5 (IRI)        |       1.7163|       2899|      1464|       1334|5915   |59     |59933   |                                                                           2900|                   45|
+|5915809 |CSD  |Barnston Island 3 (IRI) |       0.5841|          0|         0|          0|5915   |59     |59933   |                                                                             NA|                   NA|
+|5915810 |CSD  |Musqueam 4 (IRI)        |       0.5331|         10|         4|          4|5915   |59     |59933   |                                                                             NA|                   NA|
+|5915811 |CSD  |Seymour Creek 2 (IRI)   |       0.4861|        105|        37|         30|5915   |59     |59933   |                                                                            105|                    0|
+|5915813 |CSD  |Katzie 2 (IRI)          |       0.3074|         26|        14|         14|5915   |59     |59933   |                                                                             NA|                   NA|
+|5915816 |CSD  |McMillan Island 6 (IRI) |       1.7796|         96|        42|         42|5915   |59     |59933   |                                                                             95|                    0|
+|5915825 |CSD  |Matsqui 4 (IRI)         |       0.2756|        456|       285|        278|5915   |59     |59933   |                                                                            440|                    0|
+|5915830 |CSD  |Katzie 1 (IRI)          |       0.4241|        244|        84|         68|5915   |59     |59933   |                                                                            245|                    0|
+|5915840 |CSD  |Whonnock 1 (IRI)        |       0.3862|          5|         3|          3|5915   |59     |59933   |                                                                             NA|                   NA|
+]]
+
+---
+
+.tiny[
+
+``` r
+chinese_csd_van %&gt;% transmute(`Region Name`, 
+  Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;% arrange(desc(Chinese_share))
+```
+]
+.scroll-output[
+.tiny[
+
+|Region Name             | Chinese_share|
+|:-----------------------|-------------:|
+|Richmond (CY)           |     0.5425144|
+|Metro Vancouver A (RDA) |     0.3870023|
+|Burnaby (CY)            |     0.3328721|
+|Vancouver (CY)          |     0.2589025|
+|Coquitlam (CY)          |     0.2222222|
+|West Vancouver (DM)     |     0.2023741|
+|Tsawwassen (TWL)        |     0.1670534|
+|Anmore (VL)             |     0.1189979|
+|Port Coquitlam (CY)     |     0.1171552|
+|Port Moody (CY)         |     0.1098491|
+|New Westminster (CY)    |     0.1092819|
+|Delta (CY)              |     0.0900531|
+|Surrey (CY)             |     0.0859456|
+|White Rock (CY)         |     0.0772014|
+|Musqueam 2 (IRI)        |     0.0757576|
+|North Vancouver (DM)    |     0.0694627|
+|Langley (DM)            |     0.0534514|
+|North Vancouver (CY)    |     0.0522563|
+|Burrard Inlet 3 (IRI)   |     0.0443038|
+|Pitt Meadows (CY)       |     0.0404731|
+|Lions Bay (VL)          |     0.0395683|
+|Maple Ridge (CY)        |     0.0385600|
+|Belcarra (VL)           |     0.0310078|
+|Langley (CY)            |     0.0208742|
+|Bowen Island (IM)       |     0.0201183|
+|Capilano 5 (IRI)        |     0.0155172|
+|Semiahmoo (IRI)         |     0.0000000|
+|Coquitlam 1 (IRI)       |     0.0000000|
+|Mission 1 (IRI)         |     0.0000000|
+|Seymour Creek 2 (IRI)   |     0.0000000|
+|McMillan Island 6 (IRI) |     0.0000000|
+|Matsqui 4 (IRI)         |     0.0000000|
+|Katzie 1 (IRI)          |     0.0000000|
+|Coquitlam 2 (IRI)       |            NA|
+|Barnston Island 3 (IRI) |            NA|
+|Musqueam 4 (IRI)        |            NA|
+|Katzie 2 (IRI)          |            NA|
+|Whonnock 1 (IRI)        |            NA|
+]]
+
+---
+
+### Practice
+
+Calculate Renter household share by CSD in Vancouver CMA. Sort them by the renter share in descending order. 
+
+
+``` r
+explore_census_vectors("CA21")
+```
+
+---
+
+.tiny[
+
+``` r
+renter_csd_van &lt;- get_census("CA21", list(CMA="59933"), level="CSD", 
+                             vectors = c("v_CA21_4239", "v_CA21_4237"))
+```
+
+```
+
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+```
+]
+
+.scroll-output[
+.tiny[
+
+|GeoUID  |Type |Region Name             | Area (sq km)| Population| Dwellings| Households|CD_UID |PR_UID |CMA_UID | v_CA21_4239: Renter| v_CA21_4237: Total - Private households by tenure|
+|:-------|:----|:-----------------------|------------:|----------:|---------:|----------:|:------|:------|:-------|-------------------:|-------------------------------------------------:|
+|5915001 |CSD  |Langley (DM)            |     307.2193|     132603|     49011|      46928|5915   |59     |59933   |                8500|                                             46930|
+|5915002 |CSD  |Langley (CY)            |      10.1796|      28963|     13271|      12598|5915   |59     |59933   |                4680|                                             12595|
+|5915004 |CSD  |Surrey (CY)             |     316.1071|     568322|    195098|     185671|5915   |59     |59933   |               56575|                                            185670|
+|5915007 |CSD  |White Rock (CY)         |       5.1736|      21939|     11541|      10735|5915   |59     |59933   |                3775|                                             10735|
+|5915011 |CSD  |Delta (CY)              |     179.6628|     108455|     39736|      38058|5915   |59     |59933   |                9275|                                             38055|
+|5915015 |CSD  |Richmond (CY)           |     128.8718|     209937|     85035|      81080|5915   |59     |59933   |               23275|                                             81080|
+|5915020 |CSD  |Metro Vancouver A (RDA) |     815.2061|      18612|      9201|       7682|5915   |59     |59933   |                4395|                                              7670|
+|5915022 |CSD  |Vancouver (CY)          |     115.1756|     662248|    328347|     305336|5915   |59     |59933   |              166490|                                            305335|
+|5915025 |CSD  |Burnaby (CY)            |      90.5678|     249125|    107046|     101136|5915   |59     |59933   |               39950|                                            101135|
+|5915029 |CSD  |New Westminster (CY)    |      15.6194|      78916|     37737|      36099|5915   |59     |59933   |               16360|                                             36095|
+|5915034 |CSD  |Coquitlam (CY)          |     122.1535|     148625|     58683|      55949|5915   |59     |59933   |               17155|                                             55950|
+|5915036 |CSD  |Belcarra (VL)           |       5.5027|        687|       289|        262|5915   |59     |59933   |                  30|                                               265|
+|5915038 |CSD  |Anmore (VL)             |      27.5283|       2356|       768|        744|5915   |59     |59933   |                  65|                                               745|
+|5915039 |CSD  |Port Coquitlam (CY)     |      29.1640|      61498|     23671|      22884|5915   |59     |59933   |                5235|                                             22880|
+|5915043 |CSD  |Port Moody (CY)         |      25.8503|      33535|     13603|      13109|5915   |59     |59933   |                3210|                                             13110|
+|5915046 |CSD  |North Vancouver (DM)    |     160.6647|      88168|     34179|      32700|5915   |59     |59933   |                7710|                                             32700|
+|5915051 |CSD  |North Vancouver (CY)    |      11.8298|      58120|     29021|      27293|5915   |59     |59933   |               12755|                                             27295|
+|5915055 |CSD  |West Vancouver (DM)     |      87.1800|      44122|     18795|      17690|5915   |59     |59933   |                5155|                                             17690|
+|5915062 |CSD  |Bowen Island (IM)       |      50.1235|       4256|      2036|       1724|5915   |59     |59933   |                 260|                                              1725|
+|5915065 |CSD  |Lions Bay (VL)          |       2.5320|       1390|       557|        506|5915   |59     |59933   |                  60|                                               505|
+|5915070 |CSD  |Pitt Meadows (CY)       |      86.3411|      19146|      7628|       7404|5915   |59     |59933   |                1520|                                              7405|
+|5915075 |CSD  |Maple Ridge (CY)        |     267.8161|      90990|     34254|      33103|5915   |59     |59933   |                6910|                                             33115|
+|5915801 |CSD  |Semiahmoo (IRI)         |       1.3222|         71|        33|         31|5915   |59     |59933   |                   0|                                                30|
+|5915802 |CSD  |Tsawwassen (TWL)        |       6.5719|       2256|      1081|        930|5915   |59     |59933   |                 175|                                               930|
+|5915803 |CSD  |Musqueam 2 (IRI)        |       1.8398|       1646|       584|        562|5915   |59     |59933   |                 120|                                               555|
+|5915804 |CSD  |Coquitlam 2 (IRI)       |       0.8096|          0|         1|          0|5915   |59     |59933   |                  NA|                                                NA|
+|5915805 |CSD  |Coquitlam 1 (IRI)       |       0.0310|         55|        26|         24|5915   |59     |59933   |                   0|                                                25|
+|5915806 |CSD  |Burrard Inlet 3 (IRI)   |       1.1176|       2373|      1168|       1136|5915   |59     |59933   |                 155|                                              1145|
+|5915807 |CSD  |Mission 1 (IRI)         |       0.2767|        570|       199|        172|5915   |59     |59933   |                  20|                                               170|
+|5915808 |CSD  |Capilano 5 (IRI)        |       1.7163|       2899|      1464|       1334|5915   |59     |59933   |                 900|                                              1335|
+|5915809 |CSD  |Barnston Island 3 (IRI) |       0.5841|          0|         0|          0|5915   |59     |59933   |                  NA|                                                NA|
+|5915810 |CSD  |Musqueam 4 (IRI)        |       0.5331|         10|         4|          4|5915   |59     |59933   |                  NA|                                                NA|
+|5915811 |CSD  |Seymour Creek 2 (IRI)   |       0.4861|        105|        37|         30|5915   |59     |59933   |                   0|                                                30|
+|5915813 |CSD  |Katzie 2 (IRI)          |       0.3074|         26|        14|         14|5915   |59     |59933   |                  NA|                                                NA|
+|5915816 |CSD  |McMillan Island 6 (IRI) |       1.7796|         96|        42|         42|5915   |59     |59933   |                   0|                                                45|
+|5915825 |CSD  |Matsqui 4 (IRI)         |       0.2756|        456|       285|        278|5915   |59     |59933   |                  10|                                               280|
+|5915830 |CSD  |Katzie 1 (IRI)          |       0.4241|        244|        84|         68|5915   |59     |59933   |                   0|                                                70|
+|5915840 |CSD  |Whonnock 1 (IRI)        |       0.3862|          5|         3|          3|5915   |59     |59933   |                  NA|                                                NA|
+]]
+
+---
+
+.tiny[
+
+``` r
+renter_csd_van %&gt;% transmute(
+  `Region Name`,
+  renter_share=`v_CA21_4239: Renter`/`v_CA21_4237: Total - Private households by tenure`) %&gt;%
+  arrange(desc(renter_share))
+```
+]
+
+.tiny[
+
+|Region Name             | renter_share|
+|:-----------------------|------------:|
+|Capilano 5 (IRI)        |    0.6741573|
+|Metro Vancouver A (RDA) |    0.5730117|
+|Vancouver (CY)          |    0.5452699|
+|North Vancouver (CY)    |    0.4673017|
+|New Westminster (CY)    |    0.4532484|
+|Burnaby (CY)            |    0.3950166|
+|Langley (CY)            |    0.3715760|
+|White Rock (CY)         |    0.3516535|
+|Coquitlam (CY)          |    0.3066130|
+|Surrey (CY)             |    0.3047073|
+|West Vancouver (DM)     |    0.2914076|
+|Richmond (CY)           |    0.2870622|
+|Port Moody (CY)         |    0.2448513|
+|Delta (CY)              |    0.2437262|
+|North Vancouver (DM)    |    0.2357798|
+|Port Coquitlam (CY)     |    0.2288024|
+|Musqueam 2 (IRI)        |    0.2162162|
+|Maple Ridge (CY)        |    0.2086668|
+|Pitt Meadows (CY)       |    0.2052667|
+|Tsawwassen (TWL)        |    0.1881720|
+|Langley (DM)            |    0.1811208|
+|Bowen Island (IM)       |    0.1507246|
+|Burrard Inlet 3 (IRI)   |    0.1353712|
+|Lions Bay (VL)          |    0.1188119|
+|Mission 1 (IRI)         |    0.1176471|
+|Belcarra (VL)           |    0.1132075|
+|Anmore (VL)             |    0.0872483|
+|Matsqui 4 (IRI)         |    0.0357143|
+|Semiahmoo (IRI)         |    0.0000000|
+|Coquitlam 1 (IRI)       |    0.0000000|
+|Seymour Creek 2 (IRI)   |    0.0000000|
+|McMillan Island 6 (IRI) |    0.0000000|
+|Katzie 1 (IRI)          |    0.0000000|
+|Coquitlam 2 (IRI)       |           NA|
+|Barnston Island 3 (IRI) |           NA|
+|Musqueam 4 (IRI)        |           NA|
+|Katzie 2 (IRI)          |           NA|
+|Whonnock 1 (IRI)        |           NA|
+]
+
+
+---
+
+### Map
+
+
+``` r
+chinese_csd_van_sf &lt;- get_census(dataset='CA21', 
+                              regions=list(CMA="59933"), 
+                              vectors=c("v_CA21_4872","v_CA21_4881"), 
+                              level='CSD',
+                              geo_format = 'sf')
+```
+
+```
+
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+Downloading: 1.3 kB     
+```
+
+geo_format = 'sf' create an sf object, which extends data.frame-like objects with the geometry column.
+
+
+
+``` r
+class(chinese_csd_van_sf)
+```
+
+```
+[1] "sf"         "data.frame"
+```
+
+---
+
+.scroll-output[
+.tiny[
+
+|CMA_UID |CD_UID |name                    | Dwellings 2016| Population| Dwellings|PR_UID | Population 2016| Households|Type |GeoUID  | Households 2016|Quality Flags | Shape Area|Region Name             | Area (sq km)| v_CA21_4872: Total - Visible minority for the population in private households| v_CA21_4881: Chinese|geometry                       |
+|:-------|:------|:-----------------------|--------------:|----------:|---------:|:------|---------------:|----------:|:----|:-------|---------------:|:-------------|----------:|:-----------------------|------------:|------------------------------------------------------------------------------:|--------------------:|:------------------------------|
+|59933   |5915   |Langley (DM)            |          43720|     132603|     49011|59     |          117285|      46928|CSD  |5915001 |           41982|0             |   307.2193|Langley (DM)            |     307.2193|                                                                         130960|                 7000|MULTIPOLYGON (((-122.4613 4... |
+|59933   |5915   |Langley (CY)            |          12264|      28963|     13271|59     |           25888|      12598|CSD  |5915002 |           11840|0             |    10.1796|Langley (CY)            |      10.1796|                                                                          28025|                  585|MULTIPOLYGON (((-122.6797 4... |
+|59933   |5915   |Surrey (CY)             |         181159|     568322|    195098|59     |          517887|     185671|CSD  |5915004 |          169964|0             |   316.1071|Surrey (CY)             |     316.1071|                                                                         562565|                48350|MULTIPOLYGON (((-122.8902 4... |
+|59933   |5915   |White Rock (CY)         |          10856|      21939|     11541|59     |           19952|      10735|CSD  |5915007 |           10005|0             |     5.1736|White Rock (CY)         |       5.1736|                                                                          20725|                 1600|MULTIPOLYGON (((-122.7888 4... |
+|59933   |5915   |Delta (CY)              |          37590|     108455|     39736|59     |          102238|      38058|CSD  |5915011 |           35758|0             |   179.6628|Delta (CY)              |     179.6628|                                                                         107270|                 9660|MULTIPOLYGON (((-122.8902 4... |
+|59933   |5915   |Richmond (CY)           |          77478|     209937|     85035|59     |          198309|      81080|CSD  |5915015 |           73457|0             |   128.8718|Richmond (CY)           |     128.8718|                                                                         208400|               113060|MULTIPOLYGON (((-123.264 49... |
+|59933   |5915   |Metro Vancouver A (RDA) |           8542|      18612|      9201|59     |           16133|       7682|CSD  |5915020 |            6103|0             |   815.2061|Metro Vancouver A (RDA) |     815.2061|                                                                          17080|                 6610|MULTIPOLYGON (((-122.9085 4... |
+|59933   |5915   |Vancouver (CY)          |         309418|     662248|    328347|59     |          631486|     305336|CSD  |5915022 |          283916|0             |   115.1756|Vancouver (CY)          |     115.1756|                                                                         650380|               168385|MULTIPOLYGON (((-123.1971 4... |
+|59933   |5915   |Burnaby (CY)            |          98030|     249125|    107046|59     |          232755|     101136|CSD  |5915025 |           92201|0             |    90.5678|Burnaby (CY)            |      90.5678|                                                                         245725|                81795|MULTIPOLYGON (((-123.0234 4... |
+|59933   |5915   |New Westminster (CY)    |          34235|      78916|     37737|59     |           70996|      36099|CSD  |5915029 |           32708|0             |    15.6194|New Westminster (CY)    |      15.6194|                                                                          78055|                 8530|MULTIPOLYGON (((-122.9519 4... |
+|59933   |5915   |Coquitlam (CY)          |          54393|     148625|     58683|59     |          139284|      55949|CSD  |5915034 |           51325|0             |   122.1535|Coquitlam (CY)          |     122.1535|                                                                         147465|                32770|MULTIPOLYGON (((-122.8223 4... |
+|59933   |5915   |Belcarra (VL)           |            292|        687|       289|59     |             643|        262|CSD  |5915036 |             253|0             |     5.5027|Belcarra (VL)           |       5.5027|                                                                            645|                   20|MULTIPOLYGON (((-122.8776 4... |
+|59933   |5915   |Anmore (VL)             |            723|       2356|       768|59     |            2210|        744|CSD  |5915038 |             688|0             |    27.5283|Anmore (VL)             |      27.5283|                                                                           2395|                  285|MULTIPOLYGON (((-122.8636 4... |
+|59933   |5915   |Port Coquitlam (CY)     |          22586|      61498|     23671|59     |           58612|      22884|CSD  |5915039 |           21753|0             |    29.1640|Port Coquitlam (CY)     |      29.1640|                                                                          60390|                 7075|MULTIPOLYGON (((-122.7968 4... |
+|59933   |5915   |Port Moody (CY)         |          13318|      33535|     13603|59     |           33551|      13109|CSD  |5915043 |           12976|0             |    25.8503|Port Moody (CY)         |      25.8503|                                                                          33455|                 3675|MULTIPOLYGON (((-122.9085 4... |
+|59933   |5915   |North Vancouver (DM)    |          32488|      88168|     34179|59     |           85649|      32700|CSD  |5915046 |           30985|0             |   160.6647|North Vancouver (DM)    |     160.6647|                                                                          87385|                 6070|MULTIPOLYGON (((-123.1238 4... |
+|59933   |5915   |North Vancouver (CY)    |          26426|      58120|     29021|59     |           52898|      27293|CSD  |5915051 |           24645|0             |    11.8298|North Vancouver (CY)    |      11.8298|                                                                          57505|                 3005|MULTIPOLYGON (((-123.1024 4... |
+|59933   |5915   |West Vancouver (DM)     |          18649|      44122|     18795|59     |           42473|      17690|CSD  |5915055 |           16933|0             |    87.1800|West Vancouver (DM)     |      87.1800|                                                                          43385|                 8780|MULTIPOLYGON (((-123.141 49... |
+|59933   |5915   |Bowen Island (IM)       |           1915|       4256|      2036|59     |            3680|       1724|CSD  |5915062 |            1495|0             |    50.1235|Bowen Island (IM)       |      50.1235|                                                                           4225|                   85|MULTIPOLYGON (((-123.3605 4... |
+|59933   |5915   |Lions Bay (VL)          |            547|       1390|       557|59     |            1334|        506|CSD  |5915065 |             495|0             |     2.5320|Lions Bay (VL)          |       2.5320|                                                                           1390|                   55|MULTIPOLYGON (((-123.2436 4... |
+|59933   |5915   |Pitt Meadows (CY)       |           7356|      19146|      7628|59     |           18573|       7404|CSD  |5915070 |            7194|0             |    86.3411|Pitt Meadows (CY)       |      86.3411|                                                                          19025|                  770|MULTIPOLYGON (((-122.5799 4... |
+|59933   |5915   |Maple Ridge (CY)        |          31400|      90990|     34254|59     |           82256|      33103|CSD  |5915075 |           30262|0             |   267.8161|Maple Ridge (CY)        |     267.8161|                                                                          89860|                 3465|MULTIPOLYGON (((-122.4227 4... |
+|59933   |5915   |Semiahmoo (IRI)         |             64|         71|        33|59     |             120|         31|CSD  |5915801 |              58|0             |     1.3222|Semiahmoo (IRI)         |       1.3222|                                                                             75|                    0|MULTIPOLYGON (((-122.7793 4... |
+|59933   |5915   |Tsawwassen (TWL)        |            368|       2256|      1081|59     |             816|        930|CSD  |5915802 |             323|0             |     6.5719|Tsawwassen (TWL)        |       6.5719|                                                                           2155|                  360|MULTIPOLYGON (((-123.1039 4... |
+|59933   |5915   |Musqueam 2 (IRI)        |            615|       1646|       584|59     |            1652|        562|CSD  |5915803 |             578|0             |     1.8398|Musqueam 2 (IRI)        |       1.8398|                                                                           1650|                  125|MULTIPOLYGON (((-123.2216 4... |
+|59933   |5915   |Coquitlam 2 (IRI)       |              0|          0|         1|59     |               0|          0|CSD  |5915804 |               0|0             |     0.8096|Coquitlam 2 (IRI)       |       0.8096|                                                                             NA|                   NA|MULTIPOLYGON (((-122.8018 4... |
+|59933   |5915   |Coquitlam 1 (IRI)       |             25|         55|        26|59     |              54|         24|CSD  |5915805 |              22|0             |     0.0310|Coquitlam 1 (IRI)       |       0.0310|                                                                             55|                    0|MULTIPOLYGON (((-122.806 49... |
+|59933   |5915   |Burrard Inlet 3 (IRI)   |           1068|       2373|      1168|59     |            2141|       1136|CSD  |5915806 |            1051|0             |     1.1176|Burrard Inlet 3 (IRI)   |       1.1176|                                                                           2370|                  105|MULTIPOLYGON (((-122.9913 4... |
+|59933   |5915   |Mission 1 (IRI)         |            178|        570|       199|59     |             576|        172|CSD  |5915807 |             160|0             |     0.2767|Mission 1 (IRI)         |       0.2767|                                                                            570|                    0|MULTIPOLYGON (((-123.0918 4... |
+|59933   |5915   |Capilano 5 (IRI)        |           1433|       2899|      1464|59     |            2931|       1334|CSD  |5915808 |            1309|0             |     1.7163|Capilano 5 (IRI)        |       1.7163|                                                                           2900|                   45|MULTIPOLYGON (((-123.1244 4... |
+|59933   |5915   |Barnston Island 3 (IRI) |             16|         NA|        NA|59     |              49|         NA|CSD  |5915809 |              15|1             |     0.5841|Barnston Island 3 (IRI) |       0.5841|                                                                             NA|                   NA|MULTIPOLYGON (((-122.7011 4... |
+|59933   |5915   |Musqueam 4 (IRI)        |              4|         10|         4|59     |              10|          4|CSD  |5915810 |               4|0             |     0.5331|Musqueam 4 (IRI)        |       0.5331|                                                                             NA|                   NA|MULTIPOLYGON (((-123.1306 4... |
+|59933   |5915   |Seymour Creek 2 (IRI)   |             40|        105|        37|59     |             123|         30|CSD  |5915811 |              37|0             |     0.4861|Seymour Creek 2 (IRI)   |       0.4861|                                                                            105|                    0|MULTIPOLYGON (((-123.03 49.... |
+|59933   |5915   |Katzie 2 (IRI)          |             15|         26|        14|59     |              40|         14|CSD  |5915813 |              15|0             |     0.3074|Katzie 2 (IRI)          |       0.3074|                                                                             NA|                   NA|MULTIPOLYGON (((-122.6538 4... |
+|59933   |5915   |McMillan Island 6 (IRI) |             32|         96|        42|59     |              94|         42|CSD  |5915816 |              32|0             |     1.7796|McMillan Island 6 (IRI) |       1.7796|                                                                             95|                    0|MULTIPOLYGON (((-122.5488 4... |
+|59933   |5915   |Matsqui 4 (IRI)         |            286|        456|       285|59     |             471|        278|CSD  |5915825 |             285|0             |     0.2756|Matsqui 4 (IRI)         |       0.2756|                                                                            440|                    0|MULTIPOLYGON (((-122.4794 4... |
+|59933   |5915   |Katzie 1 (IRI)          |             83|        244|        84|59     |             262|         68|CSD  |5915830 |              67|0             |     0.4241|Katzie 1 (IRI)          |       0.4241|                                                                            245|                    0|MULTIPOLYGON (((-122.6713 4... |
+|59933   |5915   |Whonnock 1 (IRI)        |              1|          5|         3|59     |               0|          3|CSD  |5915840 |               0|0             |     0.3862|Whonnock 1 (IRI)        |       0.3862|                                                                             NA|                   NA|MULTIPOLYGON (((-122.4655 4... |
+]]
+
+---
+
+.tiny[
+
+``` r
+chinese_share_csd_van_sf &lt;- chinese_csd_van_sf %&gt;% transmute(
+  `Region Name`, 
+  Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;% 
+  arrange(desc(Chinese_share))
+```
+]
+---
+
+You can use `geom_sf()` to show an sf object as a map.
+
+.tiny[
+
+``` r
+ggplot(chinese_share_csd_van_sf) + geom_sf(aes(fill=Chinese_share)) + theme_void()
+```
+
+![](16_census_profile_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+]
+
+---
+
+#### Practice
+
+Show the renter share at CSD level, on a map.
+
+.tiny[
+
+``` r
+renter_csd_van_sf &lt;- get_census("CA21", list(CMA="59933"), level="CSD", 
+                             vectors = c("v_CA21_4239", "v_CA21_4237"), geo_format = "sf")
+```
+
+```
+
+Downloading: 1.2 kB     
+Downloading: 1.2 kB     
+Downloading: 1.2 kB     
+Downloading: 1.2 kB     
+```
+]
+
+---
+
+
+``` r
+renter_share_csd_van_sf &lt;- renter_csd_van_sf %&gt;% transmute(
+  `Region Name`,
+  renter_share=`v_CA21_4239: Renter`/`v_CA21_4237: Total - Private households by tenure`) %&gt;%
+  arrange(desc(renter_share))
+```
+
+---
+
+.tiny[
+
+``` r
+ggplot(renter_share_csd_van_sf) + geom_sf(aes(fill=renter_share)) + theme_void()
+```
+
+![](16_census_profile_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+]
+---
+
+### Practice at home
+
+Show the Chinese share at Census tract level
+
+--
+
+.tiny[
+
+``` r
+chinese_ct_van_sf &lt;- get_census(dataset='CA21', 
+                              regions=list(CMA="59933"), 
+                              vectors=c("v_CA21_4872","v_CA21_4881"), 
+                              level='CT',
+                              geo_format = 'sf')
+
+chinese_share_ct_van_sf &lt;- chinese_ct_van_sf %&gt;% transmute(Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;% 
+  arrange(desc(Chinese_share))
+
+ggplot(chinese_share_ct_van_sf) + geom_sf(aes(fill=Chinese_share)) + theme_void()
+```
+]
+
+---
+
+
+```
+
+Downloading: 11 kB     
+Downloading: 11 kB     
+Downloading: 11 kB     
+Downloading: 11 kB     
+```
+
+![](16_census_profile_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+
+
+---
+
+Show the renter share at Census tract level
+
+--
+
+.tiny[
+
+``` r
+renter_ct_van_sf &lt;- get_census("CA21", list(CMA="59933"), level="CT", 
+                             vectors = c("v_CA21_4239", "v_CA21_4237"), geo_format = "sf")
+
+renter_share_ct_van_sf &lt;- renter_ct_van_sf %&gt;% transmute(
+  `Region Name`,
+  renter_share=`v_CA21_4239: Renter`/`v_CA21_4237: Total - Private households by tenure`) %&gt;%
+  arrange(desc(renter_share))
+
+ggplot(renter_share_ct_van_sf) + geom_sf(aes(fill=renter_share)) + theme_void()
+```
+]
+
+---
+
+
+```
+
+Downloading: 11 kB     
+Downloading: 11 kB     
+Downloading: 11 kB     
+Downloading: 11 kB     
+```
+
+![](16_census_profile_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
