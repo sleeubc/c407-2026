@@ -27,8 +27,6 @@ class: center, middle, inverse, title-slide
 
 
 
-
-
 Census public use microdata file (PUMF) publishes data at individual level. 
 
 Census Profile publishes data at geographic area level (e.g., whole Canada, province, CMA, CSD, tract).
@@ -114,53 +112,11 @@ Most of the data are available at each of the Census geographic levels.
 
 ---
 
-
-```
-
-Downloading: 32 kB     
-Downloading: 32 kB     
-Downloading: 32 kB     
-Downloading: 32 kB     
-Downloading: 49 kB     
-Downloading: 49 kB     
-Downloading: 49 kB     
-Downloading: 49 kB     
-```
-
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
 
 ---
 
-
-```
-
-Downloading: 7.6 kB     
-Downloading: 7.6 kB     
-Downloading: 7.6 kB     
-Downloading: 7.6 kB     
-Downloading: 7.6 kB     
-Downloading: 7.6 kB     
-Downloading: 40 kB     
-Downloading: 40 kB     
-Downloading: 40 kB     
-Downloading: 40 kB     
-Downloading: 90 kB     
-Downloading: 90 kB     
-Downloading: 90 kB     
-Downloading: 90 kB     
-Downloading: 200 kB     
-Downloading: 200 kB     
-Downloading: 220 kB     
-Downloading: 220 kB     
-Downloading: 340 kB     
-Downloading: 340 kB     
-Downloading: 360 kB     
-Downloading: 360 kB     
-Downloading: 360 kB     
-Downloading: 360 kB     
-```
-
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -168,16 +124,6 @@ We will learn how to import Census profile data into R, using `cancensus` packag
 
 .scroll-output[
 .tiny[
-
-```
-
-Downloading: 5 kB     
-Downloading: 5 kB     
-Downloading: 5 kB     
-Downloading: 5 kB     
-```
-
-
 
 |GeoUID |Region Name                                                        | v_CA21_4311: Median value of dwellings ($) (60)|
 |:------|:------------------------------------------------------------------|-----------------------------------------------:|
@@ -348,16 +294,6 @@ Downloading: 5 kB
 .scroll-output[
 .tiny[
 
-```
-
-Downloading: 11 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-```
-
-
-
 |GeoUID     | v_CA21_4311: Median value of dwellings ($) (60)|
 |:----------|-----------------------------------------------:|
 |9330001.01 |                                          800000|
@@ -465,16 +401,7 @@ Downloading: 11 kB
 ---
 
 .small[It is difficult to interpret data at small geographic units. We will learn how to show them on a map.]
-
-```
-
-Downloading: 9.6 kB     
-Downloading: 9.6 kB     
-Downloading: 9.6 kB     
-Downloading: 9.6 kB     
-```
-
-&lt;img src="C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -514,14 +441,6 @@ Suppose we want to calculate Chinese shares by CMA.
 ``` r
 chinese_cma &lt;- get_census(dataset='CA21', regions=list(C="01"), 
                           vectors=c("v_CA21_4872", "v_CA21_4881"), level='CMA')
-```
-
-```
-
-Downloading: 5.6 kB     
-Downloading: 5.6 kB     
-Downloading: 5.6 kB     
-Downloading: 5.6 kB     
 ```
 
 This code downloads total population and the number of Chinese by CMA.
@@ -1191,14 +1110,6 @@ The following code downloads total population and the number of Chinese by CSD w
 chinese_csd_van &lt;- get_census(dataset='CA21', regions=list(CMA="59933"), 
                           vectors=c("v_CA21_4872", "v_CA21_4881"), level='CSD')
 ```
-
-```
-
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-```
 ]
 
 ---
@@ -1321,14 +1232,6 @@ explore_census_vectors("CA21")
 renter_csd_van &lt;- get_census("CA21", list(CMA="59933"), level="CSD", 
                              vectors = c("v_CA21_4239", "v_CA21_4237"))
 ```
-
-```
-
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-```
 ]
 
 .scroll-output[
@@ -1446,14 +1349,6 @@ chinese_csd_van_sf &lt;- get_census(dataset='CA21',
                               geo_format = 'sf')
 ```
 
-```
-
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-Downloading: 1.3 kB     
-```
-
 geo_format = 'sf' create an sf object, which extends data.frame-like objects with the geometry column.
 
 
@@ -1534,7 +1429,7 @@ You can use `geom_sf()` to show an sf object as a map.
 ggplot(chinese_share_csd_van_sf) + geom_sf(aes(fill=Chinese_share)) + theme_void()
 ```
 
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -1548,14 +1443,6 @@ Show the renter share at CSD level, on a map.
 ``` r
 renter_csd_van_sf &lt;- get_census("CA21", list(CMA="59933"), level="CSD", 
                              vectors = c("v_CA21_4239", "v_CA21_4237"), geo_format = "sf")
-```
-
-```
-
-Downloading: 1.2 kB     
-Downloading: 1.2 kB     
-Downloading: 1.2 kB     
-Downloading: 1.2 kB     
 ```
 ]
 
@@ -1577,7 +1464,7 @@ renter_share_csd_van_sf &lt;- renter_csd_van_sf %&gt;% transmute(
 ggplot(renter_share_csd_van_sf) + geom_sf(aes(fill=renter_share)) + theme_void()
 ```
 
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
 ]
 ---
 
@@ -1605,16 +1492,7 @@ ggplot(chinese_share_ct_van_sf) + geom_sf(aes(fill=Chinese_share)) + theme_void(
 
 ---
 
-
-```
-
-Downloading: 11 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-```
-
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -1640,20 +1518,7 @@ ggplot(renter_share_ct_van_sf) + geom_sf(aes(fill=renter_share)) + theme_void()
 
 ---
 
-
-```
-
-Downloading: 3.6 kB     
-Downloading: 3.6 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-Downloading: 11 kB     
-```
-
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

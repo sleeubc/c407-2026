@@ -19,12 +19,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA, fig.asp = 0.56, out.width='70%', dpi = 300, fig.align = 'center')
 options(tibble.print_max = Inf)
 library(kableExtra)
-```
-
-```{r}
 library(tidyverse)
 library(cancensus)
 library(sf)
+# Global override to suppress downloading messages
+get_census <- function(...) cancensus::get_census(..., quiet = TRUE)
 ```
 
 ---
