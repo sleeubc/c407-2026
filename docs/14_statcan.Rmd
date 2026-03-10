@@ -148,7 +148,7 @@ population <- get_cansim("17-10-0148-01")
 
 population %>% filter(GEO %>% str_detect("Vancouver"), Gender=="Total - gender", `Age group`=="All ages") %>% 
 	ggplot(aes(Date, VALUE)) + geom_line() + geom_point() +
-	labs(title = "Vancouver Metro Population Trend", x=NULL, y=NULL, caption = "Annual, July 1 estimates, y-axis in log scale.\nSource: Statistics Canada Table: 17-10-0135-01") + 
+	labs(title = "Vancouver Metro Population Trend", x=NULL, y=NULL, caption = "Annual, July 1 estimates, y-axis in log scale.\nSource: Statistics Canada Table: 17-10-0148-01") + 
 	scale_y_log10(labels=scales::label_number(scale = 0.000001, suffix="M")) + theme_bw()
 ```
 
@@ -160,7 +160,7 @@ population <- get_cansim("17-10-0148-01")
 
 population %>% filter(GEO %>% str_detect("Vancouver"), Gender=="Total - gender", `Age group`=="All ages") %>% 
 	ggplot(aes(Date, VALUE)) + geom_line() + geom_point() +
-	labs(title = "Vancouver Metro Population Trend", x=NULL, y=NULL, caption = "Annual, July 1 estimates, y-axis in log scale.\nSource: Statistics Canada Table: 17-10-0135-01") + 
+	labs(title = "Vancouver Metro Population Trend", x=NULL, y=NULL, caption = "Annual, July 1 estimates, y-axis in log scale.\nSource: Statistics Canada Table: 17-10-0148-01") + 
 	scale_y_log10(labels=scales::label_number(scale = 0.000001, suffix="M")) + theme_bw()
 ```
 ]
@@ -193,7 +193,7 @@ population$GEO %>% unique()
 .scroll-output[
 .tiny[
 ```{r}
-population$Sex %>% unique()
+population$Gender %>% unique()
 ```
 ]]
 
@@ -219,7 +219,7 @@ population %>% filter(
 	labs(
 		title = "Vancouver Metro Population Trend", 
 		x=NULL, y=NULL, 
-		caption = "Annual, July 1 estimates, y-axis in log scale.\nSource: Statistics Canada Table: 17-10-0135-01") + 
+		caption = "Annual, July 1 estimates, y-axis in log scale.\nSource: Statistics Canada Table: 17-10-0148-01") + 
 	scale_y_log10(labels=scales::label_number(scale = 0.000001, suffix="M")) + theme_bw()
 ```
 ]
