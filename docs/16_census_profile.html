@@ -112,11 +112,11 @@ Most of the data are available at each of the Census geographic levels.
 
 ---
 
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+![](16_census_profile_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
 
 ---
 
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](16_census_profile_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -401,7 +401,7 @@ We will learn how to import Census profile data into R, using `cancensus` packag
 ---
 
 .small[It is difficult to interpret data at small geographic units. We will learn how to show them on a map.]
-&lt;img src="C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="16_census_profile_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -424,13 +424,13 @@ Click [here](https://censusmapper.ca/users/sign_up) to sign up for Censusmapper.
 Run the following code &lt;i&gt;in Console just once&lt;/i&gt;, to store your API key in your computer and automatically use it in API calls. 
 
 ``` r
-set_cancensus_api_key("your_api_key", install=TRUE)
+set_cancensus_api_key("your_api_key", install = TRUE)
 ```
 
 Run the following code &lt;i&gt;in Console just once&lt;/i&gt;, to set the cache folder.
 
 ``` r
-set_cancensus_cache_path("~/cancensus_cache", install=TRUE)
+set_cancensus_cache_path("~/cancensus_cache", install = TRUE)
 ```
 
 ---
@@ -439,8 +439,10 @@ Suppose we want to calculate Chinese shares by CMA.
 
 
 ``` r
-chinese_cma &lt;- get_census(dataset='CA21', regions=list(C="01"), 
-                          vectors=c("v_CA21_4872", "v_CA21_4881"), level='CMA')
+chinese_cma &lt;- get_census(
+  dataset = "CA21", regions = list(C = "01"),
+  vectors = c("v_CA21_4872", "v_CA21_4881"), level = "CMA"
+)
 ```
 
 This code downloads total population and the number of Chinese by CMA.
@@ -621,9 +623,11 @@ The following columns are included by default: Area (sq km), Population, Dwellin
 .tiny[
 
 ``` r
-chinese_cma %&gt;% transmute(
-  `Region Name`, 
-  Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;% 
+chinese_cma %&gt;%
+  transmute(
+    `Region Name`,
+    Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`
+  ) %&gt;%
   arrange(desc(Chinese_share))
 ```
 ]
@@ -798,10 +802,12 @@ chinese_cma %&gt;% transmute(
 
 
 ``` r
-chinese_cma &lt;- get_census(dataset='CA21', 
-                          regions=list(C="01"), 
-                          vectors=c("v_CA21_4872","v_CA21_4881"), 
-                          level='CMA')
+chinese_cma &lt;- get_census(
+  dataset = "CA21",
+  regions = list(C = "01"),
+  vectors = c("v_CA21_4872", "v_CA21_4881"),
+  level = "CMA"
+)
 ```
 
 ---
@@ -810,7 +816,7 @@ chinese_cma &lt;- get_census(dataset='CA21',
 
 
 ``` r
-list_census_datasets() %&gt;% view
+list_census_datasets() %&gt;% view()
 ```
 
 .scroll-output[
@@ -857,7 +863,7 @@ Used for geographic coverage
 
 
 ``` r
-list_census_regions("CA21") %&gt;% view
+list_census_regions("CA21") %&gt;% view()
 ```
 
 .scroll-output[
@@ -973,25 +979,25 @@ list_census_regions("CA21") %&gt;% view
 Whole Canada
 
 ``` r
-regions = list(C="01")
+regions &lt;- list(C = "01")
 ```
 
 Vancouver CMA
 
 ``` r
-regions = list(CMA="59933")
+regions &lt;- list(CMA = "59933")
 ```
 
 Vancouver or Toronto CMAs
 
 ``` r
-regions = list(CMA = c("59933","35535"))
+regions &lt;- list(CMA = c("59933", "35535"))
 ```
 
 Vancouver or Toronto CMAs or Alberta
 
 ``` r
-regions = list(CMA = c("59933","35535"), PR="48")
+regions &lt;- list(CMA = c("59933", "35535"), PR = "48")
 ```
 ]
 
@@ -1087,10 +1093,12 @@ Type "Chinese" in the Search box.
 
 
 ``` r
-chinese_cma &lt;- get_census(dataset='CA21', 
-                          regions=list(C="01"), 
-                          vectors=c("v_CA21_4872","v_CA21_4881"), 
-                          level='CMA')
+chinese_cma &lt;- get_census(
+  dataset = "CA21",
+  regions = list(C = "01"),
+  vectors = c("v_CA21_4872", "v_CA21_4881"),
+  level = "CMA"
+)
 ```
 
 
@@ -1107,8 +1115,10 @@ The following code downloads total population and the number of Chinese by CSD w
 
 
 ``` r
-chinese_csd_van &lt;- get_census(dataset='CA21', regions=list(CMA="59933"), 
-                          vectors=c("v_CA21_4872", "v_CA21_4881"), level='CSD')
+chinese_csd_van &lt;- get_census(
+  dataset = "CA21", regions = list(CMA = "59933"),
+  vectors = c("v_CA21_4872", "v_CA21_4881"), level = "CSD"
+)
 ```
 ]
 
@@ -1164,8 +1174,11 @@ chinese_csd_van &lt;- get_census(dataset='CA21', regions=list(CMA="59933"),
 .tiny[
 
 ``` r
-chinese_csd_van %&gt;% transmute(`Region Name`, 
-  Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;% arrange(desc(Chinese_share))
+chinese_csd_van %&gt;%
+  transmute(`Region Name`,
+    Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`
+  ) %&gt;%
+  arrange(desc(Chinese_share))
 ```
 ]
 .scroll-output[
@@ -1229,8 +1242,10 @@ explore_census_vectors("CA21")
 .tiny[
 
 ``` r
-renter_csd_van &lt;- get_census("CA21", list(CMA="59933"), level="CSD", 
-                             vectors = c("v_CA21_4239", "v_CA21_4237"))
+renter_csd_van &lt;- get_census("CA21", list(CMA = "59933"),
+  level = "CSD",
+  vectors = c("v_CA21_4239", "v_CA21_4237")
+)
 ```
 ]
 
@@ -1284,9 +1299,11 @@ renter_csd_van &lt;- get_census("CA21", list(CMA="59933"), level="CSD",
 .tiny[
 
 ``` r
-renter_csd_van %&gt;% transmute(
-  `Region Name`,
-  renter_share=`v_CA21_4239: Renter`/`v_CA21_4237: Total - Private households by tenure`) %&gt;%
+renter_csd_van %&gt;%
+  transmute(
+    `Region Name`,
+    renter_share = `v_CA21_4239: Renter` / `v_CA21_4237: Total - Private households by tenure`
+  ) %&gt;%
   arrange(desc(renter_share))
 ```
 ]
@@ -1342,11 +1359,13 @@ renter_csd_van %&gt;% transmute(
 
 
 ``` r
-chinese_csd_van_sf &lt;- get_census(dataset='CA21', 
-                              regions=list(CMA="59933"), 
-                              vectors=c("v_CA21_4872","v_CA21_4881"), 
-                              level='CSD',
-                              geo_format = 'sf')
+chinese_csd_van_sf &lt;- get_census(
+  dataset = "CA21",
+  regions = list(CMA = "59933"),
+  vectors = c("v_CA21_4872", "v_CA21_4881"),
+  level = "CSD",
+  geo_format = "sf"
+)
 ```
 
 geo_format = 'sf' create an sf object, which extends data.frame-like objects with the geometry column.
@@ -1413,9 +1432,11 @@ class(chinese_csd_van_sf)
 .tiny[
 
 ``` r
-chinese_share_csd_van_sf &lt;- chinese_csd_van_sf %&gt;% transmute(
-  `Region Name`, 
-  Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;% 
+chinese_share_csd_van_sf &lt;- chinese_csd_van_sf %&gt;%
+  transmute(
+    `Region Name`,
+    Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`
+  ) %&gt;%
   arrange(desc(Chinese_share))
 ```
 ]
@@ -1426,10 +1447,12 @@ You can use `geom_sf()` to show an sf object as a map.
 .tiny[
 
 ``` r
-ggplot(chinese_share_csd_van_sf) + geom_sf(aes(fill=Chinese_share)) + theme_void()
+ggplot(chinese_share_csd_van_sf) +
+  geom_sf(aes(fill = Chinese_share)) +
+  theme_void()
 ```
 
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+![](16_census_profile_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -1441,8 +1464,10 @@ Show the renter share at CSD level, on a map.
 .tiny[
 
 ``` r
-renter_csd_van_sf &lt;- get_census("CA21", list(CMA="59933"), level="CSD", 
-                             vectors = c("v_CA21_4239", "v_CA21_4237"), geo_format = "sf")
+renter_csd_van_sf &lt;- get_census("CA21", list(CMA = "59933"),
+  level = "CSD",
+  vectors = c("v_CA21_4239", "v_CA21_4237"), geo_format = "sf"
+)
 ```
 ]
 
@@ -1450,9 +1475,11 @@ renter_csd_van_sf &lt;- get_census("CA21", list(CMA="59933"), level="CSD",
 
 
 ``` r
-renter_share_csd_van_sf &lt;- renter_csd_van_sf %&gt;% transmute(
-  `Region Name`,
-  renter_share=`v_CA21_4239: Renter`/`v_CA21_4237: Total - Private households by tenure`) %&gt;%
+renter_share_csd_van_sf &lt;- renter_csd_van_sf %&gt;%
+  transmute(
+    `Region Name`,
+    renter_share = `v_CA21_4239: Renter` / `v_CA21_4237: Total - Private households by tenure`
+  ) %&gt;%
   arrange(desc(renter_share))
 ```
 
@@ -1461,10 +1488,12 @@ renter_share_csd_van_sf &lt;- renter_csd_van_sf %&gt;% transmute(
 .tiny[
 
 ``` r
-ggplot(renter_share_csd_van_sf) + geom_sf(aes(fill=renter_share)) + theme_void()
+ggplot(renter_share_csd_van_sf) +
+  geom_sf(aes(fill = renter_share)) +
+  theme_void()
 ```
 
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+![](16_census_profile_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
 ]
 ---
 
@@ -1477,22 +1506,27 @@ Show the Chinese share at Census tract level
 .tiny[
 
 ``` r
-chinese_ct_van_sf &lt;- get_census(dataset='CA21', 
-                              regions=list(CMA="59933"), 
-                              vectors=c("v_CA21_4872","v_CA21_4881"), 
-                              level='CT',
-                              geo_format = 'sf')
+chinese_ct_van_sf &lt;- get_census(
+  dataset = "CA21",
+  regions = list(CMA = "59933"),
+  vectors = c("v_CA21_4872", "v_CA21_4881"),
+  level = "CT",
+  geo_format = "sf"
+)
 
-chinese_share_ct_van_sf &lt;- chinese_ct_van_sf %&gt;% transmute(Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;% 
+chinese_share_ct_van_sf &lt;- chinese_ct_van_sf %&gt;%
+  transmute(Chinese_share = `v_CA21_4881: Chinese` / `v_CA21_4872: Total - Visible minority for the population in private households`) %&gt;%
   arrange(desc(Chinese_share))
 
-ggplot(chinese_share_ct_van_sf) + geom_sf(aes(fill=Chinese_share)) + theme_void()
+ggplot(chinese_share_ct_van_sf) +
+  geom_sf(aes(fill = Chinese_share)) +
+  theme_void()
 ```
 ]
 
 ---
 
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+![](16_census_profile_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -1504,21 +1538,27 @@ Show the renter share at Census tract level
 .tiny[
 
 ``` r
-renter_ct_van_sf &lt;- get_census("CA21", list(CMA="59933"), level="CT", 
-                             vectors = c("v_CA21_4239", "v_CA21_4237"), geo_format = "sf")
+renter_ct_van_sf &lt;- get_census("CA21", list(CMA = "59933"),
+  level = "CT",
+  vectors = c("v_CA21_4239", "v_CA21_4237"), geo_format = "sf"
+)
 
-renter_share_ct_van_sf &lt;- renter_ct_van_sf %&gt;% transmute(
-  `Region Name`,
-  renter_share=`v_CA21_4239: Renter`/`v_CA21_4237: Total - Private households by tenure`) %&gt;%
+renter_share_ct_van_sf &lt;- renter_ct_van_sf %&gt;%
+  transmute(
+    `Region Name`,
+    renter_share = `v_CA21_4239: Renter` / `v_CA21_4237: Total - Private households by tenure`
+  ) %&gt;%
   arrange(desc(renter_share))
 
-ggplot(renter_share_ct_van_sf) + geom_sf(aes(fill=renter_share)) + theme_void()
+ggplot(renter_share_ct_van_sf) +
+  geom_sf(aes(fill = renter_share)) +
+  theme_void()
 ```
 ]
 
 ---
 
-![](C:/Users/leesh/Dropbox/_teaching/C407/c407-2026/docs/16_census_profile_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+![](16_census_profile_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

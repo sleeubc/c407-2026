@@ -16,14 +16,16 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA, fig.asp = 0.56, out.width='70%', dpi = 300, fig.align = 'center')
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = NA, fig.asp = 0.56, out.width = "70%", dpi = 300, fig.align = "center")
+knitr::opts_knit$set(root.dir = "..")
 options(tibble.print_max = Inf)
 library(kableExtra)
+```
+
+```{r}
 library(tidyverse)
 library(cancensus)
 library(sf)
-# Global override to suppress downloading messages
-get_census <- function(...) cancensus::get_census(..., quiet = TRUE)
 ```
 
 ---
@@ -31,11 +33,12 @@ get_census <- function(...) cancensus::get_census(..., quiet = TRUE)
 Obtain the number of commuters and that of public transit users among the commuters for each CT in Vancouver CMA along with geographic boundaries, as a simple feature collection.
 
 ```{r}
-tb_public_transit <- get_census("CA21", 
-                                c("v_CA21_7632","v_CA21_7644"), 
-                                regions = list(CMA = "59933"), 
-                                level = "CT", 
-                                geo_format = "sf")
+tb_public_transit <- get_census("CA21",
+  c("v_CA21_7632", "v_CA21_7644"),
+  regions = list(CMA = "59933"),
+  level = "CT",
+  geo_format = "sf"
+)
 ```
 
 `geo_format = 'sf'` creates a simple feature collection, which extends data.frame-like objects with the geometry column.
@@ -47,13 +50,18 @@ A simple feature collection has the geometry column, which contains geographic i
 The geometry column is sticky.
 
 ```{r eval=FALSE}
-tb_public_transit %>% select(GeoUID, starts_with("v_CA21")) %>% view
+tb_public_transit %>%
+  select(GeoUID, starts_with("v_CA21")) %>%
+  view()
 ```
 
 .scroll-output[
 .tiny[
 ```{r echo=FALSE}
-tb_public_transit %>% select(GeoUID, starts_with("v_CA21")) %>% head(20) %>% kable()
+tb_public_transit %>%
+  select(GeoUID, starts_with("v_CA21")) %>%
+  head(20) %>%
+  kable()
 ```
 ]]
 
@@ -62,16 +70,19 @@ tb_public_transit %>% select(GeoUID, starts_with("v_CA21")) %>% head(20) %>% kab
 Use `geom_sf()` to show a simple feature collection.
 
 ```{r out.width= '100%'}
-ggplot(tb_public_transit) + geom_sf() + theme_void()
+ggplot(tb_public_transit) +
+  geom_sf() +
+  theme_void()
 ```
 
 ---
 
 .tiny[
 ```{r out.width='85%'}
-ggplot(tb_public_transit) + 
-  geom_sf(aes(fill = `v_CA21_7644: Public transit` / `v_CA21_7632: Total - Main mode of commuting for the employed labour force aged 15 years and over with a usual place of work or no fixed workplace address`)) + 
-  scale_fill_viridis_c(name="Public transit\nuser share") + theme_void()
+ggplot(tb_public_transit) +
+  geom_sf(aes(fill = `v_CA21_7644: Public transit` / `v_CA21_7632: Total - Main mode of commuting for the employed labour force aged 15 years and over with a usual place of work or no fixed workplace address`)) +
+  scale_fill_viridis_c(name = "Public transit\nuser share") +
+  theme_void()
 ```
 ]
 
@@ -80,10 +91,11 @@ ggplot(tb_public_transit) +
 #### Practice
 
 ```{r}
-csd_bndry <- get_census( "CA21",  
-                         regions = list(CMA = "59933"), 
-                         level = "CSD", 
-                         geo_format = "sf")
+csd_bndry <- get_census("CA21",
+  regions = list(CMA = "59933"),
+  level = "CSD",
+  geo_format = "sf"
+)
 ```
 
 1. Confirm that csd_bndry is a sf collection.
@@ -92,8 +104,11 @@ csd_bndry <- get_census( "CA21",
 ---
 
 ```{r echo=FALSE, out.width='100%'}
-ggplot(tb_public_transit) + geom_sf(aes(fill = `v_CA21_7644: Public transit` / `v_CA21_7632: Total - Main mode of commuting for the employed labour force aged 15 years and over with a usual place of work or no fixed workplace address`)) + geom_sf(data=csd_bndry, color="lightgrey", alpha=0) + 
-  scale_fill_viridis_c(name="Public transit\nuser share", label=scales::number_format(accuracy = 1, scale=100, suffix = "%")) + theme_void()
+ggplot(tb_public_transit) +
+  geom_sf(aes(fill = `v_CA21_7644: Public transit` / `v_CA21_7632: Total - Main mode of commuting for the employed labour force aged 15 years and over with a usual place of work or no fixed workplace address`)) +
+  geom_sf(data = csd_bndry, color = "lightgrey", alpha = 0) +
+  scale_fill_viridis_c(name = "Public transit\nuser share", label = scales::number_format(accuracy = 1, scale = 100, suffix = "%")) +
+  theme_void()
 ```
 
 
@@ -101,13 +116,14 @@ ggplot(tb_public_transit) + geom_sf(aes(fill = `v_CA21_7644: Public transit` / `
 
 .tiny[
 ```{r eval=FALSE, echo=params$answers}
-ggplot(tb_public_transit) + 
-	geom_sf(aes(fill = `v_CA21_7644: Public transit` / `v_CA21_7632: Total - Main mode of commuting for the employed labour force aged 15 years and over with a usual place of work or no fixed workplace address`)) +
-	geom_sf(data=csd_bndry, color="grey", alpha=0) + 
-	scale_fill_viridis_c(
-		name="Public transit\nuser share", 
-		label=scales::number_format(accuracy = 1, scale=100, suffix = "%")) + 
-	theme_void()
+ggplot(tb_public_transit) +
+  geom_sf(aes(fill = `v_CA21_7644: Public transit` / `v_CA21_7632: Total - Main mode of commuting for the employed labour force aged 15 years and over with a usual place of work or no fixed workplace address`)) +
+  geom_sf(data = csd_bndry, color = "grey", alpha = 0) +
+  scale_fill_viridis_c(
+    name = "Public transit\nuser share",
+    label = scales::number_format(accuracy = 1, scale = 100, suffix = "%")
+  ) +
+  theme_void()
 ```
 ]
 
@@ -137,7 +153,7 @@ library(VancouvR)
 For smaller datasets, no API key is needed, but for larger ones, you must [register at the City of Vancouver Open Data Portal](https://opendata.vancouver.ca/signup/) to get an API key.
 
 ```{r eval=FALSE}
-options(VancouverOpenDataApiKey="your api key")
+options(VancouverOpenDataApiKey = "your api key")
 ```
 
 ---
@@ -183,18 +199,20 @@ lines %>% knitr::kable()
 #### Practice - Create this map, using `geom_sf()`, `geom_sf_text()`:
 
 ```{r out.width='100%', echo=FALSE}
-ggplot() + geom_sf(data = lines) + 
-  geom_sf(data = stations, size=3, color="red") + 
-  geom_sf_text(aes(label=station), data = stations, size = 2) + 
+ggplot() +
+  geom_sf(data = lines) +
+  geom_sf(data = stations, size = 3, color = "red") +
+  geom_sf_text(aes(label = station), data = stations, size = 2) +
   theme_void()
 ```
 
 ---
 
 ```{r out.width='100%', eval=FALSE}
-ggplot() + geom_sf(data = lines) + 
-  geom_sf(data = stations, size=3, color="red") + 
-  geom_sf_text(aes(label=station), data = stations, size = 2) + 
+ggplot() +
+  geom_sf(data = lines) +
+  geom_sf(data = stations, size = 3, color = "red") +
+  geom_sf_text(aes(label = station), data = stations, size = 2) +
   theme_void()
 ```
 
@@ -205,8 +223,10 @@ ggplot() + geom_sf(data = lines) +
 .tiny[
 ```{r}
 library(ggmap)
-van <- get_map("Queen Elizabeth park, Vancouver", zoom = 12, 
-               source = "stadia", maptype = "stamen_toner_lite")
+van <- get_map("Queen Elizabeth park, Vancouver",
+  zoom = 12,
+  source = "stadia", maptype = "stamen_toner_lite"
+)
 ggmap(van)
 ```
 ]
@@ -217,21 +237,21 @@ ggmap(van)
 - To zoom in, use `coord_sf()`.
 
 ```{r eval=FALSE}
-ggmap(van) + geom_sf(data = lines, inherit.aes = FALSE) + 
-  geom_sf(data = stations, size=3, color="red", inherit.aes = FALSE) + 
-  geom_sf_text(aes(label=station), data = stations, size = 2, inherit.aes = FALSE) + 
-  coord_sf(ylim = c(49.2,49.3)) + 
-	theme_void()
+ggmap(van) + geom_sf(data = lines, inherit.aes = FALSE) +
+  geom_sf(data = stations, size = 3, color = "red", inherit.aes = FALSE) +
+  geom_sf_text(aes(label = station), data = stations, size = 2, inherit.aes = FALSE) +
+  coord_sf(ylim = c(49.2, 49.3)) +
+  theme_void()
 ```
 
 ---
 
 ```{r echo=FALSE, out.width="100%"}
-ggmap(van) + geom_sf(data = lines, inherit.aes = FALSE) + 
-  geom_sf(data = stations, size=3, color="red", inherit.aes = FALSE) + 
-  geom_sf_text(aes(label=station), data = stations, size = 2, inherit.aes = FALSE) + 
-  coord_sf(ylim = c(49.2,49.3)) +
-	theme_void()
+ggmap(van) + geom_sf(data = lines, inherit.aes = FALSE) +
+  geom_sf(data = stations, size = 3, color = "red", inherit.aes = FALSE) +
+  geom_sf_text(aes(label = station), data = stations, size = 2, inherit.aes = FALSE) +
+  coord_sf(ylim = c(49.2, 49.3)) +
+  theme_void()
 ```
 
 ---
@@ -243,8 +263,8 @@ zoning <- get_cov_data("zoning-districts-and-labels", format = "geojson")
 ```
 
 ```{r echo=FALSE, out.width="250%"}
-ggmap(van) + geom_sf(aes(fill=zoning_classification), zoning, inherit.aes = FALSE, alpha=0.2) + 
-	labs(fill=NULL) + coord_sf(xlim = c(-123.3, -123.02), ylim = c(49.2,49.3)) + theme_void()
+ggmap(van) + geom_sf(aes(fill = zoning_classification), zoning, inherit.aes = FALSE, alpha = 0.2) +
+  labs(fill = NULL) + coord_sf(xlim = c(-123.3, -123.02), ylim = c(49.2, 49.3)) + theme_void()
 ```
 
 ---
@@ -252,20 +272,21 @@ ggmap(van) + geom_sf(aes(fill=zoning_classification), zoning, inherit.aes = FALS
 ```{r eval=FALSE}
 zoning <- get_cov_data("zoning-districts-and-labels", format = "geojson")
 
-ggmap(van) + 
-	geom_sf(
-		aes(fill=zoning_classification), zoning, 
-					inherit.aes = FALSE, alpha=0.2) + 
-	labs(fill=NULL) + 
-	coord_sf(xlim = c(-123.3, -123.02), ylim = c(49.2,49.3)) + 
-	theme_void()
+ggmap(van) +
+  geom_sf(
+    aes(fill = zoning_classification), zoning,
+    inherit.aes = FALSE, alpha = 0.2
+  ) +
+  labs(fill = NULL) +
+  coord_sf(xlim = c(-123.3, -123.02), ylim = c(49.2, 49.3)) +
+  theme_void()
 ```
 
 ---
 
 ```{r eval=FALSE}
 library(mapview)
-mapview(zoning, zcol="zoning_classification")
+mapview(zoning, zcol = "zoning_classification")
 ```
 
 Do not use the interactive mode map to generate a static map!
@@ -274,7 +295,7 @@ Do not use the interactive mode map to generate a static map!
 
 ```{r echo=FALSE}
 library(mapview)
-mapview(zoning, zcol="zoning_classification")
+mapview(zoning, zcol = "zoning_classification")
 ```
 
 ---
@@ -308,7 +329,7 @@ burnaby_parks <- st_read("Data/Park_Inventory.geojson")
 ---
 
 ```{r}
-mapview(burnaby_parks, zcol="NAME", legend=FALSE)
+mapview(burnaby_parks, zcol = "NAME", legend = FALSE)
 ```
 
 ---
@@ -327,6 +348,6 @@ You should get the same result.
 ---
 
 ```{r}
-mapview(burnaby_parks_2, zcol="NAME", legend=FALSE)
+mapview(burnaby_parks_2, zcol = "NAME", legend = FALSE)
 ```
 
