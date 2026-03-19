@@ -42,7 +42,7 @@ library(mapview)
 ```
 
 ```{r}
-zoning <- get_cov_data("zoning-districts-and-labels", format = "geojson") %>%
+zoning <- get_cov_data("zoning-districts-and-labels") %>%
   select(zoning_classification)
 ```
 
@@ -233,7 +233,7 @@ ggplot(crimes_sf) +
 Identify transactions within 300 metres from each skytrain station. (We will continue to use `van_2023_sf`.)
 
 ```{r}
-stations <- get_cov_data("rapid-transit-stations", format = "geojson") %>%
+stations <- get_cov_data("rapid-transit-stations") %>%
   select(station)
 ```
 

@@ -163,15 +163,13 @@ Search for [Rapid transit stations](https://opendata.vancouver.ca/explore/datase
 Note the Dataset Identifier.
 
 ```{r}
-stations <- get_cov_data("rapid-transit-stations", format = "geojson")
+stations <- get_cov_data("rapid-transit-stations")
 ```
-
-`format = "geojson"` gives a simple feature collection.
 
 Do the same for [Rapid transit lines](https://opendata.vancouver.ca/explore/dataset/rapid-transit-lines/information/)
 
 ```{r}
-lines <- get_cov_data("rapid-transit-lines", format = "geojson")
+lines <- get_cov_data("rapid-transit-lines")
 ```
 
 Confirm that both `stations` and `lines` are sf collections with point and line types.
@@ -259,7 +257,7 @@ ggmap(van) + geom_sf(data = lines, inherit.aes = FALSE) +
 #### Practice - Create a zoning map for city of Vancouver
 
 ```{r echo=FALSE}
-zoning <- get_cov_data("zoning-districts-and-labels", format = "geojson")
+zoning <- get_cov_data("zoning-districts-and-labels")
 ```
 
 ```{r echo=FALSE, out.width="250%"}
@@ -270,7 +268,7 @@ ggmap(van) + geom_sf(aes(fill = zoning_classification), zoning, inherit.aes = FA
 ---
 
 ```{r eval=FALSE}
-zoning <- get_cov_data("zoning-districts-and-labels", format = "geojson")
+zoning <- get_cov_data("zoning-districts-and-labels")
 
 ggmap(van) +
   geom_sf(
@@ -300,12 +298,27 @@ mapview(zoning, zcol = "zoning_classification")
 
 ---
 
-#### (Optional) Additional resource
+#### (Optional) tmap
 
-Another great R package for creating a map is `tmap` package.
+A specialized R package for creating a map.
 
-See this online book to learn more about how to make a map using R.
-https://bookdown.org/nicohahn/making_maps_with_r5/docs/introduction.html
+We will stick to ggplot() to build on what we learned. But if you create maps often, it is worth while to learn the package.
+
+
+- Free online book https://bookdown.org/nicohahn/making_maps_with_r5/docs/introduction.html
+- You can ask AI to translate your ggplot() map code to a tmap.
+
+---
+
+.tiny[
+```{r}
+library(tmap)
+
+tm_shape(zoning) +
+  tm_polygons(col = "zoning_classification", 
+              alpha = 0.2, palette = "Set1", title = "Zoning")
+```
+]
 
 ---
 
