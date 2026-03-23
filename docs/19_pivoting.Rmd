@@ -1,0 +1,251 @@
+---
+title: "Pivoting"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA, fig.asp = 0.56, out.width='70%', dpi = 300, fig.align = 'center')
+options(tibble.print_max = Inf)
+library(kableExtra)
+```
+
+```{r}
+library(tidyverse)
+```
+
+---
+
+#### pivot_wider()
+
+.tiny[
+```{r}
+library(cancensus)
+renter_csd_van <- get_census("CA16", list(CMA="59933"), level="CSD", 
+                             vectors = c("v_CA16_4838", "v_CA16_4836")) 
+
+renter_l <- renter_csd_van %>% select(`Region Name`, `v_CA16_4838: Renter`, `v_CA16_4836: Total - Private households by tenure - 25% sample data`) %>% pivot_longer(-`Region Name`, names_to = "vector")
+```
+]
+
+---
+
+.scroll-output[
+.tiny[
+```{r echo=FALSE}
+renter_l %>% kable()
+```
+]]
+
+---
+
+Calculate renter share for each CSD
+
+```{r echo=FALSE}
+renter_l %>% pivot_wider(`Region Name`, names_from = "vector") %>% 
+  transmute(`Region Name`, renter_share = `v_CA16_4838: Renter`/`v_CA16_4836: Total - Private households by tenure - 25% sample data`) %>% arrange(-renter_share) %>% kable()
+```
+
+---
+
+.pull-left[
+.tiny[
+```{r}
+long <- tibble( 
+  geo_code=c(100, 100, 101, 101),
+  geo_name=c("a", "a", "b", "b"), 
+  var_name=c("x", "y", "x", "y"), 
+  val=c(5,6,7,8))
+```
+
+```{r echo=FALSE}
+long %>% kable()
+```
+]]
+
+.pull-right[
+.tiny[
+```{r}
+wide <- long %>% 
+  pivot_wider(
+    names_from = var_name, 
+    values_from = val
+    )
+```
+
+```{r echo=FALSE}
+wide %>% kable()
+```
+]]
+
+---
+
+#### Application
+
+Calculate renter share for each CSD
+
+```{r echo=FALSE}
+renter_l %>% pivot_wider(`Region Name`, names_from = "vector", values_from = "value") %>% 
+  transmute(`Region Name`, renter_share = `v_CA16_4838: Renter`/`v_CA16_4836: Total - Private households by tenure - 25% sample data`) %>% arrange(-renter_share) %>% kable()
+```
+
+---
+
+.tiny[
+```{r eval=params$answers, echo=params$answers}
+renter_w <- renter_l %>% pivot_wider(
+  names_from = "vector", 
+  values_from = "value")
+```
+]
+
+.scroll-output[
+.tiny[
+```{r echo=FALSE, eval=params$answers}
+renter_w %>% kable()
+```
+]]
+
+---
+
+.tiny[
+```{r eval=FALSE, echo=params$answers}
+renter_w %>% transmute(
+  `Region Name`, 
+  renter_share = `v_CA16_4838: Renter`/`v_CA16_4836: Total - Private households by tenure - 25% sample data`) %>% 
+  arrange( desc(renter_share))
+```
+]
+
+.scroll-output[
+.tiny[
+```{r echo=FALSE, eval=params$answers}
+renter_w %>% transmute(`Region Name`, renter_share = `v_CA16_4838: Renter`/`v_CA16_4836: Total - Private households by tenure - 25% sample data`) %>% arrange( desc(renter_share)) %>% kable()
+```
+]]
+
+---
+
+#### pivot_longer()
+
+.tiny[
+```{r }
+pindex <- cansim::get_cansim("18-10-0205-01")
+
+pindex_w <- pindex %>% 
+  filter(`New housing price indexes` == "Total (house and land)", 
+         GEO %>% str_detect("Vancouver|Toronto|Montréal|Victoria|Edmonton|Calgary"),
+         lubridate::ym(REF_DATE) >= lubridate::ymd("2016-12-01")) %>% 
+  select(REF_DATE, GEO, VALUE) %>% 
+  pivot_wider(names_from = REF_DATE, values_from = VALUE)
+```
+]
+
+---
+
+.scroll-output-80[
+.tiny[
+```{r echo=FALSE}
+pindex_w %>% kable()
+```
+]]
+
+---
+
+Generate this plot.
+
+```{r echo=FALSE}
+pindex_w %>% pivot_longer( cols = `2016-12`:`2024-01`, names_to = "month") %>% 
+  mutate(month=lubridate::ym(month)) %>% 
+  ggplot(aes(month, value, color=GEO)) + geom_line()  + labs(x=NULL, y=NULL, color=NULL) +
+  theme_bw()
+```
+
+---
+
+### Wide to long
+
+.pull-left[
+```{r eval=FALSE}
+wide
+```
+
+```{r echo=FALSE}
+wide %>% kable()
+```
+]
+
+.pull-right[
+```{r}
+long2 <- wide %>% pivot_longer(
+  cols = x:y, 
+  names_to = "var", 
+  values_to= "val")
+```
+```{r echo=FALSE}
+long2 %>% kable()
+```
+
+]
+
+---
+
+##### Application: generate the following figure
+
+```{r echo=FALSE}
+pindex_w %>% pivot_longer( cols = `2016-12`:`2024-01`, names_to = "month") %>% 
+  mutate(month=lubridate::ym(month)) %>% 
+  ggplot(aes(month, value, color=GEO)) + geom_line()  + labs(x=NULL, y=NULL, color=NULL) +
+  theme_bw()
+```
+
+---
+
+.tiny[
+```{r eval=params$answers, echo=params$answers}
+pindex_l <- pindex_w %>% pivot_longer( 
+  cols = `2016-12`:`2024-01`, 
+  names_to = "month")
+```
+]
+
+.scroll-output[
+.tiny[
+```{r echo=FALSE, eval=params$answers}
+pindex_l %>% kable()
+```
+]]
+
+
+---
+
+.tiny[
+```{r eval=FALSE, echo=params$answers}
+pindex_l %>% 
+  mutate(month=lubridate::ym(month)) %>% 
+  ggplot(aes(month, value, color=GEO)) + geom_line()  + 
+  labs(x=NULL, y=NULL, color=NULL) + theme_bw()
+```
+]
+
+.scroll-output[
+.tiny[
+```{r echo=FALSE, eval=params$answers}
+pindex_l %>% 
+  mutate(month=lubridate::ym(month)) %>% 
+  ggplot(aes(month, value, color=GEO)) + geom_line()  + labs(x=NULL, y=NULL, color=NULL) +
+  theme_bw()
+```
+]]
+
