@@ -1,0 +1,277 @@
+---
+title: "Join"
+author: "Sanghoon Lee"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+params:
+  answers: TRUE
+output:
+  xaringan::moon_reader:
+    css: [default, c407_slides.css]
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment=NA, fig.asp = 0.56, out.width='70%', dpi = 300, fig.align = 'center')
+options(tibble.print_max = Inf)
+library(kableExtra)
+```
+
+```{r}
+library(tidyverse)
+```
+
+---
+
+#### Joining tables
+
+.pull-left[
+```{r}
+band_members
+```
+]
+
+.pull-right[
+```{r}
+band_instruments
+```
+]
+
+---
+
+.pull-left-1[
+.small[
+```{r}
+band_members
+```
+```{r}
+band_instruments
+```
+]
+]
+
+.pull-right-2[
+.tiny[
+```{r}
+band_members %>% 
+  inner_join(band_instruments, by="name")
+```
+```{r}
+band_members %>% 
+  left_join(band_instruments, by="name")
+```
+]]
+
+---
+
+.pull-left-1[
+.tiny[
+```{r}
+band_members
+```
+```{r}
+band_instruments
+```
+]
+]
+
+.pull-right-2[
+.tiny[
+```{r}
+band_members %>% 
+  right_join(band_instruments, by="name")
+```
+```{r}
+band_members %>% 
+  full_join(band_instruments, by="name")
+```
+]]
+
+---
+
+.pull-left-1[
+.small[
+```{r}
+band_members
+```
+```{r}
+band_instruments2
+```
+]]
+
+--
+
+.pull-right-2[
+.tiny[
+```{r}
+band_members %>% 
+  inner_join(band_instruments2, by=c("name"="artist"))
+```
+```{r}
+band_members %>% 
+  left_join(band_instruments2, by=c("name"="artist"))
+```
+]]
+
+---
+
+### Practice
+
+.tiny[
+```{r}
+pumf_2016 <- read_rds("data/2016_census_pumf_ind.rds")
+pumf_2021 <- read_rds("data/2021_census_pumf_ind.rds")
+```
+
+```{r}
+pop_2016 <- pumf_2016 %>% group_by(CMA) %>% summarise(pop_2016 = sum(WEIGHT))
+pop_2021 <- pumf_2021 %>% group_by(CMA) %>% summarise(pop_2021 = sum(WEIGHT))
+```
+]
+
+.tiny[
+.pull-left[
+```{r echo=FALSE}
+pop_2016 %>% kable()
+```
+]
+.pull-right[
+```{r echo=FALSE}
+pop_2021 %>% kable() 
+```
+]
+]
+
+---
+
+Generate this figure
+
+```{r echo=FALSE, out.width="100%", out.height="100%"}
+pop_16_21 <- pop_2016 %>% mutate(CMAID=as.numeric(CMA)) %>% select(-CMA) %>% 
+	full_join(pop_2021 %>% mutate(CMAID=as.numeric(CMA)), by= "CMAID") %>% 
+							mutate(pop_growth = pop_2021 / pop_2016 - 1)
+
+pop_16_21 %>% 
+	mutate(CMA= case_when(CMA %>% str_detect("Other") ~ "Other CMAs and Rural Areas", .default = CMA)) %>% 
+	ggplot() + geom_col(aes(pop_growth, CMA %>% fct_reorder(pop_growth))) + 
+	scale_x_continuous(breaks=c(0, 0.05, 0.1, 0.15, 0.2, 0.25), labels=scales::label_percent()) +
+	labs(x="Population Growth Rate", y=NULL) 
+```
+
+---
+
+```{r}
+pop_16_21 <- pop_2016 %>% full_join(pop_2021, by= "CMA") %>% 
+	mutate(pop_growth = pop_2021 / pop_2016 - 1)
+```
+
+.tiny[
+.scroll-output[
+```{r echo=FALSE}
+pop_16_21 %>% kable()
+```
+]]
+
+---
+
+.tiny[
+```{r eval=FALSE}
+pop_2016 %>% full_join(pop_2021, by= "CMA") %>% 
+	filter(is.na(pop_2016) | is.na(pop_2021))
+```
+]
+
+.tiny[
+```{r echo=FALSE}
+pop_2016 %>% full_join(pop_2021, by= "CMA") %>% 
+	filter(is.na(pop_2016) | is.na(pop_2021)) %>% kable()
+```
+]
+
+---
+
+```{r out.width="90%", out.height="90%"}
+ggplot(pop_16_21) + geom_col(aes(pop_growth, CMA))
+```
+
+---
+
+.tiny[
+```{r eval=FALSE}
+pop_2016 %>% mutate(CMAID=as.numeric(CMA))
+```
+]
+
+.tiny[
+```{r echo=FALSE}
+pop_2016 %>% mutate(CMAID=as.numeric(CMA)) %>% kable
+```
+]
+
+---
+
+.tiny[
+```{r eval=FALSE}
+pop_2021 %>% mutate(CMAID=as.numeric(CMA))
+```
+]
+
+.tiny[
+```{r echo=FALSE}
+pop_2021 %>% mutate(CMAID=as.numeric(CMA)) %>% kable()
+```
+]
+
+---
+
+.tiny[
+```{r}
+pop_16_21 <- pop_2016 %>% mutate(CMAID=as.numeric(CMA)) %>% select(-CMA) %>% 
+	full_join(pop_2021 %>% mutate(CMAID=as.numeric(CMA)), by= "CMAID") %>% 
+							mutate(pop_growth = pop_2021 / pop_2016 - 1)
+```
+]
+
+.tiny[
+.scroll-output[
+```{r echo=FALSE}
+pop_16_21 %>% kable()
+```
+]]
+
+---
+
+```{r out.width="90%", out.height="90%"}
+ggplot(pop_16_21) + geom_col(aes(pop_growth, CMA))
+```
+
+---
+
+.tiny[
+```{r eval=FALSE}
+pop_16_21 %>% 
+	mutate(CMA= case_when(
+		CMA %>% str_detect("Other") ~ "Other CMAs and Rural Areas", 
+		.default = CMA)) %>% 
+	ggplot() + geom_col(aes(pop_growth, CMA %>% fct_reorder(pop_growth))) + 
+	scale_x_continuous(breaks=c(0, 0.05, 0.1, 0.15, 0.2, 0.25), 
+										 labels=scales::label_percent()) +
+	labs(x="Population Growth Rate", y=NULL)
+```
+]
+
+---
+
+```{r echo=FALSE, out.width="100%", out.height="100%"}
+pop_16_21 %>% 
+	mutate(CMA= case_when(CMA %>% str_detect("Other") ~ "Other CMAs and Rural Areas", .default = CMA)) %>% 
+	ggplot() + geom_col(aes(pop_growth, CMA %>% fct_reorder(pop_growth))) + 
+	scale_x_continuous(breaks=c(0, 0.05, 0.1, 0.15, 0.2, 0.25), labels=scales::label_percent()) +
+	labs(x="Population Growth Rate", y=NULL) 
+```
+
+

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Join</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sanghoon Lee" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="c407_slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Join
+]
+.author[
+### Sanghoon Lee
+]
+.date[
+### 23 March, 2026
+]
+
+---
+
+
+
+
+
+``` r
+library(tidyverse)
+```
+
+---
+
+#### Joining tables
+
+.pull-left[
+
+``` r
+band_members
+```
+
+```
+# A tibble: 3 × 2
+  name  band   
+  &lt;chr&gt; &lt;chr&gt;  
+1 Mick  Stones 
+2 John  Beatles
+3 Paul  Beatles
+```
+]
+
+.pull-right[
+
+``` r
+band_instruments
+```
+
+```
+# A tibble: 3 × 2
+  name  plays 
+  &lt;chr&gt; &lt;chr&gt; 
+1 John  guitar
+2 Paul  bass  
+3 Keith guitar
+```
+]
+
+---
+
+.pull-left-1[
+.small[
+
+``` r
+band_members
+```
+
+```
+# A tibble: 3 × 2
+  name  band   
+  &lt;chr&gt; &lt;chr&gt;  
+1 Mick  Stones 
+2 John  Beatles
+3 Paul  Beatles
+```
+
+``` r
+band_instruments
+```
+
+```
+# A tibble: 3 × 2
+  name  plays 
+  &lt;chr&gt; &lt;chr&gt; 
+1 John  guitar
+2 Paul  bass  
+3 Keith guitar
+```
+]
+]
+
+.pull-right-2[
+.tiny[
+
+``` r
+band_members %&gt;% 
+  inner_join(band_instruments, by="name")
+```
+
+```
+# A tibble: 2 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 John  Beatles guitar
+2 Paul  Beatles bass  
+```
+
+``` r
+band_members %&gt;% 
+  left_join(band_instruments, by="name")
+```
+
+```
+# A tibble: 3 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 Mick  Stones  &lt;NA&gt;  
+2 John  Beatles guitar
+3 Paul  Beatles bass  
+```
+]]
+
+---
+
+.pull-left-1[
+.tiny[
+
+``` r
+band_members
+```
+
+```
+# A tibble: 3 × 2
+  name  band   
+  &lt;chr&gt; &lt;chr&gt;  
+1 Mick  Stones 
+2 John  Beatles
+3 Paul  Beatles
+```
+
+``` r
+band_instruments
+```
+
+```
+# A tibble: 3 × 2
+  name  plays 
+  &lt;chr&gt; &lt;chr&gt; 
+1 John  guitar
+2 Paul  bass  
+3 Keith guitar
+```
+]
+]
+
+.pull-right-2[
+.tiny[
+
+``` r
+band_members %&gt;% 
+  right_join(band_instruments, by="name")
+```
+
+```
+# A tibble: 3 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 John  Beatles guitar
+2 Paul  Beatles bass  
+3 Keith &lt;NA&gt;    guitar
+```
+
+``` r
+band_members %&gt;% 
+  full_join(band_instruments, by="name")
+```
+
+```
+# A tibble: 4 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 Mick  Stones  &lt;NA&gt;  
+2 John  Beatles guitar
+3 Paul  Beatles bass  
+4 Keith &lt;NA&gt;    guitar
+```
+]]
+
+---
+
+.pull-left-1[
+.small[
+
+``` r
+band_members
+```
+
+```
+# A tibble: 3 × 2
+  name  band   
+  &lt;chr&gt; &lt;chr&gt;  
+1 Mick  Stones 
+2 John  Beatles
+3 Paul  Beatles
+```
+
+``` r
+band_instruments2
+```
+
+```
+# A tibble: 3 × 2
+  artist plays 
+  &lt;chr&gt;  &lt;chr&gt; 
+1 John   guitar
+2 Paul   bass  
+3 Keith  guitar
+```
+]]
+
+--
+
+.pull-right-2[
+.tiny[
+
+``` r
+band_members %&gt;% 
+  inner_join(band_instruments2, by=c("name"="artist"))
+```
+
+```
+# A tibble: 2 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 John  Beatles guitar
+2 Paul  Beatles bass  
+```
+
+``` r
+band_members %&gt;% 
+  left_join(band_instruments2, by=c("name"="artist"))
+```
+
+```
+# A tibble: 3 × 3
+  name  band    plays 
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; 
+1 Mick  Stones  &lt;NA&gt;  
+2 John  Beatles guitar
+3 Paul  Beatles bass  
+```
+]]
+
+---
+
+### Practice
+
+.tiny[
+
+``` r
+pumf_2016 &lt;- read_rds("data/2016_census_pumf_ind.rds")
+pumf_2021 &lt;- read_rds("data/2021_census_pumf_ind.rds")
+```
+
+
+``` r
+pop_2016 &lt;- pumf_2016 %&gt;% group_by(CMA) %&gt;% summarise(pop_2016 = sum(WEIGHT))
+pop_2021 &lt;- pumf_2021 %&gt;% group_by(CMA) %&gt;% summarise(pop_2021 = sum(WEIGHT))
+```
+]
+
+.tiny[
+.pull-left[
+
+|CMA                                                                          |   pop_2016|
+|:----------------------------------------------------------------------------|----------:|
+|Halifax                                                                      |   395880.4|
+|Moncton – Saint John                                                         |   267419.9|
+|Québec                                                                       |   776427.9|
+|Montréal                                                                     |  4021971.5|
+|Sherbrooke – Trois-Rivières                                                  |   352265.1|
+|Ottawa – Gatineau                                                            |  1295009.4|
+|Oshawa                                                                       |   373928.4|
+|Toronto                                                                      |  5865778.8|
+|Hamilton                                                                     |   734301.1|
+|St. Catharines – Niagara                                                     |   393743.3|
+|Kitchener – Cambridge – Waterloo                                             |   519410.8|
+|London                                                                       |   489151.3|
+|Windsor                                                                      |   327965.1|
+|Brantford – Guelph – Barrie                                                  |   479336.4|
+|Kingston – Peterborough                                                      |   276187.0|
+|Greater Sudbury / Grand Sudbury – Thunder Bay                                |   278668.5|
+|Winnipeg                                                                     |   757166.5|
+|Regina – Saskatoon                                                           |   522681.6|
+|Calgary                                                                      |  1371657.0|
+|Edmonton                                                                     |  1296951.1|
+|Vancouver                                                                    |  2429306.8|
+|Victoria                                                                     |   363644.1|
+|Kelowna – Abbotsford                                                         |   363532.9|
+|Other census metropolitan areas, census agglomerations and other geographies | 10507679.1|
+]
+.pull-right[
+
+|CMA                                                                          |   pop_2021|
+|:----------------------------------------------------------------------------|----------:|
+|Halifax                                                                      |   459285.8|
+|Moncton –  Saint John                                                        |   282107.3|
+|Québec                                                                       |   818954.8|
+|Montréal                                                                     |  4209999.9|
+|Sherbrooke – Trois-Rivières                                                  |   372390.3|
+|Ottawa - Gatineau                                                            |  1478889.7|
+|Oshawa                                                                       |   415157.3|
+|Toronto                                                                      |  6130098.2|
+|Hamilton                                                                     |   777202.3|
+|St. Catharines – Niagara                                                     |   424602.0|
+|Kitchener –  Cambridge –  Waterloo                                           |   573234.9|
+|London                                                                       |   534826.6|
+|Windsor                                                                      |   413231.3|
+|Brantford – Guelph – Barrie                                                  |   515937.3|
+|Kingston – Peterborough                                                      |   289599.0|
+|Greater Sudbury – Thunder Bay                                                |   288006.4|
+|Winnipeg                                                                     |   822345.8|
+|Regina – Saskatoon                                                           |   554343.5|
+|Calgary                                                                      |  1467038.3|
+|Edmonton                                                                     |  1396902.6|
+|Vancouver                                                                    |  2608986.1|
+|Victoria                                                                     |   391473.8|
+|Kelowna –  Abbotsford-Mission                                                |   413806.7|
+|Other census metropolitan areas, census agglomerations and other geographies | 10690057.3|
+]
+]
+
+---
+
+Generate this figure
+
+&lt;img src="20_join_files/figure-html/unnamed-chunk-20-1.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+``` r
+pop_16_21 &lt;- pop_2016 %&gt;% full_join(pop_2021, by= "CMA") %&gt;% 
+	mutate(pop_growth = pop_2021 / pop_2016 - 1)
+```
+
+.tiny[
+.scroll-output[
+
+|CMA                                                                          |   pop_2016|   pop_2021| pop_growth|
+|:----------------------------------------------------------------------------|----------:|----------:|----------:|
+|Halifax                                                                      |   395880.4|   459285.8|  0.1601629|
+|Moncton – Saint John                                                         |   267419.9|         NA|         NA|
+|Québec                                                                       |   776427.9|   818954.8|  0.0547725|
+|Montréal                                                                     |  4021971.5|  4209999.9|  0.0467503|
+|Sherbrooke – Trois-Rivières                                                  |   352265.1|   372390.3|  0.0571307|
+|Ottawa – Gatineau                                                            |  1295009.4|         NA|         NA|
+|Oshawa                                                                       |   373928.4|   415157.3|  0.1102590|
+|Toronto                                                                      |  5865778.8|  6130098.2|  0.0450613|
+|Hamilton                                                                     |   734301.1|   777202.3|  0.0584246|
+|St. Catharines – Niagara                                                     |   393743.3|   424602.0|  0.0783725|
+|Kitchener – Cambridge – Waterloo                                             |   519410.8|         NA|         NA|
+|London                                                                       |   489151.3|   534826.6|  0.0933766|
+|Windsor                                                                      |   327965.1|   413231.3|  0.2599857|
+|Brantford – Guelph – Barrie                                                  |   479336.4|   515937.3|  0.0763574|
+|Kingston – Peterborough                                                      |   276187.0|   289599.0|  0.0485613|
+|Greater Sudbury / Grand Sudbury – Thunder Bay                                |   278668.5|         NA|         NA|
+|Winnipeg                                                                     |   757166.5|   822345.8|  0.0860831|
+|Regina – Saskatoon                                                           |   522681.6|   554343.5|  0.0605759|
+|Calgary                                                                      |  1371657.0|  1467038.3|  0.0695372|
+|Edmonton                                                                     |  1296951.1|  1396902.6|  0.0770665|
+|Vancouver                                                                    |  2429306.8|  2608986.1|  0.0739632|
+|Victoria                                                                     |   363644.1|   391473.8|  0.0765303|
+|Kelowna – Abbotsford                                                         |   363532.9|         NA|         NA|
+|Other census metropolitan areas, census agglomerations and other geographies | 10507679.1| 10690057.3|  0.0173567|
+|Moncton –  Saint John                                                        |         NA|   282107.3|         NA|
+|Ottawa - Gatineau                                                            |         NA|  1478889.7|         NA|
+|Kitchener –  Cambridge –  Waterloo                                           |         NA|   573234.9|         NA|
+|Greater Sudbury – Thunder Bay                                                |         NA|   288006.4|         NA|
+|Kelowna –  Abbotsford-Mission                                                |         NA|   413806.7|         NA|
+]]
+
+---
+
+.tiny[
+
+``` r
+pop_2016 %&gt;% full_join(pop_2021, by= "CMA") %&gt;% 
+	filter(is.na(pop_2016) | is.na(pop_2021))
+```
+]
+
+.tiny[
+
+|CMA                                           |  pop_2016|  pop_2021|
+|:---------------------------------------------|---------:|---------:|
+|Moncton – Saint John                          |  267419.9|        NA|
+|Ottawa – Gatineau                             | 1295009.4|        NA|
+|Kitchener – Cambridge – Waterloo              |  519410.8|        NA|
+|Greater Sudbury / Grand Sudbury – Thunder Bay |  278668.5|        NA|
+|Kelowna – Abbotsford                          |  363532.9|        NA|
+|Moncton –  Saint John                         |        NA|  282107.3|
+|Ottawa - Gatineau                             |        NA| 1478889.7|
+|Kitchener –  Cambridge –  Waterloo            |        NA|  573234.9|
+|Greater Sudbury – Thunder Bay                 |        NA|  288006.4|
+|Kelowna –  Abbotsford-Mission                 |        NA|  413806.7|
+]
+
+---
+
+
+``` r
+ggplot(pop_16_21) + geom_col(aes(pop_growth, CMA))
+```
+
+&lt;img src="20_join_files/figure-html/unnamed-chunk-25-1.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+.tiny[
+
+``` r
+pop_2016 %&gt;% mutate(CMAID=as.numeric(CMA))
+```
+]
+
+.tiny[
+
+|CMA                                                                          |   pop_2016| CMAID|
+|:----------------------------------------------------------------------------|----------:|-----:|
+|Halifax                                                                      |   395880.4|     1|
+|Moncton – Saint John                                                         |   267419.9|     2|
+|Québec                                                                       |   776427.9|     3|
+|Montréal                                                                     |  4021971.5|     4|
+|Sherbrooke – Trois-Rivières                                                  |   352265.1|     5|
+|Ottawa – Gatineau                                                            |  1295009.4|     6|
+|Oshawa                                                                       |   373928.4|     7|
+|Toronto                                                                      |  5865778.8|     8|
+|Hamilton                                                                     |   734301.1|     9|
+|St. Catharines – Niagara                                                     |   393743.3|    10|
+|Kitchener – Cambridge – Waterloo                                             |   519410.8|    11|
+|London                                                                       |   489151.3|    12|
+|Windsor                                                                      |   327965.1|    13|
+|Brantford – Guelph – Barrie                                                  |   479336.4|    14|
+|Kingston – Peterborough                                                      |   276187.0|    15|
+|Greater Sudbury / Grand Sudbury – Thunder Bay                                |   278668.5|    16|
+|Winnipeg                                                                     |   757166.5|    17|
+|Regina – Saskatoon                                                           |   522681.6|    18|
+|Calgary                                                                      |  1371657.0|    19|
+|Edmonton                                                                     |  1296951.1|    20|
+|Vancouver                                                                    |  2429306.8|    21|
+|Victoria                                                                     |   363644.1|    22|
+|Kelowna – Abbotsford                                                         |   363532.9|    23|
+|Other census metropolitan areas, census agglomerations and other geographies | 10507679.1|    24|
+]
+
+---
+
+.tiny[
+
+``` r
+pop_2021 %&gt;% mutate(CMAID=as.numeric(CMA))
+```
+]
+
+.tiny[
+
+|CMA                                                                          |   pop_2021| CMAID|
+|:----------------------------------------------------------------------------|----------:|-----:|
+|Halifax                                                                      |   459285.8|     1|
+|Moncton –  Saint John                                                        |   282107.3|     2|
+|Québec                                                                       |   818954.8|     3|
+|Montréal                                                                     |  4209999.9|     4|
+|Sherbrooke – Trois-Rivières                                                  |   372390.3|     5|
+|Ottawa - Gatineau                                                            |  1478889.7|     6|
+|Oshawa                                                                       |   415157.3|     7|
+|Toronto                                                                      |  6130098.2|     8|
+|Hamilton                                                                     |   777202.3|     9|
+|St. Catharines – Niagara                                                     |   424602.0|    10|
+|Kitchener –  Cambridge –  Waterloo                                           |   573234.9|    11|
+|London                                                                       |   534826.6|    12|
+|Windsor                                                                      |   413231.3|    13|
+|Brantford – Guelph – Barrie                                                  |   515937.3|    14|
+|Kingston – Peterborough                                                      |   289599.0|    15|
+|Greater Sudbury – Thunder Bay                                                |   288006.4|    16|
+|Winnipeg                                                                     |   822345.8|    17|
+|Regina – Saskatoon                                                           |   554343.5|    18|
+|Calgary                                                                      |  1467038.3|    19|
+|Edmonton                                                                     |  1396902.6|    20|
+|Vancouver                                                                    |  2608986.1|    21|
+|Victoria                                                                     |   391473.8|    22|
+|Kelowna –  Abbotsford-Mission                                                |   413806.7|    23|
+|Other census metropolitan areas, census agglomerations and other geographies | 10690057.3|    24|
+]
+
+---
+
+.tiny[
+
+``` r
+pop_16_21 &lt;- pop_2016 %&gt;% mutate(CMAID=as.numeric(CMA)) %&gt;% select(-CMA) %&gt;% 
+	full_join(pop_2021 %&gt;% mutate(CMAID=as.numeric(CMA)), by= "CMAID") %&gt;% 
+							mutate(pop_growth = pop_2021 / pop_2016 - 1)
+```
+]
+
+.tiny[
+.scroll-output[
+
+|   pop_2016| CMAID|CMA                                                                          |   pop_2021| pop_growth|
+|----------:|-----:|:----------------------------------------------------------------------------|----------:|----------:|
+|   395880.4|     1|Halifax                                                                      |   459285.8|  0.1601629|
+|   267419.9|     2|Moncton –  Saint John                                                        |   282107.3|  0.0549227|
+|   776427.9|     3|Québec                                                                       |   818954.8|  0.0547725|
+|  4021971.5|     4|Montréal                                                                     |  4209999.9|  0.0467503|
+|   352265.1|     5|Sherbrooke – Trois-Rivières                                                  |   372390.3|  0.0571307|
+|  1295009.4|     6|Ottawa - Gatineau                                                            |  1478889.7|  0.1419915|
+|   373928.4|     7|Oshawa                                                                       |   415157.3|  0.1102590|
+|  5865778.8|     8|Toronto                                                                      |  6130098.2|  0.0450613|
+|   734301.1|     9|Hamilton                                                                     |   777202.3|  0.0584246|
+|   393743.3|    10|St. Catharines – Niagara                                                     |   424602.0|  0.0783725|
+|   519410.8|    11|Kitchener –  Cambridge –  Waterloo                                           |   573234.9|  0.1036253|
+|   489151.3|    12|London                                                                       |   534826.6|  0.0933766|
+|   327965.1|    13|Windsor                                                                      |   413231.3|  0.2599857|
+|   479336.4|    14|Brantford – Guelph – Barrie                                                  |   515937.3|  0.0763574|
+|   276187.0|    15|Kingston – Peterborough                                                      |   289599.0|  0.0485613|
+|   278668.5|    16|Greater Sudbury – Thunder Bay                                                |   288006.4|  0.0335089|
+|   757166.5|    17|Winnipeg                                                                     |   822345.8|  0.0860831|
+|   522681.6|    18|Regina – Saskatoon                                                           |   554343.5|  0.0605759|
+|  1371657.0|    19|Calgary                                                                      |  1467038.3|  0.0695372|
+|  1296951.1|    20|Edmonton                                                                     |  1396902.6|  0.0770665|
+|  2429306.8|    21|Vancouver                                                                    |  2608986.1|  0.0739632|
+|   363644.1|    22|Victoria                                                                     |   391473.8|  0.0765303|
+|   363532.9|    23|Kelowna –  Abbotsford-Mission                                                |   413806.7|  0.1382923|
+| 10507679.1|    24|Other census metropolitan areas, census agglomerations and other geographies | 10690057.3|  0.0173567|
+]]
+
+---
+
+
+``` r
+ggplot(pop_16_21) + geom_col(aes(pop_growth, CMA))
+```
+
+&lt;img src="20_join_files/figure-html/unnamed-chunk-32-1.png" width="90%" height="90%" style="display: block; margin: auto;" /&gt;
+
+---
+
+.tiny[
+
+``` r
+pop_16_21 %&gt;% 
+	mutate(CMA= case_when(
+		CMA %&gt;% str_detect("Other") ~ "Other CMAs and Rural Areas", 
+		.default = CMA)) %&gt;% 
+	ggplot() + geom_col(aes(pop_growth, CMA %&gt;% fct_reorder(pop_growth))) + 
+	scale_x_continuous(breaks=c(0, 0.05, 0.1, 0.15, 0.2, 0.25), 
+										 labels=scales::label_percent()) +
+	labs(x="Population Growth Rate", y=NULL)
+```
+]
+
+---
+
+&lt;img src="20_join_files/figure-html/unnamed-chunk-34-1.png" width="100%" height="100%" style="display: block; margin: auto;" /&gt;
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
