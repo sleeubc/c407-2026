@@ -119,110 +119,67 @@ band_members %>%
 
 ---
 
-### Practice
-
-.tiny[
-```{r}
-pumf_2016 <- read_rds("data/2016_census_pumf_ind.rds")
-pumf_2021 <- read_rds("data/2021_census_pumf_ind.rds")
-```
+#### The Happiness Gap: Where Canada’s Young Adults Thrive
 
 ```{r}
-pop_2016 <- pumf_2016 %>% group_by(CMA) %>% summarise(pop_2016 = sum(WEIGHT))
-pop_2021 <- pumf_2021 %>% group_by(CMA) %>% summarise(pop_2021 = sum(WEIGHT))
-```
-]
+library(cansim)
 
-.tiny[
-.pull-left[
-```{r echo=FALSE}
-pop_2016 %>% kable()
-```
-]
-.pull-right[
-```{r echo=FALSE}
-pop_2021 %>% kable() 
-```
-]
-]
+health <- get_cansim("13-10-0905-01")
 
----
+life_satisfaction <- health %>% filter(
+	GEO != "Canada (excluding territories)",
+	REF_DATE == "2024",
+	Indicators=="Life satisfaction, satisfied or very satisfied",
+	`Age group`== "18 to 34 years",
+	Sex == "Both sexes",
+	Characteristics == "Percent",
+	) %>% 
+	select(GEO, GeoUID, VALUE)
 
-Generate this figure
-
-```{r echo=FALSE, out.width="100%", out.height="100%"}
-pop_16_21 <- pop_2016 %>% mutate(CMAID=as.numeric(CMA)) %>% select(-CMA) %>% 
-	full_join(pop_2021 %>% mutate(CMAID=as.numeric(CMA)), by= "CMAID") %>% 
-							mutate(pop_growth = pop_2021 / pop_2016 - 1)
-
-pop_16_21 %>% 
-	mutate(CMA= case_when(CMA %>% str_detect("Other") ~ "Other CMAs and Rural Areas", .default = CMA)) %>% 
-	ggplot() + geom_col(aes(pop_growth, CMA %>% fct_reorder(pop_growth))) + 
-	scale_x_continuous(breaks=c(0, 0.05, 0.1, 0.15, 0.2, 0.25), labels=scales::label_percent()) +
-	labs(x="Population Growth Rate", y=NULL) 
 ```
 
 ---
 
-```{r}
-pop_16_21 <- pop_2016 %>% full_join(pop_2021, by= "CMA") %>% 
-	mutate(pop_growth = pop_2021 / pop_2016 - 1)
+```{r echo=FALSE}
+life_satisfaction %>% knitr::kable()
 ```
 
-.tiny[
-.scroll-output[
-```{r echo=FALSE}
-pop_16_21 %>% kable()
-```
-]]
 
 ---
 
-.tiny[
-```{r eval=FALSE}
-pop_2016 %>% full_join(pop_2021, by= "CMA") %>% 
-	filter(is.na(pop_2016) | is.na(pop_2021))
-```
-]
+##### Practice: Show the life satisfaction survey results on a map
 
-.tiny[
-```{r echo=FALSE}
-pop_2016 %>% full_join(pop_2021, by= "CMA") %>% 
-	filter(is.na(pop_2016) | is.na(pop_2021)) %>% kable()
-```
-]
+Generate the map on next slide.
 
 ---
 
-```{r out.width="90%", out.height="90%"}
-ggplot(pop_16_21) + geom_col(aes(pop_growth, CMA))
+```{r echo=FALSE, fig.width=6, fig.height=3, out.width="120%"}
+library(cancensus)
+pr_sf <- get_census("CA21", list("C"="01"), level="PR", geo_format = "sf") %>% 
+	select(GeoUID)
+
+life_satisfaction_pr_sf <- pr_sf %>% left_join(life_satisfaction, by="GeoUID")
+
+ggplot(life_satisfaction_pr_sf) + 
+	geom_sf(aes(fill=VALUE)) +
+	geom_sf_text(aes(label= paste0(GEO, "\n", VALUE, "%")),color="grey", size=3) +
+	scale_fill_continuous(guide=F) +
+	coord_sf(ylim = c(42, 63)) +
+	labs(title = "Life satisfaction\nsatisfied or very satisfied\n", caption = "Source: Health indicator statistics, StatCan table: 13-10-0905-01") +
+	theme_void()
 ```
 
 ---
 
 .tiny[
 ```{r eval=FALSE}
-pop_2016 %>% mutate(CMAID=as.numeric(CMA))
+library(cancensus)
+pr_sf <- get_census("CA21", list("C"="01"), level="PR", geo_format = "sf") %>% 
+	select(GeoUID)
 ```
-]
 
-.tiny[
 ```{r echo=FALSE}
-pop_2016 %>% mutate(CMAID=as.numeric(CMA)) %>% kable
-```
-]
-
----
-
-.tiny[
-```{r eval=FALSE}
-pop_2021 %>% mutate(CMAID=as.numeric(CMA))
-```
-]
-
-.tiny[
-```{r echo=FALSE}
-pop_2021 %>% mutate(CMAID=as.numeric(CMA)) %>% kable()
+pr_sf %>% knitr::kable()
 ```
 ]
 
@@ -230,48 +187,51 @@ pop_2021 %>% mutate(CMAID=as.numeric(CMA)) %>% kable()
 
 .tiny[
 ```{r}
-pop_16_21 <- pop_2016 %>% mutate(CMAID=as.numeric(CMA)) %>% select(-CMA) %>% 
-	full_join(pop_2021 %>% mutate(CMAID=as.numeric(CMA)), by= "CMAID") %>% 
-							mutate(pop_growth = pop_2021 / pop_2016 - 1)
+life_satisfaction_pr_sf <- pr_sf %>% left_join(life_satisfaction, by="GeoUID")
 ```
-]
 
-.tiny[
-.scroll-output[
 ```{r echo=FALSE}
-pop_16_21 %>% kable()
-```
-]]
-
----
-
-```{r out.width="90%", out.height="90%"}
-ggplot(pop_16_21) + geom_col(aes(pop_growth, CMA))
-```
-
----
-
-.tiny[
-```{r eval=FALSE}
-pop_16_21 %>% 
-	mutate(CMA= case_when(
-		CMA %>% str_detect("Other") ~ "Other CMAs and Rural Areas", 
-		.default = CMA)) %>% 
-	ggplot() + geom_col(aes(pop_growth, CMA %>% fct_reorder(pop_growth))) + 
-	scale_x_continuous(breaks=c(0, 0.05, 0.1, 0.15, 0.2, 0.25), 
-										 labels=scales::label_percent()) +
-	labs(x="Population Growth Rate", y=NULL)
+life_satisfaction_pr_sf %>% knitr::kable()
 ```
 ]
 
 ---
 
-```{r echo=FALSE, out.width="100%", out.height="100%"}
-pop_16_21 %>% 
-	mutate(CMA= case_when(CMA %>% str_detect("Other") ~ "Other CMAs and Rural Areas", .default = CMA)) %>% 
-	ggplot() + geom_col(aes(pop_growth, CMA %>% fct_reorder(pop_growth))) + 
-	scale_x_continuous(breaks=c(0, 0.05, 0.1, 0.15, 0.2, 0.25), labels=scales::label_percent()) +
-	labs(x="Population Growth Rate", y=NULL) 
+.tiny[
+```{r}
+life_satisfaction_pr_sf <- life_satisfaction_pr_sf %>% mutate(
+	pr_value_label = ifelse(is.na(GEO), NA, paste0(GEO, "\n", VALUE, "%"))
+)
 ```
 
+```{r echo=F}
+life_satisfaction_pr_sf %>% mutate(
+	pr_value_label = ifelse(is.na(GEO), NA, paste0(GEO, "\\n", VALUE, "%"))
+) %>% knitr::kable()
+```
+]
 
+---
+
+.tiny[
+```{r}
+ggplot(life_satisfaction_pr_sf) + 
+	geom_sf(aes(fill=VALUE)) +
+	geom_sf_text(aes(label= pr_value_label),color="grey", size=3) +
+	theme_void()
+```
+]
+
+---
+
+.tiny[
+```{r}
+ggplot(life_satisfaction_pr_sf) + 
+	geom_sf(aes(fill=VALUE)) +
+	geom_sf_text(aes(label= pr_value_label),color="grey", size=3) +
+	scale_fill_continuous(guide=F) +
+	coord_sf(ylim = c(42, 63)) +
+	labs(title = "Life satisfaction\nsatisfied or very satisfied\n", caption = "Source: Health indicator statistics, StatCan table: 13-10-0905-01") +
+	theme_void()
+```
+]
