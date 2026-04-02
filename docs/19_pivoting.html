@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### Sanghoon Lee
 ]
 .date[
-### 22 March, 2026
+### 01 April, 2026
 ]
 
 ---
@@ -36,18 +36,12 @@ library(tidyverse)
 
 #### pivot_wider()
 
-.tiny[
+
+
 
 ``` r
-library(cancensus)
-renter_csd_van &lt;- get_census("CA16", list(CMA="59933"), level="CSD", 
-                             vectors = c("v_CA16_4838", "v_CA16_4836")) 
-
-renter_l &lt;- renter_csd_van %&gt;% select(`Region Name`, `v_CA16_4838: Renter`, `v_CA16_4836: Total - Private households by tenure - 25% sample data`) %&gt;% pivot_longer(-`Region Name`, names_to = "vector")
+renter_l &lt;- read_rds("data/renter_l.rds")
 ```
-]
-
----
 
 .scroll-output[
 .tiny[
@@ -389,21 +383,12 @@ renter_w %&gt;% transmute(
 
 #### pivot_longer()
 
-.tiny[
+
+
 
 ``` r
-pindex &lt;- cansim::get_cansim("18-10-0205-01")
-
-pindex_w &lt;- pindex %&gt;% 
-  filter(`New housing price indexes` == "Total (house and land)", 
-         GEO %&gt;% str_detect("Vancouver|Toronto|Montréal|Victoria|Edmonton|Calgary"),
-         lubridate::ym(REF_DATE) &gt;= lubridate::ymd("2016-12-01")) %&gt;% 
-  select(REF_DATE, GEO, VALUE) %&gt;% 
-  pivot_wider(names_from = REF_DATE, values_from = VALUE)
+pindex_w &lt;- read_rds("data/pindex_w.rds")
 ```
-]
-
----
 
 .scroll-output-80[
 .tiny[
@@ -422,7 +407,7 @@ pindex_w &lt;- pindex %&gt;%
 
 Generate this plot.
 
-&lt;img src="19_pivoting_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="19_pivoting_files/figure-html/unnamed-chunk-18-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -463,7 +448,7 @@ long2 &lt;- wide %&gt;% pivot_longer(
 
 ##### Application: generate the following figure
 
-&lt;img src="19_pivoting_files/figure-html/unnamed-chunk-21-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="19_pivoting_files/figure-html/unnamed-chunk-23-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -1014,7 +999,7 @@ pindex_l %&gt;%
 
 .scroll-output[
 .tiny[
-&lt;img src="19_pivoting_files/figure-html/unnamed-chunk-25-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="19_pivoting_files/figure-html/unnamed-chunk-27-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]]
 
     </textarea>

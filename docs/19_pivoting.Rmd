@@ -29,17 +29,19 @@ library(tidyverse)
 
 #### pivot_wider()
 
-.tiny[
-```{r}
+```{r eval=FALSE, echo=FALSE}
 library(cancensus)
 renter_csd_van <- get_census("CA16", list(CMA="59933"), level="CSD", 
                              vectors = c("v_CA16_4838", "v_CA16_4836")) 
 
 renter_l <- renter_csd_van %>% select(`Region Name`, `v_CA16_4838: Renter`, `v_CA16_4836: Total - Private households by tenure - 25% sample data`) %>% pivot_longer(-`Region Name`, names_to = "vector")
-```
-]
 
----
+renter_l %>% write_rds("data/renter_l.rds")
+```
+
+```{r}
+renter_l <- read_rds("data/renter_l.rds")
+```
 
 .scroll-output[
 .tiny[
@@ -139,8 +141,7 @@ renter_w %>% transmute(`Region Name`, renter_share = `v_CA16_4838: Renter`/`v_CA
 
 #### pivot_longer()
 
-.tiny[
-```{r }
+```{r eval=FALSE, echo=FALSE}
 pindex <- cansim::get_cansim("18-10-0205-01")
 
 pindex_w <- pindex %>% 
@@ -149,10 +150,13 @@ pindex_w <- pindex %>%
          lubridate::ym(REF_DATE) >= lubridate::ymd("2016-12-01")) %>% 
   select(REF_DATE, GEO, VALUE) %>% 
   pivot_wider(names_from = REF_DATE, values_from = VALUE)
-```
-]
 
----
+pindex_w %>% write_rds("data/pindex_w.rds")
+```
+
+```{r}
+pindex_w <- read_rds("data/pindex_w.rds")
+```
 
 .scroll-output-80[
 .tiny[
