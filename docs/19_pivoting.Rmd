@@ -149,7 +149,8 @@ pindex_w <- pindex %>%
          GEO %>% str_detect("Vancouver|Toronto|Montréal|Victoria|Edmonton|Calgary"),
          lubridate::ym(REF_DATE) >= lubridate::ymd("2016-12-01")) %>% 
   select(REF_DATE, GEO, VALUE) %>% 
-  pivot_wider(names_from = REF_DATE, values_from = VALUE)
+  pivot_wider(names_from = REF_DATE, values_from = VALUE) %>% 
+	select(GEO:`2026-02`)
 
 pindex_w %>% write_rds("data/pindex_w.rds")
 ```
@@ -170,7 +171,7 @@ pindex_w %>% kable()
 Generate this plot.
 
 ```{r echo=FALSE}
-pindex_w %>% pivot_longer( cols = `2016-12`:`2024-01`, names_to = "month") %>% 
+pindex_w %>% pivot_longer( cols = `2016-12`:`2026-02`, names_to = "month") %>% 
   mutate(month=lubridate::ym(month)) %>% 
   ggplot(aes(month, value, color=GEO)) + geom_line()  + labs(x=NULL, y=NULL, color=NULL) +
   theme_bw()
@@ -193,9 +194,8 @@ wide %>% kable()
 .pull-right[
 ```{r}
 long2 <- wide %>% pivot_longer(
-  cols = x:y, 
-  names_to = "var", 
-  values_to= "val")
+  cols = x:y 
+)
 ```
 ```{r echo=FALSE}
 long2 %>% kable()
@@ -205,10 +205,37 @@ long2 %>% kable()
 
 ---
 
+### Wide to long
+
+.pull-left[
+```{r eval=FALSE}
+wide
+```
+
+```{r echo=FALSE}
+wide %>% kable()
+```
+]
+
+.pull-right[
+```{r}
+long2 <- wide %>% pivot_longer(
+  cols = x:y, 
+  names_to = "var", 
+  values_to= "val")
+```
+
+```{r echo=FALSE}
+long2 %>% kable()
+```
+]
+
+---
+
 ##### Application: generate the following figure
 
 ```{r echo=FALSE}
-pindex_w %>% pivot_longer( cols = `2016-12`:`2024-01`, names_to = "month") %>% 
+pindex_w %>% pivot_longer( cols = `2016-12`:`2026-02`, names_to = "month") %>% 
   mutate(month=lubridate::ym(month)) %>% 
   ggplot(aes(month, value, color=GEO)) + geom_line()  + labs(x=NULL, y=NULL, color=NULL) +
   theme_bw()
@@ -219,7 +246,7 @@ pindex_w %>% pivot_longer( cols = `2016-12`:`2024-01`, names_to = "month") %>%
 .tiny[
 ```{r eval=params$answers, echo=params$answers}
 pindex_l <- pindex_w %>% pivot_longer( 
-  cols = `2016-12`:`2024-01`, 
+  cols = `2016-12`:`2026-02`, 
   names_to = "month")
 ```
 ]
@@ -230,7 +257,6 @@ pindex_l <- pindex_w %>% pivot_longer(
 pindex_l %>% kable()
 ```
 ]]
-
 
 ---
 
