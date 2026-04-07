@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Discretizing map colors and ColorBrewer</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sanghoon Lee" />
+    <script src="libs/header-attrs-2.29/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="c407_slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Discretizing map colors and ColorBrewer
+]
+.author[
+### Sanghoon Lee
+]
+.date[
+### 06 April, 2026
+]
+
+---
+
+
+
+
+.center[
+&lt;img src="22_pub_tr_sh.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.vertical-center[
+&lt;img src="22_pub_tr_sh_d.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+
+``` r
+install.packages("devtools")
+devtools::install_github("sleeubc/sanghoon")
+```
+
+---
+
+
+``` r
+library(tidyverse)
+library(sf)
+library(sanghoon)
+```
+
+---
+
+
+``` r
+library(cancensus)
+tb_public_transit &lt;- get_census("CA16", 
+                                c("v_CA16_5792","v_CA16_5801"), 
+                                regions = list(CMA = "59933"), 
+                                level = "CT", 
+                                geo_format = "sf")
+```
+
+
+---
+
+.tiny[
+
+``` r
+tb_public_transit &lt;- tb_public_transit %&gt;% transmute(
+  pub_tr_sh=`v_CA16_5801: Public transit` / `v_CA16_5792: Total - Main mode of commuting for the employed labour force aged 15 years and over in private households with a usual place of work or no fixed workplace address - 25% sample data`)
+```
+]
+
+.scroll-output[
+.tiny[
+
+| pub_tr_sh|geometry                       |
+|---------:|:------------------------------|
+| 0.2876481|MULTIPOLYGON (((-123.0235 4... |
+| 0.2039216|MULTIPOLYGON (((-123.0235 4... |
+| 0.2235294|MULTIPOLYGON (((-123.0423 4... |
+| 0.2445652|MULTIPOLYGON (((-123.0592 4... |
+| 0.2254197|MULTIPOLYGON (((-123.0592 4... |
+| 0.3315650|MULTIPOLYGON (((-123.072 49... |
+| 0.3333333|MULTIPOLYGON (((-123.071 49... |
+| 0.3548387|MULTIPOLYGON (((-123.1019 4... |
+| 0.3881356|MULTIPOLYGON (((-123.0913 4... |
+| 0.4477612|MULTIPOLYGON (((-123.1171 4... |
+| 0.2673522|MULTIPOLYGON (((-123.1303 4... |
+| 0.3325301|MULTIPOLYGON (((-123.1303 4... |
+| 0.2722772|MULTIPOLYGON (((-123.1409 4... |
+| 0.1330472|MULTIPOLYGON (((-123.1401 4... |
+| 0.1612903|MULTIPOLYGON (((-123.1971 4... |
+| 0.1353135|MULTIPOLYGON (((-123.1682 4... |
+| 0.2890625|MULTIPOLYGON (((-123.1398 4... |
+| 0.2912088|MULTIPOLYGON (((-123.116 49... |
+| 0.2679739|MULTIPOLYGON (((-123.1167 4... |
+| 0.3518822|MULTIPOLYGON (((-123.0909 4... |
+| 0.3385621|MULTIPOLYGON (((-123.0907 4... |
+| 0.3587302|MULTIPOLYGON (((-123.0718 4... |
+| 0.3121150|MULTIPOLYGON (((-123.0801 4... |
+| 0.3342857|MULTIPOLYGON (((-123.072 49... |
+| 0.2838284|MULTIPOLYGON (((-123.0594 4... |
+| 0.3379447|MULTIPOLYGON (((-123.0579 4... |
+| 0.3054393|MULTIPOLYGON (((-123.0235 4... |
+| 0.3108808|MULTIPOLYGON (((-123.0413 4... |
+| 0.3565737|MULTIPOLYGON (((-123.0235 4... |
+| 0.4371658|MULTIPOLYGON (((-123.0236 4... |
+]]
+
+---
+
+.tiny[
+
+``` r
+  ggplot(tb_public_transit) + geom_sf(aes(fill = pub_tr_sh)) + 
+  scale_fill_viridis_c(name="Public transit\nuser share") + theme_void()
+```
+
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-8-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+tb_public_transit %&gt;% mutate(pub_tr_sh_d = pub_tr_sh %&gt;% classify(5)) %&gt;% 
+  ggplot() + geom_sf(aes(fill = pub_tr_sh_d)) + 
+  scale_fill_viridis_d(name="Public transit\nuser share", na.value = "darkgrey") + theme_void()
+```
+
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-9-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+
+``` r
+tb_public_transit %&gt;% mutate(pub_tr_sh_d = pub_tr_sh %&gt;% classify(5))
+```
+
+.scroll-output[
+.tiny[
+
+| pub_tr_sh|geometry                       |pub_tr_sh_d      |
+|---------:|:------------------------------|:----------------|
+| 0.2876481|MULTIPOLYGON (((-123.0235 4... |0.2092 to 0.3121 |
+| 0.2039216|MULTIPOLYGON (((-123.0235 4... |0.1042 to 0.2064 |
+| 0.2235294|MULTIPOLYGON (((-123.0423 4... |0.2092 to 0.3121 |
+| 0.2445652|MULTIPOLYGON (((-123.0592 4... |0.2092 to 0.3121 |
+| 0.2254197|MULTIPOLYGON (((-123.0592 4... |0.2092 to 0.3121 |
+| 0.3315650|MULTIPOLYGON (((-123.072 49... |0.3165 to 0.4153 |
+| 0.3333333|MULTIPOLYGON (((-123.071 49... |0.3165 to 0.4153 |
+| 0.3548387|MULTIPOLYGON (((-123.1019 4... |0.3165 to 0.4153 |
+| 0.3881356|MULTIPOLYGON (((-123.0913 4... |0.3165 to 0.4153 |
+| 0.4477612|MULTIPOLYGON (((-123.1171 4... |0.4221 to 0.5206 |
+| 0.2673522|MULTIPOLYGON (((-123.1303 4... |0.2092 to 0.3121 |
+| 0.3325301|MULTIPOLYGON (((-123.1303 4... |0.3165 to 0.4153 |
+| 0.2722772|MULTIPOLYGON (((-123.1409 4... |0.2092 to 0.3121 |
+| 0.1330472|MULTIPOLYGON (((-123.1401 4... |0.1042 to 0.2064 |
+| 0.1612903|MULTIPOLYGON (((-123.1971 4... |0.1042 to 0.2064 |
+| 0.1353135|MULTIPOLYGON (((-123.1682 4... |0.1042 to 0.2064 |
+| 0.2890625|MULTIPOLYGON (((-123.1398 4... |0.2092 to 0.3121 |
+| 0.2912088|MULTIPOLYGON (((-123.116 49... |0.2092 to 0.3121 |
+| 0.2679739|MULTIPOLYGON (((-123.1167 4... |0.2092 to 0.3121 |
+| 0.3518822|MULTIPOLYGON (((-123.0909 4... |0.3165 to 0.4153 |
+| 0.3385621|MULTIPOLYGON (((-123.0907 4... |0.3165 to 0.4153 |
+| 0.3587302|MULTIPOLYGON (((-123.0718 4... |0.3165 to 0.4153 |
+| 0.3121150|MULTIPOLYGON (((-123.0801 4... |0.2092 to 0.3121 |
+| 0.3342857|MULTIPOLYGON (((-123.072 49... |0.3165 to 0.4153 |
+| 0.2838284|MULTIPOLYGON (((-123.0594 4... |0.2092 to 0.3121 |
+| 0.3379447|MULTIPOLYGON (((-123.0579 4... |0.3165 to 0.4153 |
+| 0.3054393|MULTIPOLYGON (((-123.0235 4... |0.2092 to 0.3121 |
+| 0.3108808|MULTIPOLYGON (((-123.0413 4... |0.2092 to 0.3121 |
+| 0.3565737|MULTIPOLYGON (((-123.0235 4... |0.3165 to 0.4153 |
+| 0.4371658|MULTIPOLYGON (((-123.0236 4... |0.4221 to 0.5206 |
+]]
+
+---
+
+.tiny[
+
+``` r
+tb_public_transit %&gt;% mutate(
+  pub_tr_sh_d = pub_tr_sh %&gt;% classify(5, label=scales::label_number(accuracy = 0.1, scale = 100, suffix = "%"))) %&gt;% 
+  ggplot() + geom_sf(aes(fill = pub_tr_sh_d)) + 
+  scale_fill_viridis_d(name="Public transit\nuser share", na.value = "darkgrey") + theme_void()
+```
+
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-12-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+tb_public_transit %&gt;% mutate(
+  pub_tr_sh_d = pub_tr_sh %&gt;% classify(5, style="quantile", label=scales::label_number(accuracy= 0.1, scale = 100, suffix = "%"))) %&gt;% 
+  ggplot() + geom_sf(aes(fill = pub_tr_sh_d)) + 
+  scale_fill_viridis_d(name="Public transit\nuser share\n(quantile)", na.value = "darkgrey") + theme_void()
+```
+
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-13-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+.tiny[
+
+``` r
+tb_public_transit %&gt;% mutate(
+  pub_tr_sh_d = pub_tr_sh %&gt;% classify(5, style="jenks", label=scales::label_number(accuracy=0.1, scale = 100, suffix = "%"))) %&gt;% 
+  ggplot() + geom_sf(aes(fill = pub_tr_sh_d)) + 
+  scale_fill_viridis_d(name="Public transit\nuser share\n(Jenks natural break)", na.value = "darkgrey") + theme_void()
+```
+
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-14-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+#### Create this map
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-15-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+
+.small[
+
+``` r
+tb_public_transit %&gt;% mutate(
+  pub_tr_sh_d = pub_tr_sh %&gt;% classify(4, style="jenks", 
+  	label=scales::label_number(accuracy=0.1, scale = 100, suffix = "%"))
+  ) %&gt;% 
+  ggplot() + geom_sf(aes(fill = pub_tr_sh_d)) + 
+  scale_fill_viridis_d("Public transit\nuser share\n(Jenks natural break)", 
+  										 na.value = "darkgrey") + 
+	theme_void()
+```
+]
+
+---
+
+
+### ColorBrewer
+
+https://colorbrewer2.org/
+
+---
+
+.tiny[
+
+``` r
+tb_public_transit %&gt;% mutate(
+  pub_tr_sh_d = pub_tr_sh %&gt;% classify(5, style="jenks", label=scales::label_number(accuracy=0.1, scale = 100, suffix = "%"))) %&gt;% 
+  ggplot() + geom_sf(aes(fill = pub_tr_sh_d)) + 
+  scale_fill_brewer(name="Public transit\nuser share\n(Jenks natural break)", palette = "YlOrBr", na.value = "darkgrey") + theme_void()
+```
+
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-17-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+### Creats this map
+
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-18-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+
+.tiny[
+
+``` r
+tb_public_transit %&gt;% mutate(
+  pub_tr_sh_d = pub_tr_sh %&gt;% classify(5, style="jenks", label=scales::label_number(accuracy=0.1, scale = 100, suffix = "%"))) %&gt;% 
+  ggplot() + geom_sf(aes(fill = pub_tr_sh_d)) + 
+  scale_fill_brewer(name="Public transit\nuser share\n(Jenks natural break)", palette = "Blues", na.value = "darkgrey") + theme_void()
+```
+]
+
+---
+
+.tiny[
+
+``` r
+tb_public_transit %&gt;% mutate(
+  pub_tr_sh_d = pub_tr_sh %&gt;% classify(5, style="jenks", label=scales::label_number(accuracy=0.1, scale = 100, suffix = "%"))) %&gt;% 
+  ggplot() + geom_sf(aes(fill = pub_tr_sh_d)) + 
+  scale_fill_brewer(name="Public transit\nuser share\n(Jenks natural break)", palette = "YlOrBr", na.value = "darkgrey") + theme_void() +
+  theme(legend.key.size = unit(0.5, "cm"), legend.position = c(0.05, 0.25))
+```
+
+&lt;img src="21_discretizing_map_colors_files/figure-html/unnamed-chunk-20-1.png" width="85%" style="display: block; margin: auto;" /&gt;
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
